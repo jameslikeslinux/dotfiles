@@ -8,6 +8,7 @@ setopt append_history
 bindkey -e
 bindkey ';5D' emacs-backward-word
 bindkey ';5C' emacs-forward-word
+WORDCHARS="${WORDCHARS:s@/@}"
 
 # enable command autocompletion
 autoload -U compinit && compinit
