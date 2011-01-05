@@ -6,8 +6,11 @@ setopt append_history
 
 # enable emacs keybindings
 bindkey -e
-bindkey ';5D' emacs-backward-word
-bindkey ';5C' emacs-forward-word
+bindkey "^[OH" beginning-of-line
+bindkey "^[OF" end-of-line
+bindkey "^[[3~" delete-char
+bindkey ";5D" emacs-backward-word
+bindkey ";5C" emacs-forward-word
 WORDCHARS="${WORDCHARS:s@/@}"
 
 # enable command autocompletion
