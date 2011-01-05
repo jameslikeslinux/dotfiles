@@ -47,3 +47,7 @@ alias lt="ls -alrt"
 alias vi="$EDITOR"
 alias p="pfexec $SHELL"
 alias s="sudo -s"
+
+# color list autocompletion
+eval $(dircolors)
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
