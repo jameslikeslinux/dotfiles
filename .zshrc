@@ -23,3 +23,12 @@ esac
 # set prompt: red for root; green for user
 autoload -U colors && colors
 PROMPT="%B%(!.%{$fg[red]%}%m.%{$fg[green]%}%n@%m)%{$fg[blue]%} %~ %#%{$reset_color%}%b "
+
+# aliases
+ls --color > /dev/null 2>&1 && alias ls="ls --color"
+alias ll="ls -al"
+alias ld="ls -ld"
+alias lt="ls -alrt"
+alias vi="$EDITOR"
+alias p="pfexec su"
+alias s="sudo -s"
