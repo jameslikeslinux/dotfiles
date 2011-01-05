@@ -15,7 +15,7 @@ bindkey "^[[3~" delete-char
 # sun-color term
 bindkey "^[[214z" beginning-of-line
 bindkey "^[[220z" end-of-line
-bindkey "^?" delete-char
+# bindkey "^?" delete-char
 # TODO: ctrl+left ctrl+right word skip
 
 # xterm
@@ -40,10 +40,10 @@ autoload -U colors && colors
 PROMPT="%B%(!.%{$fg[red]%}%m.%{$fg[green]%}%n@%m)%{$fg[blue]%} %~ %#%{$reset_color%}%b "
 
 # aliases
-ls --color > /dev/null 2>&1 && alias ls="ls --color"
+ls --color / > /dev/null 2>&1 && alias ls="ls --color"
 alias ll="ls -al"
 alias ld="ls -ld"
 alias lt="ls -alrt"
 alias vi="$EDITOR"
-alias p="pfexec su"
+alias p="pfexec $SHELL"
 alias s="sudo -s"
