@@ -6,11 +6,23 @@ setopt append_history
 
 # enable emacs keybindings
 bindkey -e
+
+# solaris xterm
 bindkey "^[OH" beginning-of-line
 bindkey "^[OF" end-of-line
 bindkey "^[[3~" delete-char
-bindkey ";5D" emacs-backward-word
-bindkey ";5C" emacs-forward-word
+
+# sun-color term
+bindkey "^[[214z" beginning-of-line
+bindkey "^[[220z" end-of-line
+bindkey "^?" delete-char
+# TODO: ctrl+left ctrl+right word skip
+
+# xterm
+bindkey ";5D" backward-word
+bindkey ";5C" forward-word
+
+# split on slashes
 WORDCHARS="${WORDCHARS:s@/@}"
 
 # enable command autocompletion
