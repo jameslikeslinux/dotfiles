@@ -61,3 +61,9 @@ s() {
         return 1
     fi
 }
+
+# train myself away from 'pfexec' and 'sudo'
+pfexec sudo() {
+    echo "Use 's' instead." >&2
+    return 1
+}
