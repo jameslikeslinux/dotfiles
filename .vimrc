@@ -22,6 +22,9 @@ set ruler
 set nocompatible
 set backspace=2
 
+" Enable mouse input
+set mouse=a
+
 " Spaces for tabs
 set tabstop=4
 set shiftwidth=4
