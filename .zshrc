@@ -49,7 +49,6 @@ alias ll="ls -al"
 alias ld="ls -ld"
 alias lt="ls -alrt"
 alias vi="$EDITOR"
-alias p="pfexec $SHELL"
 
 # simple privilege escalation
 s() {
