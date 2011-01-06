@@ -38,7 +38,7 @@ PROMPT="%B%(!.%{$fg[red]%}%m.%{$fg[green]%}%n@%m)%{$fg[blue]%} %~ %#%{$reset_col
 autoload -U compinit && compinit
 
 # color list autocompletion
-if which dircolors > /dev/null; then
+if [[ -x $(which dircolors) ]]; then
     eval $(dircolors)
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 fi
@@ -50,4 +50,15 @@ alias ld="ls -ld"
 alias lt="ls -alrt"
 alias vi="$EDITOR"
 alias p="pfexec $SHELL"
-alias s="sudo -s"
+
+# simple privilege escalation
+s() {
+    if [[ -x $(which pfexec) && ! -e "/etc/jumpstart_release" ]]; then
+        pfexec ${@:-$SHELL}
+    elif [[ -x $(which sudo) ]]; then
+        sudo ${@:--s}
+    else 
+        echo "Neither pfexec nor sudo are in your path." >&2
+        return 1
+    fi
+}

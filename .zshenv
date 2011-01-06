@@ -5,7 +5,7 @@ for dir in /bin /sbin /usr/bin /usr/sbin /usr/sfw/bin /usr/ccs/bin /usr/gnu/bin 
 done
 
 # editor is vim if it exists
-if which vim > /dev/null; then
+if [[ -x $(which vim) ]]; then
     export EDITOR="vim"
 else
     export EDITOR="vi"
