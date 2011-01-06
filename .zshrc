@@ -38,8 +38,10 @@ PROMPT="%B%(!.%{$fg[red]%}%m.%{$fg[green]%}%n@%m)%{$fg[blue]%} %~ %#%{$reset_col
 autoload -U compinit && compinit
 
 # color list autocompletion
-eval $(dircolors)
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+if which dircolors > /dev/null; then
+    eval $(dircolors)
+    zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+fi
 
 # aliases
 ls --color / > /dev/null 2>&1 && alias ls="ls --color"
