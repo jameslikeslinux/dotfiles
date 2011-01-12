@@ -12,3 +12,4 @@ else
 fi
 
 export PAGER="less"
+export PKGBUILD_IPS_SERVER="http://pkg.thestaticvoid.com:10001/"
