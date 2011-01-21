@@ -1,6 +1,6 @@
 # set path
 typeset -U path
-for dir in /bin /sbin /usr/bin /usr/sbin /usr/sfw/bin /usr/ccs/bin /usr/gnu/bin  /usr/local/bin /usr/local/sbin /usr/local/texlive/2009/bin/i386-solaris /usr/local/texlive/2010/bin/i386-solaris /opt/SunStudioExpress/bin; do
+for dir in /bin /sbin /usr/bin /usr/sbin /usr/gnu/bin /usr/ccs/bin /usr/local/bin /usr/local/sbin /usr/local/texlive/2009/bin/i386-solaris /usr/local/texlive/2010/bin/i386-solaris /opt/SunStudioExpress/bin; do
     [[ -e $dir ]] && path=($dir $path)
 done
 

@@ -46,7 +46,7 @@ fi
 # aliases
 ls --color / > /dev/null 2>&1 && alias ls="ls --color"
 alias ll="ls -al"
-alias ld="ls -ld"
+%alias ld="ls -ld"
 alias lt="ls -alrt"
 alias vi="$EDITOR"
 alias falcon="ssh jlee@falcon"
