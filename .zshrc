@@ -49,9 +49,6 @@ alias ll="ls -al"
 #alias ld="ls -ld"
 alias lt="ls -alrt"
 alias vi="$EDITOR"
-alias falcon="ssh jlee@falcon"
-alias hawk="ssh jlee@hawk"
-alias tsv="ssh jlee@thestaticvoid.com"
 
 # simple privilege escalation
 s() {
