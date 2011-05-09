@@ -61,3 +61,9 @@ s() {
         return 1
     fi
 }
+
+svn-show-eligible() {
+    for rev in $(svn mergeinfo --show-revs eligible $@); do
+        svn log -v -$rev $@
+    done
+}
