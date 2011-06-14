@@ -67,3 +67,7 @@ svn-show-eligible() {
         svn log -v -$rev $@
     done
 }
+
+if [[ "$HOST" = "builder" && -z "$CC" ]]; then
+    source /opt/dtbld/bin/env.sh
+fi
