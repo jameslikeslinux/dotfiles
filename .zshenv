@@ -1,5 +1,5 @@
 # editor is vim if it exists
-if [[ -x $(which vim) ]]; then
+if [[ -x $(whence vim) ]]; then
     export EDITOR="vim"
 else
     export EDITOR="vi"

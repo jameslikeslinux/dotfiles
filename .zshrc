@@ -38,7 +38,7 @@ PROMPT="%B%(!.%{$fg[red]%}%m.%{$fg[green]%}%n@%m)%{$fg[blue]%} %~ %#%{$reset_col
 autoload -U compinit && compinit
 
 # color list autocompletion
-if [[ -x $(which dircolors) ]]; then
+if [[ -x $(whence dircolors) ]]; then
     eval $(dircolors)
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 fi
