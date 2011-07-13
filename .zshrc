@@ -52,14 +52,11 @@ alias vi="$EDITOR"
 
 # simple privilege escalation
 s() {
-    if [[ -x $(which pfexec) && ! -e "/etc/jumpstart_release" ]]; then
-        pfexec ${@:-$SHELL}
-    elif [[ -x $(which sudo) ]]; then
-        sudo ${@:--s}
-    else 
-        echo "Neither pfexec nor sudo are in your path." >&2
-        return 1
-    fi
+    sudo ${@:--E -s}
+}
+
+play() {
+    DISPLAY=:0 mplayer -af volnorm -cache 4096 $@
 }
 
 svn-show-eligible() {
