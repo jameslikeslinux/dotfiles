@@ -52,7 +52,7 @@ alias vi="$EDITOR"
 
 # simple privilege escalation
 s() {
-    sudo ${@:--E -s}
+    sudo -E ${@:--s}
 }
 
 play() {
