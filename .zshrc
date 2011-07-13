@@ -10,6 +10,12 @@ bindkey -e
 # split on slashes
 WORDCHARS="${WORDCHARS:s@/@}"
 
+# if using SSH, TERM will almost always be xterm compatible
+# this works around /etc/profile setting it to vt100 (boo)
+if [[ ! -z $SSH_CLIENT ]]; then
+    export TERM=xterm
+fi
+
 # terminal specific settings
 case $TERM in
     xterm*)
