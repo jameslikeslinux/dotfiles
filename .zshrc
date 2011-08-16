@@ -10,6 +10,12 @@ bindkey -e
 # split on slashes
 WORDCHARS="${WORDCHARS:s@/@}"
 
+# if using SSH, TERM will almost always be xterm compatible
+# this works around /etc/profile setting it to vt100 (boo)
+if [[ ! -z $SSH_CLIENT ]]; then
+    export TERM=xterm
+fi
+
 # terminal specific settings
 case $TERM in
     xterm*)
@@ -38,7 +44,7 @@ PROMPT="%B%(!.%{$fg[red]%}%m.%{$fg[green]%}%n@%m)%{$fg[blue]%} %~ %#%{$reset_col
 autoload -U compinit && compinit
 
 # color list autocompletion
-if [[ -x $(which dircolors) ]]; then
+if [[ -x $(whence dircolors) ]]; then
     eval $(dircolors)
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 fi
@@ -52,7 +58,7 @@ alias vi="$EDITOR"
 
 # simple privilege escalation
 s() {
-    sudo ${@:--E -s}
+    sudo -E ${@:--s}
 }
 
 play() {
