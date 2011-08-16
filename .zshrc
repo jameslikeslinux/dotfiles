@@ -56,7 +56,7 @@ s() {
 }
 
 play() {
-    DISPLAY=:0 mplayer -af volnorm -cache 4096 $@
+    DISPLAY=:0 mplayer -af volnorm -cache 4096 -fs $@
 }
 
 svn-show-eligible() {
