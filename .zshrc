@@ -58,7 +58,11 @@ alias vi="$EDITOR"
 
 # simple privilege escalation
 s() {
-    sudo -E ${@:--s}
+    if $(sudo -V | grep "Sudo version 1.6" > /dev/null); then
+        sudo ${@:--s}
+    else
+        sudo -E ${@:--s}
+    fi
 }
 
 play() {
