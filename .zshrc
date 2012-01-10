@@ -78,3 +78,6 @@ svn-show-eligible() {
 if [[ "$HOST" = "builder" && -z "$CC" ]]; then
     source /opt/dtbld/bin/env.sh
 fi
+
+# set standard umask
+umask 022
