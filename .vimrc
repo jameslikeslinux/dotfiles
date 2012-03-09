@@ -29,3 +29,6 @@ set expandtab
 
 " Detect puppet filetype
 au BufRead,BufNewFile *.pp set filetype=puppet
+
+" Detect Arduino Sketch filetype
+au BufRead,BufNewFile *.ino set filetype=cpp
