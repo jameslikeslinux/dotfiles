@@ -1,6 +1,6 @@
 if [[ $HOST = "builder" ]]; then
     export PKGBUILD_IPS_SERVER="http://nest:10003/"
-elif [[ -z ${HOST:#*umd.edu} ]]; then
+elif [[ -e /etc/glue ]]; then
     # glue does special stuff in bash/tcsh shells
     source ~/.bashrc
 else
