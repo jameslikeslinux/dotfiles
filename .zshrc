@@ -10,12 +10,6 @@ bindkey -e
 # split on slashes
 WORDCHARS="${WORDCHARS:s@/@}"
 
-# if using SSH, TERM will almost always be xterm compatible
-# this works around /etc/profile setting it to vt100 (boo)
-if [[ ! -z $SSH_CLIENT ]]; then
-    export TERM=xterm
-fi
-
 # terminal specific settings
 case $TERM in
     xterm*)
@@ -58,10 +52,19 @@ alias vi="$EDITOR"
 
 # simple privilege escalation
 s() {
-    if $(sudo -V | grep "Sudo version 1.6" > /dev/null); then
-        sudo ${@:--s}
+    if [[ -e /etc/glue ]]; then
+        # use 'su' instead of sudo on glue
+        if [[ $# -eq 0 ]]; then
+            su -m
+        else
+            su -m -c "$*"
+        fi
     else
-        sudo -E ${@:--s}
+        if sudo -V | grep "Sudo version 1.6" > /dev/null; then
+            sudo ${@:--s}
+        else
+            sudo -E ${@:--s}
+        fi
     fi
 }
 
@@ -75,7 +78,7 @@ svn-show-eligible() {
     done
 }
 
-if [[ "$HOST" = "builder" && -z "$CC" ]]; then
+if [[ $HOST = "builder" && -z $CC ]]; then
     source /opt/dtbld/bin/env.sh
 fi
 
