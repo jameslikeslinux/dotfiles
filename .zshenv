@@ -12,8 +12,9 @@ else
 fi
 
 # editor is vim if it exists
-if [[ -x $(whence vim) ]]; then
-    export EDITOR="vim"
+vim=$(whence vim)
+if [[ -x $vim ]]; then
+    export EDITOR=$vim
 else
     export EDITOR="vi"
 fi

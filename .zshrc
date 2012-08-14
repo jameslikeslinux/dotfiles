@@ -1,7 +1,7 @@
 # history settings
-HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
+HISTFILE=~/.histfile.$HOST
+HISTSIZE=10000
+SAVEHIST=10000
 setopt append_history
 
 # enable emacs keybindings
@@ -30,9 +30,13 @@ case $TERM in
         ;;
 esac
 
+if [[ -x $(whence klist) ]] && klist | grep jtl/admin > /dev/null; then
+    admin=1
+fi
+
 # set prompt: red for root; green for user
 autoload -U colors && colors
-PROMPT="%B%(!.%{$fg[red]%}%m.%{$fg[green]%}%n@%m)%{$fg[blue]%} %~ %#%{$reset_color%}%b "
+PROMPT="${admin:+(admin) }%B%(!.%{$fg[red]%}%m.%{$fg[green]%}%n@%m)%{$fg[blue]%} %~ %#%{$reset_color%}%b "
 
 # enable command autocompletion
 autoload -U compinit && compinit
@@ -50,6 +54,7 @@ alias ll="ls -al"
 alias lt="ls -alrt"
 alias vi="$EDITOR"
 alias vim="vim -u $HOME/.vimrc.code"
+alias rm="rm -f"
 
 # simple privilege escalation
 s() {

@@ -1,4 +1,4 @@
-source .vimrc
+source $HOME/.vimrc
 
 " Spaces for tabs
 set tabstop=4
