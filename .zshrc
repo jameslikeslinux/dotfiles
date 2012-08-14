@@ -49,6 +49,7 @@ alias ll="ls -al"
 #alias ld="ls -ld"
 alias lt="ls -alrt"
 alias vi="$EDITOR"
+alias v="vi -u $HOME/.vimrc.code"
 
 # simple privilege escalation
 s() {

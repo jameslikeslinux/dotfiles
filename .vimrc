@@ -22,11 +22,6 @@ set ruler
 set nocompatible
 set backspace=2
 
-" Spaces for tabs
-set tabstop=4
-set shiftwidth=4
-set expandtab
-
 " Detect puppet filetype
 au BufRead,BufNewFile *.pp set filetype=puppet
 
