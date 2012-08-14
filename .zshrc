@@ -30,7 +30,7 @@ case $TERM in
         ;;
 esac
 
-if [[ -x $(whence klist) ]] && klist | grep jtl/admin > /dev/null; then
+if [[ -x $(whence klist) ]] && klist 2>&1 | grep jtl/admin > /dev/null; then
     admin=1
 fi
 
