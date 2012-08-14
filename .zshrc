@@ -49,12 +49,10 @@ fi
 
 # aliases
 ls --color / > /dev/null 2>&1 && alias ls="ls --color"
-alias ll="ls -al"
-#alias ld="ls -ld"
-alias lt="ls -alrt"
 alias vi="$EDITOR"
 alias vim="vim -u $HOME/.vimrc.code"
 alias rm="rm -f"
+alias glue="ssh -q argon"
 
 # simple privilege escalation
 s() {
