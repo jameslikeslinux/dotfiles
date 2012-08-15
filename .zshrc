@@ -71,16 +71,12 @@ s() {
         fi
     fi
 }
+compdef s=sudo
 
 play() {
     DISPLAY=:0 mplayer -af volnorm -cache 4096 -fs $@
 }
-
-svn-show-eligible() {
-    for rev in $(svn mergeinfo --show-revs eligible $@); do
-        svn log -v -$rev $@
-    done
-}
+compdef play=mplayer
 
 if [[ $HOST = "builder" && -z $CC ]]; then
     source /opt/dtbld/bin/env.sh
