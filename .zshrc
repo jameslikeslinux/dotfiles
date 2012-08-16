@@ -64,9 +64,9 @@ s() {
     if [[ -e /etc/glue ]]; then
         # use 'su' instead of sudo on glue
         if [[ $# -eq 0 ]]; then
-            su -m
+            su -m -c "$SHELL; kdestroy"
         else
-            su -m -c "$*"
+            su -m -c "$SHELL -c \"$*\"; kdestroy"
         fi
     else
         if sudo -V | grep "Sudo version 1.6" > /dev/null; then
