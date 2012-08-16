@@ -52,7 +52,7 @@ ls --color / > /dev/null 2>&1 && alias ls="ls --color"
 alias vi="$EDITOR"
 alias vim="vim -u $HOME/.vimrc.code"
 alias rm="rm -f"
-alias glue="ssh -q argon"
+alias glue="ssh -qt stowe.umd.edu"
 
 # simple privilege escalation
 s() {
