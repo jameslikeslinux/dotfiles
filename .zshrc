@@ -55,6 +55,7 @@ fi
 ls --color / > /dev/null 2>&1 && alias ls="ls --color"
 alias vi="$EDITOR"
 alias vim="vim -u $HOME/.vimrc.code"
+unalias cp 2>/dev/null
 alias mv="mv -f"
 alias rm="rm -f"
 alias glue="ssh -qt stowe.umd.edu"
