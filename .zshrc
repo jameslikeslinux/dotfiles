@@ -10,6 +10,14 @@ bindkey -e
 # split on slashes
 WORDCHARS="${WORDCHARS:s@/@}"
 
+# figure out if I'm running with Glue admin rights
+admin=""
+promptcolor="green"
+if [[ -x $(whence klist) ]] && klist 2>&1 | grep jtl/admin > /dev/null; then
+    admin="/admin"
+    promptcolor="red"
+fi
+
 # terminal specific settings
 case $TERM in
     xterm*)
@@ -20,7 +28,7 @@ case $TERM in
         bindkey ";5C" forward-word
 
         # set terminal title
-        precmd() { print -Pn "\e]0;%n@%m:%~\a" }
+        precmd() { print -Pn "\e]0;%n${admin}@%m:%~\a" }
         ;;
 
     sun-color)
@@ -30,13 +38,9 @@ case $TERM in
         ;;
 esac
 
-if [[ -x $(whence klist) ]] && klist 2>&1 | grep jtl/admin > /dev/null; then
-    admin=1
-fi
-
 # set prompt: red for root; green for user
 autoload -U colors && colors
-PROMPT="${admin:+(admin) }%B%(!.%{$fg[red]%}%m.%{$fg[green]%}%n@%m)%{$fg[blue]%} %~ %#%{$reset_color%}%b "
+PROMPT="%B%(!.%{$fg[red]%}root${admin}@%m.%{$fg[$promptcolor]%}%n${admin}@%m)%{$fg[blue]%} %~ %#%{$reset_color%}%b "
 
 # enable command autocompletion
 autoload -U compinit && compinit
@@ -51,6 +55,7 @@ fi
 ls --color / > /dev/null 2>&1 && alias ls="ls --color"
 alias vi="$EDITOR"
 alias vim="vim -u $HOME/.vimrc.code"
+alias mv="mv -f"
 alias rm="rm -f"
 alias glue="ssh -qt stowe.umd.edu"
 
@@ -72,6 +77,17 @@ s() {
     fi
 }
 compdef s=sudo
+
+# a better version of 'suafs'
+sa() {
+    if [[ $# -eq 0 ]]; then
+        pagsh -c "kinit jtl/admin && ($SHELL; kdestroy)"
+    else
+        pagsh -c "kinit jtl/admin && ($SHELL -c \"$*\"; kdestroy)"
+    fi
+}
+compdef sa=sudo
+unalias suafs 2>/dev/null
 
 play() {
     DISPLAY=:0 mplayer -af volnorm -cache 4096 -fs $@
