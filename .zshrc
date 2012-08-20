@@ -80,14 +80,14 @@ s() {
 compdef s=sudo
 
 # a better version of 'suafs'
-sa() {
+a() {
     if [[ $# -eq 0 ]]; then
         pagsh -c "kinit jtl/admin && ($SHELL; kdestroy)"
     else
         pagsh -c "kinit jtl/admin && ($SHELL -c \"$*\"; kdestroy)"
     fi
 }
-compdef sa=sudo
+compdef a=sudo
 unalias suafs 2>/dev/null
 
 play() {
