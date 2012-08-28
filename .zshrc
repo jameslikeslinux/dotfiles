@@ -81,6 +81,7 @@ s() {
 compdef s=sudo
 
 # a better version of 'suafs'
+unalias a 2>/dev/null
 a() {
     if [[ $# -eq 0 ]]; then
         pagsh -c "kinit jtl/admin && ($SHELL; kdestroy)"
