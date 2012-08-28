@@ -59,6 +59,7 @@ unalias cp 2>/dev/null
 alias mv="mv -f"
 alias rm="rm -f"
 alias glue="ssh -qt stowe.umd.edu"
+alias vpn="s openconnect -u jtl.oitmr --authgroup=UMapps --script=$HOME/bin/umd-networks vpn.umd.edu"
 
 # simple privilege escalation
 s() {
