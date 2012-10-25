@@ -4,6 +4,18 @@ HISTSIZE=10000
 SAVEHIST=10000
 setopt append_history
 
+if [[ ! -e $HISTFILE ]]; then
+    touch $HISTFILE
+    chmod 600 $HISTFILE
+fi
+
+if [[ ! -w $HISTFILE ]]; then
+    echo
+    echo "HISTFILE is not writable..."
+    echo "Run \"s chown $USER:$(id -gn) $HISTFILE\" to fix."
+    echo
+fi
+
 # enable emacs keybindings
 bindkey -e
 
