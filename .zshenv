@@ -1,5 +1,6 @@
 if [[ $HOST = "builder" ]]; then
-    export PKGBUILD_IPS_SERVER="http://nest:10003/"
+    export PKGBUILD_IPS_SERVER="http://nest:10001/"
+    export PATH=/usr/gcc/bin:$PATH
 elif [[ -e /etc/glue ]]; then
     # glue does special stuff in bash/tcsh shells
     source ~/.bashrc
