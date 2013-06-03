@@ -16,19 +16,14 @@ if [[ ! -w $HISTFILE ]]; then
     echo
 fi
 
+# restore default redirect behavior
+setopt clobber
+
 # enable emacs keybindings
 bindkey -e
 
 # split on slashes
 WORDCHARS="${WORDCHARS:s@/@}"
-
-# figure out if I'm running with Glue admin rights
-admin=""
-promptcolor="green"
-if [[ -x $(whence klist) ]] && klist 2>&1 | grep jtl/admin > /dev/null; then
-    admin="/admin"
-    promptcolor="red"
-fi
 
 # terminal specific settings
 case $TERM in
@@ -49,6 +44,14 @@ case $TERM in
         bindkey "^?" delete-char
         ;;
 esac
+
+# figure out if I'm running with Glue admin rights
+admin=""
+promptcolor="green"
+if [[ -x $(whence klist) ]] && klist 2>&1 | grep jtl/admin > /dev/null; then
+    admin="/admin"
+    promptcolor="red"
+fi
 
 # set prompt: red for root; green for user
 autoload -U colors && colors
