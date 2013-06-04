@@ -77,6 +77,7 @@ alias glue="ssh -qt stowe.umd.edu"
 alias vpn="s openconnect -u jtl.oitmr --authgroup=UMapps --script=$HOME/bin/umd-networks vpn.umd.edu"
 alias vpn-full="s openconnect -u jtl.oitmr --authgroup=UMapps --script=/etc/vpnc/vpnc-script vpn.umd.edu"
 alias timer='s=0; while true; do clear; printf "%d:%02d" $((s / 60)) $((s++ % 60)); sleep 1; done'
+alias windows='rdesktop -xl -g 1400x1050 -u jtl -p windows windows'
 
 # simple privilege escalation
 s() {
