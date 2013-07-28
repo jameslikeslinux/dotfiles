@@ -1,3 +1,30 @@
+# set path
+if [[ -e /etc/glue ]]; then
+    # glue does special stuff in bash/tcsh shells
+    source ~/.bashrc
+else
+    typeset -U path
+    for dir in /bin /sbin /usr/bin /usr/sbin /usr/sfw/bin /usr/gnu/bin /opt/csw/bin /opt/csw/sbin /usr/local/bin /usr/local/sbin /usr/local/texlive/2009/bin/i386-solaris /usr/local/texlive/2010/bin/i386-solaris /opt/SunStudioExpress/bin; do
+        [[ -e $dir ]] && path=($dir $path)
+    done
+fi
+
+# editor is vim if it exists
+vim=$(whence vim)
+if [[ -x $vim ]]; then
+    export EDITOR=$vim
+else
+    export EDITOR="vi"
+fi
+
+export VISUAL=$EDITOR
+export PAGER="less"
+
+# settings for Debian packaging
+export DEBFULLNAME="James Lee"
+export DEBEMAIL="jlee@thestaticvoid.com"
+export QUILT_PATCHES="debian/patches"
+
 # history settings
 HISTFILE=~/.histfile.$HOST
 HISTSIZE=10000
@@ -37,6 +64,14 @@ case $TERM in
         # set terminal title
         precmd() { print -Pn "\e]0;%n${admin}@%m:%~\a" }
         ;;
+
+    linux)
+        bindkey "^[[1~" beginning-of-line
+        bindkey "^[[4~" end-of-line
+        bindkey "^[[3~" delete-char
+        bindkey "^[[D" backward-word
+        bindkey "^[[C" forward-word
+	;;
 
     sun-color)
         bindkey "^[[214z" beginning-of-line
@@ -114,10 +149,6 @@ play() {
     DISPLAY=:0 mplayer -af volnorm -cache 4096 -fs $@
 }
 compdef play=mplayer
-
-if [[ $HOST = "builder" && -z $CC ]]; then
-    source /opt/dtbld/bin/env.sh
-fi
 
 # set standard umask
 umask 022
