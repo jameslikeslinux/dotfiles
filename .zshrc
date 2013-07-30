@@ -69,8 +69,6 @@ case $TERM in
         bindkey "^[[1~" beginning-of-line
         bindkey "^[[4~" end-of-line
         bindkey "^[[3~" delete-char
-        bindkey "^[[D" backward-word
-        bindkey "^[[C" forward-word
 	;;
 
     sun-color)
