@@ -22,6 +22,9 @@ set ruler
 set nocompatible
 set backspace=2
 
+" Disable auto-indent
+set noai
+
 " Detect puppet filetype
 au BufRead,BufNewFile *.pp set filetype=puppet
 
