@@ -56,7 +56,9 @@ WORDCHARS="${WORDCHARS:s@/@}"
 case $TERM in
     xterm*)
         bindkey "^[OH" beginning-of-line
+        bindkey "^[[H" beginning-of-line
         bindkey "^[OF" end-of-line
+        bindkey "^[[F" end-of-line
         bindkey "^[[3~" delete-char
         bindkey ";5D" backward-word
         bindkey ";5C" forward-word
