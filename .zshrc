@@ -4,10 +4,11 @@ if [[ -e /etc/glue ]]; then
     source ~/.bashrc
 else
     typeset -U path
-    for dir in /bin /sbin /usr/bin /usr/sbin /usr/sfw/bin /usr/gnu/bin /opt/csw/bin /opt/csw/sbin /usr/local/bin /usr/local/sbin /usr/local/texlive/2009/bin/i386-solaris /usr/local/texlive/2010/bin/i386-solaris /opt/SunStudioExpress/bin; do
+    for dir in /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin $HOME/bin; do
         [[ -e $dir ]] && path=($dir $path)
     done
 fi
+
 
 # editor is vim if it exists
 vim=$(whence vim)
@@ -20,10 +21,12 @@ fi
 export VISUAL=$EDITOR
 export PAGER="less"
 
+
 # settings for Debian packaging
 export DEBFULLNAME="James Lee"
 export DEBEMAIL="jlee@thestaticvoid.com"
 export QUILT_PATCHES="debian/patches"
+
 
 # history settings
 HISTFILE=~/.histfile.$HOST
@@ -43,14 +46,18 @@ if [[ ! -w $HISTFILE ]]; then
     echo
 fi
 
+
 # restore default redirect behavior
 setopt clobber
+
 
 # enable emacs keybindings
 bindkey -e
 
+
 # split on slashes
 WORDCHARS="${WORDCHARS:s@/@}"
+
 
 # terminal specific settings
 case $TERM in
@@ -80,6 +87,7 @@ case $TERM in
         ;;
 esac
 
+
 # figure out if I'm running with Glue admin rights
 admin=""
 promptcolor="green"
@@ -88,18 +96,22 @@ if [[ -x $(whence klist) ]] && klist 2>&1 | grep jtl/admin > /dev/null; then
     promptcolor="red"
 fi
 
+
 # set prompt: red for root; green for user
 autoload -U colors && colors
 PROMPT="%B%(!.%{$fg[red]%}root${admin}@%m.%{$fg[$promptcolor]%}%n${admin}@%m)%{$fg[blue]%} %~ %#%{$reset_color%}%b "
 
+
 # enable command autocompletion
 autoload -U compinit && compinit
+
 
 # color list autocompletion
 if [[ -x $(whence dircolors) ]]; then
     eval $(dircolors)
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 fi
+
 
 # aliases
 ls --color / > /dev/null 2>&1 && alias ls="ls --color"
@@ -109,10 +121,7 @@ unalias cp 2>/dev/null
 alias mv="mv -f"
 alias rm="rm -f"
 alias glue="ssh -qt stowe.umd.edu"
-alias vpn="s openconnect -u jtl.oitmr --authgroup=UMapps --script=$HOME/bin/umd-networks vpn.umd.edu"
-alias vpn-full="s openconnect -u jtl.oitmr --authgroup=UMapps --script=/etc/vpnc/vpnc-script vpn.umd.edu"
-alias timer='s=0; while true; do clear; printf "%d:%02d" $((s / 60)) $((s++ % 60)); sleep 1; done'
-alias windows='rdesktop -xl -g 1400x1050 -u jtl -p windows windows'
+
 
 # simple privilege escalation
 s() {
@@ -124,16 +133,14 @@ s() {
             su -m -c "$SHELL -c \"$*\"; kdestroy"
         fi
     else
-        if sudo -V | grep "Sudo version 1.6" > /dev/null; then
-            sudo ${@:--s}
-        else
-            sudo -E ${@:--s}
-        fi
+        sudo ${@:--s}
     fi
 }
 compdef s=sudo
 
+
 # a better version of 'suafs'
+unalias suafs 2>/dev/null
 unalias a 2>/dev/null
 a() {
     if [[ $# -eq 0 ]]; then
@@ -143,12 +150,14 @@ a() {
     fi
 }
 compdef a=sudo
-unalias suafs 2>/dev/null
 
+
+# sane mplayer defaults
 play() {
     DISPLAY=:0 mplayer -af volnorm -cache 4096 -fs $@
 }
 compdef play=mplayer
+
 
 # set standard umask
 umask 022
