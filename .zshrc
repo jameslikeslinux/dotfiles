@@ -155,3 +155,7 @@ compdef play=mplayer
 
 # set standard umask
 umask 022
+
+
+# enable X apps through sudo (along with env_keep)
+export XAUTHORITY="${XAUTHORITY-$HOME/.Xauthority}"
