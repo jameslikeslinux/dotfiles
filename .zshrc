@@ -22,12 +22,6 @@ export VISUAL=$EDITOR
 export PAGER="less"
 
 
-# settings for Debian packaging
-export DEBFULLNAME="James Lee"
-export DEBEMAIL="jlee@thestaticvoid.com"
-export QUILT_PATCHES="debian/patches"
-
-
 # history settings
 HISTFILE=~/.histfile.$HOST
 HISTSIZE=10000
