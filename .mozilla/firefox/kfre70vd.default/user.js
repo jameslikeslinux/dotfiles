@@ -12,6 +12,7 @@ user_pref("browser.urlbar.trimURLs", false);
 user_pref("datareporting.healthreport.uploadEnabled", false);
 user_pref("general.smoothScroll", false);
 user_pref("keyword.URL", "http://www.google.com/search?ie=UTF-8&sourceid=navclient&gfns=1&q=");
+user_pref("middlemouse.contentLoadURL", false);
 user_pref("pdfjs.migrationVersion", 1);
 user_pref("pdfjs.previousHandler.alwaysAskBeforeHandling", true);
 user_pref("pdfjs.previousHandler.preferredAction", 4);
