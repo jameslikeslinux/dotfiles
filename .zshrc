@@ -68,6 +68,18 @@ case $TERM in
         precmd() { print -Pn "\e]0;%n${admin}@%m:%~\a" }
         ;;
 
+    screen)
+        bindkey "^A" beginning-of-line
+        bindkey "^[[1~" beginning-of-line
+        bindkey "^E" end-of-line
+        bindkey "^[[4~" end-of-line
+        bindkey "^[[1;5D" backward-word
+        bindkey "^[[1;5C" forward-word
+
+        # set terminal title
+        precmd() { print -Pn "\e]0;%n${admin}@%m:%~\a" }
+        ;;
+
     linux)
         bindkey "^[[1~" beginning-of-line
         bindkey "^[[4~" end-of-line
