@@ -30,3 +30,6 @@ au BufRead,BufNewFile *.pp set filetype=puppet
 
 " Detect Arduino Sketch filetype
 au BufRead,BufNewFile *.ino set filetype=cpp
+
+" Detect Elixir filetype
+au BufRead,BufNewFile *.ex,*.exs set filetype=elixir
