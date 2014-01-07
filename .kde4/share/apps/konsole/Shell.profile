@@ -1,8 +1,9 @@
 [Appearance]
-ColorScheme=Linux
-Font=Monospace,8,-1,5,50,0,0,0,0,0
+ColorScheme=TomorrowNightBright
+Font=DejaVu Sans Mono for Powerline,8,-1,5,50,0,0,0,0,0
 
 [General]
+Environment=TERM=xterm-256color
 LocalTabTitleFormat=%w
 Name=Shell
 Parent=FALLBACK/

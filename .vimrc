@@ -1,22 +1,5 @@
-" Fix for color xterms in Solaris.
-" From :help xterm-color
-if &term =~ "xterm"
-  if has("terminfo")
-    set t_Co=8
-    set t_Sf=[3%p1%dm
-    set t_Sb=[4%p1%dm
-  else
-    set t_Co=8
-    set t_Sf=[3%dm
-    set t_Sb=[4%dm
-  endif
-endif
-
 " Enable syntax highlighting
 syntax on
-
-" Show cursor position
-set ruler
 
 " Behave less like vi
 set nocompatible
@@ -33,3 +16,28 @@ au BufRead,BufNewFile *.ino set filetype=cpp
 
 " Detect Elixir filetype
 au BufRead,BufNewFile *.ex,*.exs set filetype=elixir
+
+" Load Pathogen
+execute pathogen#infect()
+
+" Set color scheme
+colorscheme Tomorrow-Night-Bright
+
+" Highlight current line
+set cursorline
+
+" Enable airline
+set laststatus=2
+
+" Let airline detect mode changes quicker
+set ttimeoutlen=50
+
+" Let airline show the mode
+set noshowmode
+
+" Airline settings
+let g:airline_powerline_fonts=1
+let g:airline#extensions#tabline#enabled=1
+let g:airline#extensions#tabline#show_buffers = 0
+let g:airline#extensions#tabline#tab_min_count = 2
+let g:airline#extensions#tabline#tab_nr_type = 1
