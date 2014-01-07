@@ -8,6 +8,9 @@ set backspace=2
 " Disable auto-indent
 set noai
 
+" Use unicode
+set encoding=utf-8
+
 " Detect puppet filetype
 au BufRead,BufNewFile *.pp set filetype=puppet
 
