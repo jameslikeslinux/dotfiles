@@ -41,5 +41,8 @@ set ttimeoutlen=50
 " Let airline show the mode
 set noshowmode
 
-" Airline settings
-let g:airline_powerline_fonts=1
+" Let airline use special powerline characters
+let g:airline_powerline_fonts = 1
+
+" Airline outputs bufferline
+let g:bufferline_echo = 0
