@@ -104,7 +104,7 @@ precmd() {
     export UNIQ_PWD=$REPLY
 
     # set prompt using powerline-shell
-    export PS1="$(~/bin/powerline-shell.py $? --shell zsh 2>/dev/null) "
+    export PS1="$(~/.zsh/powerline-shell.py $? --shell zsh 2>/dev/null) "
 
     # set terminal title
     case $TERM in

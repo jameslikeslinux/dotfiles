@@ -200,8 +200,8 @@ class Color(DefaultColor):
     REPO_DIRTY_BG = 1  # red
     REPO_DIRTY_FG = 15 # white
 
-    JOBS_FG = 14
-    JOBS_BG = 8
+    JOBS_FG = 0
+    JOBS_BG = 10
 
     CMD_PASSED_BG = 8
     CMD_PASSED_FG = 15
@@ -338,9 +338,9 @@ import re
 import subprocess
 
 def add_jobs_segment():
-    pppid = subprocess.Popen(['ps', '-p', str(os.getppid()), '-oppid='], stdout=subprocess.PIPE).communicate()[0].strip()
+    #pppid = subprocess.Popen(['ps', '-p', str(os.getppid()), '-opid'], stdout=subprocess.PIPE).communicate()[0].strip()
     output = subprocess.Popen(['ps', '-a', '-o', 'ppid'], stdout=subprocess.PIPE).communicate()[0]
-    num_jobs = len(re.findall(str(pppid), output.decode('utf-8'))) - 1
+    num_jobs = len(re.findall(str(os.getppid()), output.decode('utf-8'))) - 1
 
     if num_jobs > 0:
         powerline.append(' %d ' % num_jobs, Color.JOBS_FG, Color.JOBS_BG)
