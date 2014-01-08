@@ -63,9 +63,6 @@ case $TERM in
         bindkey "^[[3~" delete-char
         bindkey ";5D" backward-word
         bindkey ";5C" forward-word
-
-        # set terminal title
-        precmd() { print -Pn "\e]0;%n${admin}@%m:%~\a" }
         ;;
 
     screen)
@@ -75,16 +72,13 @@ case $TERM in
         bindkey "^[[4~" end-of-line
         bindkey "^[[1;5D" backward-word
         bindkey "^[[1;5C" forward-word
-
-        # set terminal title
-        precmd() { print -Pn "\e]0;%n${admin}@%m:%~\a" }
         ;;
 
     linux)
         bindkey "^[[1~" beginning-of-line
         bindkey "^[[4~" end-of-line
         bindkey "^[[3~" delete-char
-	;;
+        ;;
 
     sun-color)
         bindkey "^[[214z" beginning-of-line
@@ -96,16 +90,29 @@ esac
 
 # figure out if I'm running with Glue admin rights
 admin=""
-promptcolor="green"
 if [[ -x $(whence klist) ]] && klist 2>&1 | grep jtl/admin > /dev/null; then
     admin="/admin"
-    promptcolor="red"
+
+    # set environmental variable for powerline-shell
+    export ADMIN=1
 fi
 
+source $HOME/.zsh/disambiguate.zsh
 
-# set prompt: red for root; green for user
-autoload -U colors && colors
-PROMPT="%B%(!.%{$fg[red]%}root${admin}@%m.%{$fg[$promptcolor]%}%n${admin}@%m)%{$fg[blue]%} %~ %#%{$reset_color%}%b "
+precmd() {
+    disambiguate -k $(print -P "%~")
+    export UNIQ_PWD=$REPLY
+
+    # set prompt using powerline-shell
+    export PS1="$(~/bin/powerline-shell.py $? --shell zsh 2>/dev/null) "
+
+    # set terminal title
+    case $TERM in
+        xterm*|screen)
+            print -Pn "\e]0;%n${admin}@%m:${UNIQ_PWD}\a"
+            ;;
+    esac
+}
 
 
 # enable command autocompletion
