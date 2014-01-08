@@ -43,6 +43,3 @@ set noshowmode
 
 " Let airline use special powerline characters
 let g:airline_powerline_fonts = 1
-
-" Airline outputs bufferline
-let g:bufferline_echo = 0
