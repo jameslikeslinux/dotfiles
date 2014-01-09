@@ -1,3 +1,11 @@
+autoload -U is-at-least
+if ! is-at-least 5.0.5; then
+    for zsh in $HOME/sys/bin/zsh; do
+        [[ -x $zsh ]] && exec $zsh
+    done
+fi
+
+
 # set path
 if [[ -e /etc/glue ]]; then
     # glue does special stuff in bash/tcsh shells
@@ -104,7 +112,7 @@ precmd() {
     export UNIQ_PWD=$REPLY
 
     # set prompt using powerline-shell
-    export PS1="$(~/.zsh/powerline-shell.py $? --shell zsh 2>/dev/null) "
+    export PS1="$(python2.7 ~/.zsh/powerline-shell.py $? --shell zsh 2>/dev/null) "
 
     # set terminal title
     case $TERM in

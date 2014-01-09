@@ -218,9 +218,10 @@ class Color(DefaultColor):
 
 
 import os
+import pwd
 
 def add_username_segment():
-    user = os.getenv('USER')
+    user = pwd.getpwuid(os.getuid())[0]
 
     if user not in ['root', 'jlee', 'jtl']:
         if powerline.args.shell == 'bash':
@@ -331,7 +332,7 @@ add_jobs_segment()
 import os
 
 def add_root_indicator_segment():
-    root = os.getenv('USER') == 'root'
+    root = os.getuid() == 0
     admin = os.getenv('ADMIN')
     background = Color.ROOT_BG if root else Color.USERNAME_BG
 
