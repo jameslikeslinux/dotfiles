@@ -11,19 +11,22 @@ def warn(msg):
 class Powerline:
     symbols = {
         'compatible': {
+            'root_indicator': '',
             'lock': 'RO',
             'network': 'SSH',
             'separator': '\u25B6',
             'separator_thin': '\u276F'
         },
         'patched': {
+            'root_indicator': '',
             'lock': '\uE0A2',
             'network': '\uE0A2',
             'separator': '\uE0B0',
             'separator_thin': '\uE0B1'
         },
         'flat': {
-            'lock': '',
+            'root_indicator': ' > ',
+            'lock': 'RO',
             'network': '',
             'separator': '',
             'separator_thin': ''
@@ -43,6 +46,7 @@ class Powerline:
         self.color_template = self.color_templates[shell]
         self.reset = self.color_template % '[0m'
         self.bold = self.color_template % '[1m'
+        self.root_indicator = Powerline.symbols[mode]['root_indicator']
         self.lock = Powerline.symbols[mode]['lock']
         self.network = Powerline.symbols[mode]['network']
         self.separator = Powerline.symbols[mode]['separator']
@@ -337,12 +341,12 @@ def add_root_indicator_segment():
     background = Color.ROOT_BG if root else Color.USERNAME_BG
 
     if root and admin:
-        powerline.append('', Color.USERNAME_FG, background, powerline.separator_thin, Color.SEPARATOR_FG)
+        powerline.append(powerline.root_indicator, Color.USERNAME_FG, background, powerline.separator_thin, Color.SEPARATOR_FG)
     else:
-        powerline.append('', Color.USERNAME_FG, background)
+        powerline.append(powerline.root_indicator, Color.USERNAME_FG, background)
 
     if admin:
-        powerline.append('', Color.USERNAME_FG, Color.ROOT_BG)
+        powerline.append(powerline.root_indicator, Color.USERNAME_FG, Color.ROOT_BG)
 
 add_root_indicator_segment()
 

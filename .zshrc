@@ -1,10 +1,18 @@
 # check for newer local version of zsh
 autoload -U is-at-least
 if ! is-at-least 5.0.5; then
-    for zsh in $HOME/sys/bin/zsh; do
+    for zsh in $HOME/local/bin/zsh; do
         [[ -x $zsh ]] && exec $zsh
     done
 fi
+
+
+
+# degrade shell on Solaris
+if [[ $OSNAME = "solaris" && $TERM = *256color ]]; then
+    export TERM=${TERM%-256color}
+fi
+
 
 
 # history settings
@@ -88,8 +96,10 @@ precmd() {
     disambiguate -k $(print -P "%~")
     export UNIQ_PWD=$REPLY
 
+    powerline_mode=$([[ $TERM = *256color ]] && print patched || print flat)
+
     # set prompt using powerline-shell
-    export PS1="$(python3 ~/.zsh/powerline-shell.py $? --shell zsh 2>/dev/null) "
+    export PS1="$(python3 ~/.zsh/powerline-shell.py $? --shell zsh --mode ${powerline_mode} 2>/dev/null) "
 
     # set terminal title
     case $TERM in
