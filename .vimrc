@@ -14,6 +14,9 @@ set encoding=utf-8
 " Allow unsaved buffers
 set hidden
 
+" Set terminal title
+set title
+
 " Detect puppet filetype
 au BufRead,BufNewFile *.pp set filetype=puppet
 
