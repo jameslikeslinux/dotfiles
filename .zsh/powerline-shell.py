@@ -181,6 +181,7 @@ class Color(DefaultColor):
 class Color(DefaultColor):
     USERNAME_FG = 0
     USERNAME_BG = 4
+    ROOT_BG = 1
     USERNAME_SEPARATOR = 9
 
     HOSTNAME_FG = -1 # no color
@@ -192,7 +193,7 @@ class Color(DefaultColor):
     CWD_FG = -1  # no color
     SEPARATOR_FG = 7
 
-    READONLY_BG = 1
+    READONLY_BG = 11
     READONLY_FG = 0
 
     REPO_CLEAN_BG = 2  # green
@@ -215,68 +216,47 @@ class Color(DefaultColor):
     VIRTUAL_ENV_FG = 0
 
 
-import os
-
-def add_virtual_env_segment():
-    env = os.getenv('VIRTUAL_ENV')
-    if env is None:
-        return
-
-    env_name = os.path.basename(env)
-    bg = Color.VIRTUAL_ENV_BG
-    fg = Color.VIRTUAL_ENV_FG
-    powerline.append(' %s ' % env_name, fg, bg)
-
-add_virtual_env_segment()
-
-
 
 import os
 
 def add_username_segment():
-    if powerline.args.shell == 'bash':
-        user_prompt = ' \\u '
-    elif powerline.args.shell == 'zsh':
-        user_prompt = ' %n '
-    else:
-        user_prompt = ' %s ' % os.getenv('USER')
+    user = os.getenv('USER')
 
-    root = os.getenv('USER') == 'root'
-    admin = os.getenv('ADMIN')
-    background = Color.READONLY_BG if root else Color.USERNAME_BG
+    if user not in ['root', 'jlee', 'jtl']:
+        if powerline.args.shell == 'bash':
+            user_prompt = ' \\u '
+        elif powerline.args.shell == 'zsh':
+            user_prompt = ' %n '
+        else:
+            user_prompt = ' %s ' % os.getenv('USER')
 
-    if root and admin:
-        powerline.append(user_prompt, Color.USERNAME_FG, background, powerline.separator_thin, Color.SEPARATOR_FG, bold = True)
-    else:
-        powerline.append(user_prompt, Color.USERNAME_FG, background, bold = True)
-
-    if admin:
-        powerline.append(' admin ', Color.USERNAME_FG, Color.READONLY_BG, bold = True)
+        powerline.append(user_prompt, Color.USERNAME_FG, Color.USERNAME_BG, bold = True)
 
 add_username_segment()
 
 
 def add_hostname_segment():
-    if powerline.args.colorize_hostname:
-        from lib.color_compliment import stringToHashToColorAndOpposite
-        from lib.colortrans import rgb2short
-        from socket import gethostname
-        hostname = gethostname()
-        FG, BG = stringToHashToColorAndOpposite(hostname)
-        FG, BG = (rgb2short(*color) for color in [FG, BG])
-        host_prompt = ' %s' % hostname.split('.')[0]
+    if os.getenv('SSH_CLIENT'):
+        if powerline.args.colorize_hostname:
+            from lib.color_compliment import stringToHashToColorAndOpposite
+            from lib.colortrans import rgb2short
+            from socket import gethostname
+            hostname = gethostname()
+            FG, BG = stringToHashToColorAndOpposite(hostname)
+            FG, BG = (rgb2short(*color) for color in [FG, BG])
+            host_prompt = ' %s' % hostname.split('.')[0]
 
-        powerline.append(host_prompt, FG, BG)
-    else:
-        if powerline.args.shell == 'bash':
-            host_prompt = ' \\h '
-        elif powerline.args.shell == 'zsh':
-            host_prompt = ' %m '
+            powerline.append(host_prompt, FG, BG, bold = True)
         else:
-            import socket
-            host_prompt = ' %s ' % socket.gethostname().split('.')[0]
+            if powerline.args.shell == 'bash':
+                host_prompt = ' \\h '
+            elif powerline.args.shell == 'zsh':
+                host_prompt = ' %m '
+            else:
+                import socket
+                host_prompt = ' %s ' % socket.gethostname().split('.')[0]
 
-        powerline.append(host_prompt, Color.HOSTNAME_FG, Color.HOSTNAME_BG)
+            powerline.append(host_prompt, Color.HOSTNAME_FG, Color.HOSTNAME_BG, bold = True)
 
 
 add_hostname_segment()
@@ -346,6 +326,24 @@ def add_jobs_segment():
         powerline.append(' %d ' % num_jobs, Color.JOBS_FG, Color.JOBS_BG)
 
 add_jobs_segment()
+
+
+import os
+
+def add_root_indicator_segment():
+    root = os.getenv('USER') == 'root'
+    admin = os.getenv('ADMIN')
+    background = Color.ROOT_BG if root else Color.USERNAME_BG
+
+    if root and admin:
+        powerline.append('', Color.USERNAME_FG, background, powerline.separator_thin, Color.SEPARATOR_FG)
+    else:
+        powerline.append('', Color.USERNAME_FG, background)
+
+    if admin:
+        powerline.append('', Color.USERNAME_FG, Color.ROOT_BG)
+
+add_root_indicator_segment()
 
 
 
