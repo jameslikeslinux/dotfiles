@@ -13,14 +13,14 @@ class Powerline:
         'compatible': {
             'lock': 'RO',
             'network': 'SSH',
-            'separator': u'\u25B6',
-            'separator_thin': u'\u276F'
+            'separator': '\u25B6',
+            'separator_thin': '\u276F'
         },
         'patched': {
-            'lock': u'\uE0A2',
-            'network': u'\uE0A2',
-            'separator': u'\uE0B0',
-            'separator_thin': u'\uE0B1'
+            'lock': '\uE0A2',
+            'network': '\uE0A2',
+            'separator': '\uE0B0',
+            'separator_thin': '\uE0B1'
         },
         'flat': {
             'lock': '',
@@ -285,7 +285,7 @@ def add_cwd_segment():
 
 #    $max_depth = powerline.args.cwd_max_depth
 #    if len(names) > max_depth:
-#        names = names[:2] + [u'\u2026'] + names[2 - max_depth:]
+#        names = names[:2] + ['\u2026'] + names[2 - max_depth:]
 
     if not powerline.args.cwd_only:
         for n in names[:-1]:
@@ -347,9 +347,4 @@ def add_root_indicator_segment():
 add_root_indicator_segment()
 
 
-
-output = powerline.draw()
-try:
-    sys.stdout.buffer.write(output)
-except AttributeError:
-    sys.stdout.write(output)
+sys.stdout.buffer.write(powerline.draw())
