@@ -22,5 +22,13 @@ else
     export EDITOR="vi"
 fi
 
+
+# set some standard programs
 export VISUAL=$EDITOR
 export PAGER="less"
+
+
+# degrade shell on Solaris
+if [[ $OSNAME = "solaris" && $TERM = *256color ]]; then
+    export TERM=${TERM%-256color}
+fi

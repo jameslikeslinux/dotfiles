@@ -7,14 +7,6 @@ if ! is-at-least 5.0.5; then
 fi
 
 
-
-# degrade shell on Solaris
-if [[ $OSNAME = "solaris" && $TERM = *256color ]]; then
-    export TERM=${TERM%-256color}
-fi
-
-
-
 # history settings
 HISTFILE=~/.histfile.$HOST
 HISTSIZE=10000

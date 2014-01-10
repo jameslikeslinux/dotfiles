@@ -29,12 +29,6 @@ au BufRead,BufNewFile *.ex,*.exs set filetype=elixir
 " Load Pathogen
 execute pathogen#infect()
 
-" Set color scheme
-colorscheme Tomorrow-Night-Bright
-
-" Highlight current line
-set cursorline
-
 " Enable airline
 set laststatus=2
 
@@ -44,5 +38,13 @@ set ttimeoutlen=50
 " Let airline show the mode
 set noshowmode
 
-" Let airline use special powerline characters
-let g:airline_powerline_fonts = 1
+if &t_Co == 256 || has("gui_running")
+    " Set color scheme
+    colorscheme Tomorrow-Night-Bright
+
+    " Highlight current line
+    set cursorline
+
+    " Let airline use special powerline characters
+    let g:airline_powerline_fonts = 1
+endif
