@@ -25,7 +25,7 @@ class Powerline:
             'separator_thin': '\uE0B1'
         },
         'flat': {
-            'root_indicator': ' > ',
+            'root_indicator': '>',
             'lock': 'RO',
             'network': '',
             'separator': '',
@@ -77,10 +77,10 @@ class Powerline:
 
         return ''.join((
             self.fgcolor(segment[1]) if segment[1] > -1 else self.reset,
-            self.bgcolor(segment[2]),
+            self.bgcolor(segment[2]) if segment[2] > -1 else '',
             ''.join((self.bold, segment[0], self.reset)) if bold else segment[0],
-            self.bgcolor(next_segment[2]) if next_segment else self.reset,
-            self.fgcolor(segment[4]),
+            self.bgcolor(next_segment[2]) if next_segment and next_segment[2] > -1 else self.reset,
+            self.fgcolor(segment[4]) if segment[4] > -1 else '',
             segment[3]))
 
 def get_valid_cwd():
@@ -338,15 +338,24 @@ import os
 def add_root_indicator_segment():
     root = os.getuid() == 0
     admin = os.getenv('ADMIN')
-    background = Color.ROOT_BG if root else Color.USERNAME_BG
+    root_foreground = Color.USERNAME_FG
+    root_background = Color.ROOT_BG if root else Color.USERNAME_BG
+    admin_foreground = Color.USERNAME_FG
+    admin_background = Color.ROOT_BG
+
+    if powerline.args.mode == 'flat':
+        root_foreground = root_background
+        root_background = -1
+        admin_foreground = admin_background
+        admin_background = -1
 
     if root and admin:
-        powerline.append(powerline.root_indicator, Color.USERNAME_FG, background, powerline.separator_thin, Color.SEPARATOR_FG)
+        powerline.append(powerline.root_indicator, root_foreground, root_background, powerline.separator_thin, Color.SEPARATOR_FG, bold=True)
     else:
-        powerline.append(powerline.root_indicator, Color.USERNAME_FG, background)
+        powerline.append(powerline.root_indicator, root_foreground, root_background, bold=True)
 
     if admin:
-        powerline.append(powerline.root_indicator, Color.USERNAME_FG, Color.ROOT_BG)
+        powerline.append(powerline.root_indicator, admin_foreground, admin_background, bold=True)
 
 add_root_indicator_segment()
 
