@@ -80,6 +80,9 @@ if [[ -x $(whence klist) ]] && klist 2>&1 | grep jtl/admin > /dev/null; then
 
     # set environmental variable for powerline-shell
     export ADMIN=1
+else
+    admin=""
+    unset ADMIN
 fi
 
 source $HOME/.zsh/disambiguate.zsh
