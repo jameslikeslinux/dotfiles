@@ -1,0 +1,6 @@
+# vim-scad
+
+## An OpenSCAD syntax file
+
+vim-scad is a basic Vim syntax file for the OpenSCAD 3D language. It originated via v0.2 of openscad.vim: http://www.vim.org/scripts/script.php?script_id=3556
+
