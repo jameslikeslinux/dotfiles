@@ -8,7 +8,7 @@ if [[ -e /etc/glue ]]; then
     source ~/.bashrc
 else
     typeset -U path
-    for dir in /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin $HOME/bin; do
+    for dir in /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin $HOME/bin $HOME/.cabal/bin; do
         [[ -e $dir ]] && path=($dir $path)
     done
 fi
