@@ -26,6 +26,9 @@ au BufRead,BufNewFile *.ino set filetype=cpp
 " Detect Elixir filetype
 au BufRead,BufNewFile *.ex,*.exs set filetype=elixir
 
+" Detect ImplicitCAD filetype
+au BufRead,BufNewFile *.escad set filetype=openscad
+
 " Load Pathogen
 execute pathogen#infect()
 
