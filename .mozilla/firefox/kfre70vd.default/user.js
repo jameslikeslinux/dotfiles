@@ -10,6 +10,7 @@ user_pref("browser.urlbar.autoFill", false);
 user_pref("browser.urlbar.formatting.enabled", false);
 user_pref("browser.urlbar.trimURLs", false);
 user_pref("datareporting.healthreport.uploadEnabled", false);
+user_pref("dom.ipc.plugins.enabled", false);
 user_pref("general.smoothScroll", false);
 user_pref("keyword.URL", "http://www.google.com/search?ie=UTF-8&sourceid=navclient&gfns=1&q=");
 user_pref("middlemouse.contentLoadURL", false);
