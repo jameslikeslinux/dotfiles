@@ -68,7 +68,7 @@ disambiguate () {
             part+=$cur[1]
             cur=$cur[2,-1]
             local -a glob
-            glob=( $prefix$full/$part*(-/N) )
+            glob=( $prefix/$full/$part*(-/N) )
             # continue adding if more than one directory matches or
             # the current string is . or ..
             # but stop if there are no more characters to add
