@@ -1,4 +1,4 @@
-BoldAsFont=no
+BoldAsFont=yes
 Font=DejaVu Sans Mono for Powerline
 FontHeight=8
 Term=xterm-256color
