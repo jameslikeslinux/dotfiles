@@ -77,37 +77,33 @@ case $TERM in
         ;;
 esac
 
-
-# figure out if I'm running with Glue admin rights
-admin=""
-if [[ -x $(whence klist) ]] && klist 2>&1 | grep jtl/admin > /dev/null; then
-    admin="/admin"
-
-    # set environmental variable for powerline-shell
-    export ADMIN=1
-else
-    admin=""
-    unset ADMIN
+# show user name at prompt if not one of my usual ones
+if [[ $USER != 'jlee' && $USER != 'jtl' && $USER != 'root' ]]; then
+    zstyle ':prompt:mine' show-user true
 fi
 
-source $HOME/.zsh/disambiguate.zsh
+# figure out if I'm running as a priviliged user
+if [[ $EUID == 0 ]]; then
+    zstyle ':prompt:mine' root true
+fi
 
-precmd() {
-    disambiguate -k $(print -P "%~")
-    export UNIQ_PWD=$REPLY
+if [[ $OS == 'Windows_NT' && -w $WINDIR ]]; then
+    zstyle ':prompt:mine' root true
+fi
 
-    powerline_mode=$([[ $TERM = *256color ]] && print patched || print flat)
+# figure out if I'm running with Glue admin rights
+if [[ -x $(whence klist) ]] && klist 2>&1 | grep jtl/admin > /dev/null; then
+    zstyle ':prompt:mine' admin true
+fi
 
-    # set prompt using powerline-shell
-    export PS1="$(python3 ~/.zsh/powerline-shell.py $? --shell zsh --mode ${powerline_mode} 2>/dev/null) "
+# fallback to flat appearance if using a stupid terminal
+if [[ $TERM != *256color ]]; then
+    zstyle ':prompt:mine' flat true
+fi
 
-    # set terminal title
-    case $TERM in
-        xterm*|screen)
-            print -Pn "\e]0;%n${admin}@%m:${UNIQ_PWD}\a"
-            ;;
-    esac
-}
+# enable my command prompt
+autoload -U promptinit && promptinit
+prompt mine
 
 
 # enable command autocompletion

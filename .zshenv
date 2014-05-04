@@ -32,3 +32,8 @@ export PAGER="less"
 if [[ $OSNAME = "solaris" && $TERM = *256color ]]; then
     export TERM=${TERM%-256color}
 fi
+
+
+# load extra functions
+typeset -U fpath
+fpath=("$HOME/.zsh/functions" $fpath)

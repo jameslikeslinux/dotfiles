@@ -1,0 +1,172 @@
+prompt_mine_separator() {
+    local bg=$1
+
+    if [[ -n $sep_fg && $flat != true ]]; then
+        if [[ $sep_fg == $bg ]]; then
+            print -n "%{${mycolors_bg[$bg]}${mycolors_fg[white]}%}%{${reset_color}%}"
+        else
+            print -n "%{${mycolors_bg[$bg]}${mycolors_fg[$sep_fg]}%}%{${reset_color}%}"
+        fi
+    fi
+
+    sep_fg=$bg
+}
+
+prompt_mine_segment() {
+    local content=$1
+    local bg=$2
+    local fg=$3
+    local bold=$4
+
+    if [[ $flat == true && -z $content ]]; then
+        content='>'
+        fg=$bg
+        bg=default
+        bold=true
+    fi
+
+    prompt_mine_separator $bg
+    [[ -n $bold ]] && print -n '%B'
+    print -n "%{${mycolors_bg[$bg]}${mycolors_fg[$fg]}%}${content}%{${reset_color}%}"
+    [[ -n $bold ]] && print -n '%b'
+}
+
+prompt_mine_username() {
+    if [[ $show_user == true ]]; then
+        prompt_mine_segment ' %n ' blue black bold
+    fi
+}
+
+prompt_mine_hostinfo() {
+    if [[ -n $SSH_CONNECTION ]]; then
+        prompt_mine_segment ' %m ' white default bold
+    fi
+}
+
+prompt_mine_cwd() {
+    local cwd=$1
+
+    if [[ $cwd == '/' ]]; then
+        components=('/')
+    else
+        # Split at /
+        components=(${(s:/:)cwd})
+    fi
+
+    # Print the first n-1 directory components
+    for c in $components[1,-2]; do
+        prompt_mine_segment " ${c} " br-white
+    done
+
+    # Print the last component in bold
+    prompt_mine_segment " ${components[-1]} " br-white default bold
+}
+
+prompt_mine_ro() {
+    local content
+
+    if [[ $flat == true ]]; then
+        content=" RO "
+    else
+        content="  "
+    fi
+
+    if [[ ! -w . ]]; then
+        prompt_mine_segment $content br-yellow black
+    fi
+}
+
+prompt_mine_bg() {
+    if [[ $(jobs | wc -l) -gt 0 ]]; then
+        prompt_mine_segment ' %j ' br-green black
+    fi
+}
+
+prompt_mine_userinfo() {
+    if [[ $root == true ]]; then
+        prompt_mine_segment '' red
+    else
+        prompt_mine_segment '' blue
+    fi
+
+    if [[ $admin == true ]]; then
+        prompt_mine_segment '' red
+    fi
+}
+
+prompt_mine_end() {
+    prompt_mine_separator
+}
+
+prompt_mine_build_prompt() {
+    local uniq_cwd=$1
+
+    prompt_mine_username
+    prompt_mine_hostinfo
+    prompt_mine_cwd $uniq_cwd
+    prompt_mine_ro
+    prompt_mine_bg
+    prompt_mine_userinfo
+    prompt_mine_end
+}
+
+prompt_mine_precmd() {
+    local uniq_cwd
+    local admin_title
+
+    disambiguate -k $(print -P "%~")
+    uniq_cwd=$REPLY
+
+    if [[ $admin == true ]]; then
+        admin_title='/admin'
+    fi
+
+    # Set terminal title
+    case $TERM in
+        xterm*|screen)
+            print -Pn "\e]0;%n${admin_title}@%m:${uniq_cwd}\a"
+            ;;
+    esac
+
+    PROMPT="$(prompt_mine_build_prompt $uniq_cwd) "
+}
+
+prompt_mine_setup() {
+    autoload -U disambiguate
+    autoload -U colors && colors
+
+    typeset -Ax mycolors_bg mycolors_fg
+    mycolors_bg=(${(kv)bg})
+    mycolors_fg=(${(kv)fg})
+
+    integer color_code=0
+    for color in black red green yellow blue magenta cyan white; do
+        if [[ $terminfo[colors] -lt 16 ]]; then
+            # We don't have "bright colors"...use regular instead
+            mycolors_bg[br-${color}]=$bg[$color]
+            mycolors_fg[br-${color}]=$fg[$color]
+        else
+            mycolors_bg[${color}]="\e[48;5;${color_code}m"
+            mycolors_fg[${color}]="\e[38;5;${color_code}m"
+            mycolors_bg[br-${color}]="\e[48;5;$((color_code + 8))m"
+            mycolors_fg[br-${color}]="\e[38;5;$((color_code++ + 8))m"
+        fi
+    done
+
+    if [[ $terminfo[colors] -lt 16 ]]; then
+        # Improve legibility on Linux console
+        mycolors_bg[br-white]=$bg[black]
+        mycolors_fg[br-white]=$fg[black]
+    fi
+
+    zstyle -s ':prompt:mine' show-user show_user
+    zstyle -s ':prompt:mine' root root
+    zstyle -s ':prompt:mine' admin admin
+    zstyle -s ':prompt:mine' flat flat
+
+    add-zsh-hook precmd prompt_mine_precmd
+}
+
+prompt_mine_setup "$@"
+
+# vim: syntax=zsh
