@@ -129,7 +129,15 @@ alias glue="ssh -qt stowe.umd.edu"
 
 # simple privilege escalation
 s() {
-    if [[ -e /etc/glue ]]; then
+    if [[ $OS == 'Windows_NT' ]]; then
+        if [[ $# -eq 0 ]]; then
+            cygstart --action=runas mintty -
+        else
+            #cygstart --action=runas mintty -e "$SHELL -c \"$*\""
+            print "Can't reliably run single commands as admin.  Use plain 's' instead."
+            return 1
+        fi
+    elif [[ -e /etc/glue ]]; then
         # use 'su' instead of sudo on glue
         if [[ $# -eq 0 ]]; then
             su -m -c "$SHELL; kdestroy"
