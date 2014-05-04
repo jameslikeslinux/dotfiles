@@ -87,7 +87,7 @@ if [[ $EUID == 0 ]]; then
     zstyle ':prompt:mine' root true
 fi
 
-if [[ $OS == 'Windows_NT' && -w $WINDIR ]]; then
+if [[ $OS == 'Windows_NT' && -w '/cygdrive/c' ]]; then
     zstyle ':prompt:mine' root true
 fi
 
