@@ -38,7 +38,7 @@ prompt_mine_username() {
 }
 
 prompt_mine_hostinfo() {
-    if [[ -n $SSH_CONNECTION ]]; then
+    if [[ -n $SSH_CLIENT ]]; then
         prompt_mine_segment ' %m ' white default bold
     fi
 }
