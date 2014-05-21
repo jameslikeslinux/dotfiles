@@ -11,19 +11,13 @@ DefaultProfile=Shell.profile
 Favorites=Shell.profile
 
 [KonsoleWindow]
+SaveGeometryOnExit=false
 ShowMenuBarByDefault=false
 
 [MainWindow]
-Height 1050=290
-Height 1080=606
-Height 900=289
 MenuBar=Disabled
-State=AAAA/wAAAAD9AAAAAAAAAsgAAAJeAAAABAAAAAQAAAAIAAAACPwAAAAA
+State=AAAA/wAAAAD9AAAAAAAABAAAAAKyAAAABAAAAAQAAAAIAAAACPwAAAAA
 ToolBarsMovable=Disabled
-Width 1440=562
-Width 1680=563
-Width 1920=1044
-Width 3360=983
 
 [TabBar]
 TabBarPosition=Top

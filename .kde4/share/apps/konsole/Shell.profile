@@ -9,6 +9,7 @@ Name=Shell
 Parent=FALLBACK/
 RemoteTabTitleFormat=%w
 SaveGeometryOnExit=false
+TerminalRows=24
 
 [Keyboard]
 KeyBindings=default
