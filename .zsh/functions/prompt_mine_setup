@@ -32,7 +32,7 @@ prompt_mine_segment() {
 }
 
 prompt_mine_username() {
-    if [[ $show_user == true ]]; then
+    if [[ ! $(print -P '%n') =~ $hide_users ]]; then
         prompt_mine_segment ' %n ' blue black bold
     fi
 }
@@ -159,7 +159,7 @@ prompt_mine_setup() {
         mycolors_fg[br-white]=$fg[black]
     fi
 
-    zstyle -s ':prompt:mine' show-user show_user
+    zstyle -s ':prompt:mine' hide-users hide_users
     zstyle -s ':prompt:mine' root root
     zstyle -s ':prompt:mine' admin admin
     zstyle -s ':prompt:mine' flat flat
