@@ -177,7 +177,7 @@ root() {
         return 1
     fi
 
-    if [[ ! -d $1 || ! -d $1/boot || ! -d $1/dev || ! -d $1/proc || ! -d $1/run || ! -d $1/sys ]]; then
+    if [[ ! -d $1 || ! -d $1/boot || ! -d $1/dev || ! -d $1/proc || ! -d $1/run || ! -d $1/sys || ! -d $1/home || ! -d $1/root ]]; then
         print "$1 doesn't look like a root"
         return 2
     fi
@@ -197,8 +197,15 @@ root() {
     mount -o rbind /run $1/run
     mount -o rbind /sys $1/sys
 
+    print "Mounting home directories"
+    mount -o rbind /home $1/home
+    mount -o rbind /root $1/root
+
     print "Entering root"
     chroot $1
+
+    print "Unmounting home directories"
+    umount -l $1/home $1/root
 
     print "Unmounting /boot, /dev, /proc, /run, and /sys inside root"
     umount -l $1/boot $1/dev $1/proc $1/run $1/sys
