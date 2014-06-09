@@ -123,7 +123,7 @@ unalias cp 2>/dev/null
 alias mv="mv -f"
 alias rm="rm -f"
 alias glue="ssh -qt stowe.umd.edu"
-alias bigsnaps="zfs list -t snapshot | sort -h -k 2"
+alias bigsnaps="zfs list -t snapshot -s used"
 
 
 # simple privilege escalation
