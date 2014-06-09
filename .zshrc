@@ -170,6 +170,44 @@ play() {
 compdef play=mplayer
 
 
+# simplify chrooting
+root() {
+    if [[ $# != 1 ]]; then
+        print "Usage: root PATH"
+        return 1
+    fi
+
+    if [[ ! -d $1 || ! -d $1/boot || ! -d $1/dev || ! -d $1/proc || ! -d $1/run || ! -d $1/sys ]]; then
+        print "$1 doesn't look like a root"
+        return 2
+    fi
+
+    bootdev=$(awk '/ \/boot / {print $1}' /etc/fstab)
+    print "Boot device is ${bootdev}"
+
+    if mount | grep -q $bootdev; then
+        print "Unmounting /boot"
+        umount /boot
+    fi
+
+    print "Mounting /boot, /dev, /proc, /run, and /sys inside root"
+    mount $bootdev $1/boot
+    mount -t proc proc $1/proc
+    mount -o rbind /dev $1/dev
+    mount -o rbind /run $1/run
+    mount -o rbind /sys $1/sys
+
+    print "Entering root"
+    chroot $1
+
+    print "Unmounting /boot, /dev, /proc, /run, and /sys inside root"
+    umount -l $1/boot $1/dev $1/proc $1/run $1/sys
+
+    print "Remounting /boot"
+    mount /boot
+}
+
+
 # set standard umask
 umask 022
 
