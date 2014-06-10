@@ -185,7 +185,7 @@ root() {
     bootdev=$(awk '/ \/boot / {print $1}' /etc/fstab)
     print "Boot device is ${bootdev}"
 
-    if mount | grep -q $bootdev; then
+    if mount | grep -q ' /boot '; then
         print "Unmounting /boot"
         umount /boot
     fi
