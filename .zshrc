@@ -201,6 +201,8 @@ root() {
     mount -o rbind /home $1/home
     mount -o rbind /root $1/root
 
+    # XXX check for and mount /app and /data
+
     print "Entering root"
     chroot $1
 
