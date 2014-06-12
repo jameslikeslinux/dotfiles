@@ -56,6 +56,7 @@ prompt_mine_cwd() {
     # Print the first n-1 directory components
     for c in $components[1,-2]; do
         prompt_mine_segment " ${c} " br-white
+        [[ $flat == true ]] && prompt_mine_segment '>' default white
     done
 
     # Print the last component in bold
