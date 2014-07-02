@@ -115,7 +115,7 @@ prompt_mine_precmd() {
     local uniq_cwd
     local admin_title
 
-    disambiguate -k $(print -P "%~")
+    disambiguate -k "$(print -P "%~")"
     uniq_cwd=$REPLY
 
     if [[ $admin == true ]]; then
