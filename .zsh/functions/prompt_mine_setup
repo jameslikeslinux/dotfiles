@@ -72,6 +72,9 @@ prompt_mine_cwd() {
     fi
 
     prompt_mine_segment " ${formatted} " br-white
+
+    # unset bold
+    print -n '%b'
 }
 
 prompt_mine_ro() {
