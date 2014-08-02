@@ -45,22 +45,33 @@ prompt_mine_hostinfo() {
 
 prompt_mine_cwd() {
     local cwd=$1
+    local formatted
+    local -a components
 
-    if [[ $cwd == '/' ]]; then
-        components=('/')
+    # Split at /
+    components=(${(s:/:)cwd})
+
+#    # Print the first n-1 directory components
+#    for c in $components[1,-2]; do
+#        prompt_mine_segment " ${c} " br-white
+#        [[ $flat == true ]] && prompt_mine_segment '>' default white
+#    done
+#
+#    # Print the last component in bold
+#    prompt_mine_segment " ${components[-1]} " br-white default bold
+
+
+    if [[ ${#components} > 1 ]]; then
+        if [[ ${components[1]} != '~' ]]; then
+            formatted='/'
+        fi
+
+        formatted+="${(j:/:)components[1,-2]}/%B${components[-1]}"
     else
-        # Split at /
-        components=(${(s:/:)cwd})
+        formatted="%B${cwd}"
     fi
 
-    # Print the first n-1 directory components
-    for c in $components[1,-2]; do
-        prompt_mine_segment " ${c} " br-white
-        [[ $flat == true ]] && prompt_mine_segment '>' default white
-    done
-
-    # Print the last component in bold
-    prompt_mine_segment " ${components[-1]} " br-white default bold
+    prompt_mine_segment " ${formatted} " br-white
 }
 
 prompt_mine_ro() {
