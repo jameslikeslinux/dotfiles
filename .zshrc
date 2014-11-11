@@ -144,7 +144,7 @@ s() {
             su -m -c "$SHELL -c \"$*\"; kdestroy"
         fi
     else
-        sudo ${@:--s}
+        sudo ${@:--i}
     fi
 }
 compdef s=sudo
