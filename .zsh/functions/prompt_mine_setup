@@ -3,7 +3,7 @@ prompt_mine_separator() {
 
     if [[ -n $sep_fg && $flat != true ]]; then
         if [[ $sep_fg == $bg ]]; then
-            print -n "%{${mycolors_bg[$bg]}${mycolors_fg[white]}%}%{${reset_color}%}"
+            print -n "%{${mycolors_bg[$bg]}${mycolors_fg[br-black]}%}%{${reset_color}%}"
         else
             print -n "%{${mycolors_bg[$bg]}${mycolors_fg[$sep_fg]}%}%{${reset_color}%}"
         fi
@@ -39,7 +39,7 @@ prompt_mine_username() {
 
 prompt_mine_hostinfo() {
     if [[ -n $SSH_CLIENT ]]; then
-        prompt_mine_segment ' %m ' white default bold
+        prompt_mine_segment ' %m ' br-black default bold
     fi
 }
 

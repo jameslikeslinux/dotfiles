@@ -22,7 +22,7 @@ xterm*cursorColor:  #aeafad
 
 ! Black / Grey
 *.color0:       #000000
-*.color8:       #666666
+*.color8:       t_selection
 
 ! Red / Bright Red
 *.color1:       t_red
