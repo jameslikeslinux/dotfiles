@@ -2,10 +2,16 @@ prompt_mine_separator() {
     local bg=$1
 
     if [[ -n $sep_fg && $flat != true ]]; then
-        if [[ $sep_fg == $bg ]]; then
-            print -n "%{${mycolors_bg[$bg]}${mycolors_fg[br-black]}%}%{${reset_color}%}"
+        if [[ $flat != true ]]; then
+            if [[ $sep_fg == $bg ]]; then
+                print -n "%{${mycolors_bg[$bg]}${mycolors_fg[br-black]}%}%{${reset_color}%}"
+            else
+                print -n "%{${mycolors_bg[$bg]}${mycolors_fg[$sep_fg]}%}%{${reset_color}%}"
+            fi
         else
-            print -n "%{${mycolors_bg[$bg]}${mycolors_fg[$sep_fg]}%}%{${reset_color}%}"
+            if [[ $mycolors_bg[$sep_fg] == $mycolors_bg[$bg] ]]; then
+                print -n '\b'
+            fi
         fi
     fi
 
