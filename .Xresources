@@ -49,5 +49,5 @@ xterm*cursorColor:  #aeafad
 *.color14:      #54ced6
 
 ! Light Grey (Selection) + White (Current Line)
-*.color7:       t_selection
+*.color7:       t_foreground
 *.color15:      t_current_line
