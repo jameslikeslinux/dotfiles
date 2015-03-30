@@ -37,3 +37,7 @@ fi
 # load extra functions
 typeset -U fpath
 fpath=("$HOME/.zsh/functions" $fpath)
+
+
+# extra evironmental variables
+export DISTCC_DIR="/var/tmp/portage/.distcc/"
