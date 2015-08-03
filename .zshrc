@@ -105,7 +105,7 @@ prompt mine
 
 
 # enable command autocompletion
-autoload -U compinit && compinit
+autoload -U compinit && compinit -u
 
 
 # color list autocompletion
