@@ -129,6 +129,11 @@ alias bigsnaps="zfs list -t snapshot -s used"
 
 # simple privilege escalation
 s() {
+    # Generate escaped command string
+    # XXX: I don't know why I have to echo this in a subshell
+    # to get it to work properly...need to play around with it
+    command=$(echo "${(q)argv[@]}")
+
     if [[ $OS == 'Windows_NT' ]]; then
         if [[ $# -eq 0 ]]; then
             cygstart --action=runas mintty -
@@ -137,15 +142,22 @@ s() {
             print "Can't reliably run single commands as admin.  Use plain 's' instead."
             return 1
         fi
-    elif [[ -e /etc/glue ]]; then
-        # use 'su' instead of sudo on glue
+    elif [[ -e /etc/glue/restrict ]]; then
+        # legacy glue
         if [[ $# -eq 0 ]]; then
-            su -m -c "$SHELL; kdestroy"
+            su -m -c "${SHELL}; kdestroy"
         else
-            su -m -c "$SHELL -c \"$*\"; kdestroy"
+            su -m -c "${SHELL} -c \"${command}\"; kdestroy"
+        fi
+    elif [[ -e /etc/glue ]]; then
+        # new glue
+        if [[ $# -eq 0 ]]; then
+            su
+        else
+            su -c "$command"
         fi
     else
-        sudo ${@:--s}
+        sudo "${@:--s}"
     fi
 }
 compdef s=sudo
@@ -155,10 +167,23 @@ compdef s=sudo
 unalias suafs 2>/dev/null
 unalias a 2>/dev/null
 a() {
-    if [[ $# -eq 0 ]]; then
-        pagsh -c "kinit jtl/admin && ($SHELL; kdestroy)"
+    # Generate escaped command string
+    # XXX: I don't know why I have to echo this in a subshell
+    # to get it to work properly...need to play around with it
+    command=$(echo "${(q)argv[@]}")
+
+    if [[ -x $(whence suafs) ]]; then
+        if [[ $# -eq 0 ]]; then
+            suafs
+        else
+            suafs -c "$command"
+        fi
     else
-        pagsh -c "kinit jtl/admin && ($SHELL -c \"$*\"; kdestroy)"
+        if [[ $# -eq 0 ]]; then
+            pagsh -c "kinit jtl/admin && (${SHELL}; kdestroy)"
+        else
+            pagsh -c "kinit jtl/admin && (${SHELL} -c \"${command}\"; kdestroy)"
+        fi
     fi
 }
 compdef a=sudo
