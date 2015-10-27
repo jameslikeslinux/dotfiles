@@ -147,7 +147,7 @@ s() {
         if [[ $# -eq 0 ]]; then
             su -m -c "${SHELL}; kdestroy"
         else
-            su -m -c "${SHELL} -c \"${command}\"; kdestroy"
+            su -m -c "${SHELL} -c ${(qq)command}; kdestroy"
         fi
     elif [[ -e /etc/glue ]]; then
         # new glue
@@ -182,7 +182,7 @@ a() {
         if [[ $# -eq 0 ]]; then
             pagsh -c "kinit jtl/admin && (${SHELL}; kdestroy)"
         else
-            pagsh -c "kinit jtl/admin && (${SHELL} -c \"${command}\"; kdestroy)"
+            pagsh -c "kinit jtl/admin && (${SHELL} -c ${(qq)command}; kdestroy)"
         fi
     fi
 }
