@@ -3,7 +3,7 @@ export LANG=en_US.UTF-8
 
 
 # set path
-if [[ -e /etc/glue ]]; then
+if [[ -e /etc/glue/restrict ]]; then
     # glue does special stuff in bash/tcsh shells
     source ~/.bashrc
 else
