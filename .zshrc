@@ -129,18 +129,14 @@ alias bigsnaps="zfs list -t snapshot -s used"
 
 # simple privilege escalation
 s() {
-    # Generate escaped command string
-    # XXX: I don't know why I have to echo this in a subshell
-    # to get it to work properly...need to play around with it
-    command=$(echo "${(q)argv[@]}")
+    # quote each command argument
+    command=(${(q)argv})
 
     if [[ $OS == 'Windows_NT' ]]; then
         if [[ $# -eq 0 ]]; then
             cygstart --action=runas mintty -
         else
-            #cygstart --action=runas mintty -e "$SHELL -c \"$*\""
-            print "Can't reliably run single commands as admin.  Use plain 's' instead."
-            return 1
+            cygstart --action=runas mintty -e "$SHELL -c ${(qq)command}"
         fi
     elif [[ -e /etc/glue/restrict ]]; then
         # legacy glue
@@ -167,10 +163,8 @@ compdef s=sudo
 unalias suafs 2>/dev/null
 unalias a 2>/dev/null
 a() {
-    # Generate escaped command string
-    # XXX: I don't know why I have to echo this in a subshell
-    # to get it to work properly...need to play around with it
-    command=$(echo "${(q)argv[@]}")
+    # quote each command argument
+    command=(${(q)argv})
 
     if [[ -x $(whence suafs) ]]; then
         if [[ $# -eq 0 ]]; then
