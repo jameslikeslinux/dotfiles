@@ -243,3 +243,7 @@ umask 022
 
 # enable X apps through sudo (along with env_keep)
 export XAUTHORITY="${XAUTHORITY-$HOME/.Xauthority}"
+
+
+# Glue polutes my shell
+unset LESS LESSOPEN
