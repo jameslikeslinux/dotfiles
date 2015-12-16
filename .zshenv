@@ -28,7 +28,7 @@ export VISUAL=$EDITOR
 export PAGER="less"
 
 # Glue polutes my shell
-unset LESSOPEN
+unset LESS LESSOPEN
 
 
 # degrade shell on Solaris
