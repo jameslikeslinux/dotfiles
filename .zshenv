@@ -27,6 +27,9 @@ fi
 export VISUAL=$EDITOR
 export PAGER="less"
 
+# Glue polutes my shell
+unset LESSOPEN
+
 
 # degrade shell on Solaris
 if [[ $OSNAME = "solaris" && $TERM = *256color ]]; then
