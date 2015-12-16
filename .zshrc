@@ -123,7 +123,7 @@ alias vip="vim -u $HOME/.vimrc.ruby"
 unalias cp 2>/dev/null
 alias mv="mv -f"
 alias rm="rm -f"
-alias glue="ssh -qt grumpy.umd.edu"
+alias glue="ssh -qt stowe.umd.edu"
 alias bigsnaps="zfs list -t snapshot -s used"
 
 
