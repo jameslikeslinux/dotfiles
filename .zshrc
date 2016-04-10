@@ -78,7 +78,7 @@ case $TERM in
 esac
 
 # show user name at prompt if not one of my usual ones
-zstyle ':prompt:mine' hide-users '(jlee|jtl|root)'
+zstyle ':prompt:mine' hide-users '(james|jlee|jtl|root)'
 
 # figure out if I'm running as a priviliged user
 if [[ $EUID == 0 ]]; then
