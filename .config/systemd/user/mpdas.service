@@ -1,9 +1,11 @@
 [Unit]
-Description=AudoScrobbler client for MPD
+Description=AudioScrobbler client for MPD
+Requires=mpd.service
 After=mpd.service
 
 [Service]
 ExecStart=/usr/bin/mpdas
+Restart=on-failure
 
 [Install]
 WantedBy=default.target
