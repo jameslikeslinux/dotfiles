@@ -1,6 +1,6 @@
 # check for newer local version of zsh
 autoload -U is-at-least
-if ! is-at-least 5.0.5; then
+if ! is-at-least 5.2; then
     for zsh in $HOME/local/bin/zsh; do
         [[ -x $zsh ]] && exec $zsh
     done
