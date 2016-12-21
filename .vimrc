@@ -17,19 +17,8 @@ set hidden
 " Set terminal title
 set title
 
-" Detect puppet filetype
-au BufRead,BufNewFile *.pp set filetype=puppet
-
-" Detect Arduino Sketch filetype
-au BufRead,BufNewFile *.ino set filetype=cpp
-
-" Detect Elixir filetype
-au BufRead,BufNewFile *.ex,*.exs set filetype=elixir
-
-" Detect ImplicitCAD filetype
-au BufRead,BufNewFile *.escad set filetype=openscad
-
 " Load Pathogen
+runtime bundle/vim-pathogen/autoload/pathogen.vim
 execute pathogen#infect()
 
 " Enable airline
