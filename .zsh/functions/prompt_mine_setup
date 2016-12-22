@@ -95,19 +95,19 @@ prompt_mine_ro() {
     fi
 
     if [[ ! -w . ]]; then
-        prompt_mine_segment $content br-yellow black
+        prompt_mine_segment $content yellow black
     fi
 }
 
 prompt_mine_bg() {
     if [[ $(jobs | wc -l) -gt 0 ]]; then
-        prompt_mine_segment ' %j ' br-green black
+        prompt_mine_segment ' %j ' green black
     fi
 }
 
 prompt_mine_userinfo() {
     if [[ $root == true ]]; then
-        prompt_mine_segment '' br-red
+        prompt_mine_segment '' red
     else
         prompt_mine_segment '' blue
     fi
