@@ -1,4 +1,4 @@
-" Enable syntax highlighting
+"G Enable syntax highlighting
 syntax on
 
 " Behave less like vi
@@ -41,12 +41,17 @@ if &t_Co == 256 || has("gui_running")
         set termguicolors
     endif
 
-    " Set color scheme
-    colorscheme Tomorrow-Night-Bright
-
     " Highlight current line
     set cursorline
 
     " Let airline use special powerline characters
     let g:airline_powerline_fonts = 1
 endif
+
+" Set color scheme
+colorscheme base16-default-dark
+
+" Force the background to be black (transparent)
+" See: http://stackoverflow.com/questions/7616294/force-vim-background-to-black
+set background=dark
+highlight Normal guibg=black
