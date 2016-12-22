@@ -1,5 +1,5 @@
 [Appearance]
-ColorScheme=base16-default
+ColorScheme=base16-bright
 Font=DejaVu Sans Mono for Powerline,8,-1,5,50,0,0,0,0,0
 
 [General]

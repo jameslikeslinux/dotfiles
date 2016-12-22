@@ -49,7 +49,7 @@ if &t_Co == 256 || has("gui_running")
 endif
 
 " Set color scheme
-colorscheme base16-default-dark
+colorscheme base16-bright
 
 " Force the background to be black (transparent)
 " See: http://stackoverflow.com/questions/7616294/force-vim-background-to-black
