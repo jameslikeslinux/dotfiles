@@ -53,5 +53,5 @@ colorscheme base16-default-dark
 
 " Force the background to be black (transparent)
 " See: http://stackoverflow.com/questions/7616294/force-vim-background-to-black
-set background=dark
 highlight Normal guibg=black
+set background=dark
