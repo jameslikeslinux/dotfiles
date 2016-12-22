@@ -47,7 +47,7 @@ prompt_mine_hostinfo() {
     fi
 
     if [[ -n $SSH_CLIENT ]]; then
-        prompt_mine_segment $content br-black default bold
+        prompt_mine_segment $content base02 default bold
     fi
 }
 
@@ -79,7 +79,7 @@ prompt_mine_cwd() {
         formatted="%B${cwd}"
     fi
 
-    prompt_mine_segment " ${formatted} " br-white
+    prompt_mine_segment " ${formatted} " base01
 
     # unset bold
     print -n '%b'
@@ -107,7 +107,7 @@ prompt_mine_bg() {
 
 prompt_mine_userinfo() {
     if [[ $root == true ]]; then
-        prompt_mine_segment '' red
+        prompt_mine_segment '' br-red
     else
         prompt_mine_segment '' blue
     fi
@@ -176,10 +176,18 @@ prompt_mine_setup() {
         fi
     done
 
-    if [[ $terminfo[colors] -lt 16 ]]; then
-        # Improve legibility on Linux console
-        mycolors_bg[br-white]=$bg[black]
-        mycolors_fg[br-white]=$fg[black]
+    # While Konsole doesn't support setting all the Base16 colors
+    # (https://bugs.kde.org/show_bug.cgi?id=344181), manually define
+    # the ones we want to use from the base16-bright theme.
+    # See: https://gist.github.com/XVilka/8346728
+    # See: https://github.com/chriskempson/base16-builder/blob/master/schemes/bright.yml
+    if [[ $terminfo[colors] -ge 256 ]]; then
+        mycolors_bg[base01]="\e[48;2;48;48;48m"
+        mycolors_fg[base01]="\e[38;2;48;48;48m"
+        mycolors_bg[base02]="\e[48;2;80;80;80m"
+        mycolors_fg[base02]="\e[38;2;80;80;80m"
+        mycolors_bg[base03]="\e[48;2;176;176;176m"
+        mycolors_fg[base03]="\e[38;2;176;176;176m"
     fi
 
     zstyle -s ':prompt:mine' hide-users hide_users
