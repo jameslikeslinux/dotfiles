@@ -33,6 +33,7 @@ set noshowmode
 " Show buffers in status line
 let g:bufferline_rotate = 1
 let g:bufferline_fixed_index = -2
+let g:bufferline_echo = 0
 
 if &t_Co == 256 || has("gui_running")
     " Enable true color support
