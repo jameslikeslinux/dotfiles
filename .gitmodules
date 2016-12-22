@@ -19,6 +19,3 @@
 [submodule ".vim/bundle/vim-airline-themes"]
 	path = .vim/bundle/vim-airline-themes
 	url = https://github.com/vim-airline/vim-airline-themes.git
-[submodule ".vim/bundle/vim-bufferline"]
-	path = .vim/bundle/vim-bufferline
-	url = https://github.com/bling/vim-bufferline.git

@@ -30,6 +30,9 @@ set ttimeoutlen=50
 " Let airline show the mode
 set noshowmode
 
+" Enable tabline that shows buffers when only one tab open
+let g:airline#extensions#tabline#enabled = 1
+
 if &t_Co == 256 || has("gui_running")
     " Enable true color support
     if has("termguicolors")
@@ -44,4 +47,9 @@ if &t_Co == 256 || has("gui_running")
 
     " Let airline use special powerline characters
     let g:airline_powerline_fonts = 1
+else
+    " Swap the active 'tab' separator characters on plain terminals
+    " (let the active tab be surrounded by '|')
+    let g:airline#extensions#tabline#left_sep = '|'                                 
+    let g:airline#extensions#tabline#left_alt_sep = ' '
 endif
