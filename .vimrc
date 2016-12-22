@@ -50,8 +50,3 @@ endif
 
 " Set color scheme
 colorscheme base16-bright
-
-" Force the background to be black (transparent)
-" See: http://stackoverflow.com/questions/7616294/force-vim-background-to-black
-highlight Normal guibg=black
-set background=dark
