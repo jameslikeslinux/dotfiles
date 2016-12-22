@@ -1,5 +1,5 @@
 [Appearance]
-ColorScheme=TomorrowNightBright
+ColorScheme=base16-default
 Font=DejaVu Sans Mono for Powerline,8,-1,5,50,0,0,0,0,0
 
 [General]

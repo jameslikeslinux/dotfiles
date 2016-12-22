@@ -1,4 +1,4 @@
-"G Enable syntax highlighting
+" Enable syntax highlighting
 syntax on
 
 " Behave less like vi
