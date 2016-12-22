@@ -30,6 +30,10 @@ set ttimeoutlen=50
 " Let airline show the mode
 set noshowmode
 
+" Show buffers in status line
+let g:bufferline_rotate = 1
+let g:bufferline_fixed_index = -2
+
 if &t_Co == 256 || has("gui_running")
     " Enable true color support
     if has("termguicolors")
