@@ -30,10 +30,12 @@ set ttimeoutlen=50
 " Let airline show the mode
 set noshowmode
 
-" Show buffers in status line
-let g:bufferline_rotate = 1
-let g:bufferline_fixed_index = -2
-let g:bufferline_echo = 0
+" Hide empty airline sections
+let g:airline_skip_empty_sections = 1
+
+" Show tabline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
 
 if &t_Co == 256 || has("gui_running")
     " Enable true color support
@@ -50,3 +52,4 @@ endif
 
 " Set color scheme
 colorscheme base16-bright
+let g:airline_theme='base16'
