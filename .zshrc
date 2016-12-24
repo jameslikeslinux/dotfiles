@@ -118,8 +118,6 @@ fi
 # aliases
 ls --help 2>&1 | grep -- '--color' > /dev/null && alias ls="ls --color"
 alias vi="$EDITOR"
-alias vim="vim -u $HOME/.vimrc.code"
-alias vip="vim -u $HOME/.vimrc.ruby"
 unalias cp 2>/dev/null
 alias mv="mv -f"
 alias rm="rm -f"
