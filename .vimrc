@@ -78,3 +78,7 @@ endif
 " Set color scheme
 colorscheme base16-bright
 let g:airline_theme='base16'
+
+" Use Ctrl+P to invoke CtrlP plugin
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
