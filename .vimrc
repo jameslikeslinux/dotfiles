@@ -77,11 +77,7 @@ endif
 
 " Base16 has a confusing match paren color;
 " change it to invert the paren (base0F) and cursor (base06) colors
-if exists('base16colorspace') && base16colorspace == "256"
-    autocmd ColorScheme base16-bright highlight MatchParen ctermbg=07 ctermfg=17 guibg=#be643c guifg=#e0e0e0
-else
-    autocmd ColorScheme base16-bright highlight MatchParen ctermbg=07 ctermfg=00 guibg=#be643c guifg=#e0e0e0
-endif
+autocmd ColorScheme base16-bright highlight MatchParen ctermbg=07 ctermfg=00 guibg=#be643c guifg=#e0e0e0
 
 " Set color scheme
 colorscheme base16-bright
