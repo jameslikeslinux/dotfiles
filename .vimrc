@@ -75,8 +75,19 @@ if &t_Co == 256 || has("gui_running")
     let g:airline_powerline_fonts = 1
 endif
 
+" Base16 has a confusing match paren color;
+" change it to invert the paren (base0F) and cursor (base06) colors
+if exists('base16colorspace') && base16colorspace == "256"
+    autocmd ColorScheme base16-bright highlight MatchParen ctermbg=07 ctermfg=17 guibg=#be643c guifg=#e0e0e0
+else
+    autocmd ColorScheme base16-bright highlight MatchParen ctermbg=07 ctermfg=00 guibg=#be643c guifg=#e0e0e0
+endif
+
 " Set color scheme
 colorscheme base16-bright
+
+" Airline comes with a base16-bright theme
+" but I like the base base16 theme better
 let g:airline_theme='base16'
 
 " Use Ctrl+P to invoke CtrlP plugin
