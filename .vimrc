@@ -26,7 +26,7 @@ set splitbelow
 set splitright
 
 " Show line numbers for jumping around
-set number
+set relativenumber
 
 " Disable wrapping; show indicators on overflow
 set nowrap
