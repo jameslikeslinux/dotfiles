@@ -44,9 +44,9 @@ autocmd FileType make setlocal tabstop=4 noexpandtab
 
 " Create shortcuts to switch between indenting styles
 nnoremap <Leader>0 :setlocal shiftwidth=4 tabstop=8 expandtab<CR>   " default 4-space indent
-nnoremap <Leader>1 :setlocal shiftwidth=2 tabstop=8 expandtab<CR>   " modern 2-space indent
-nnoremap <Leader>2 :setlocal shiftwidth=4 tabstop=4 noexpandtab<CR> " 4-space hard tab
-nnoremap <Leader>3 :setlocal shiftwidth=8 tabstop=8 noexpandtab<CR> " 8-space hard tab
+nnoremap <Leader>2 :setlocal shiftwidth=2 tabstop=8 expandtab<CR>   " modern 2-space indent
+nnoremap <Leader>4 :setlocal shiftwidth=4 tabstop=4 noexpandtab<CR> " 4-space hard tab
+nnoremap <Leader>8 :setlocal shiftwidth=8 tabstop=8 noexpandtab<CR> " 8-space hard tab
 
 " Load Pathogen
 runtime bundle/vim-pathogen/autoload/pathogen.vim
