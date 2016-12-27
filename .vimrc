@@ -62,16 +62,18 @@ let g:airline_skip_empty_sections = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 
-if &t_Co == 256 || has("gui_running")
-    " Enable true color support
+" Use nicer colors except on the Linux console
+if $TERM !~# '^linux'
     if has("termguicolors")
         set termguicolors
     endif
 
     " Highlight current line
     set cursorline
+endif
 
-    " Let airline use special powerline characters
+" On modern terminals or GUI, enable Powerline characters
+if &t_Co >= 256 || has("gui_running")
     let g:airline_powerline_fonts = 1
 endif
 
