@@ -17,7 +17,7 @@ fi
 # editor is vim if it exists
 vim=$(whence vim)
 if [[ -x $vim ]]; then
-    export EDITOR="$vim -u $HOME/.vimrc"
+    export EDITOR="$vim"
 else
     export EDITOR="vi"
 fi
