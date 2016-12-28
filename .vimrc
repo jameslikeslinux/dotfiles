@@ -36,7 +36,7 @@ set shiftwidth=4
 set expandtab
 
 " New-style source code uses two spaces for tabs
-autocmd FileType javascript,json,puppet,ruby setlocal shiftwidth=2
+autocmd FileType javascript,json,puppet,ruby,yaml setlocal shiftwidth=2
 
 " Makefiles must use hard tabs, but let them appear as four spaces
 autocmd FileType make setlocal tabstop=4 noexpandtab
