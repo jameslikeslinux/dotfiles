@@ -1,6 +1,6 @@
 [Appearance]
 ColorScheme=base16-bright
-Font=DejaVu Sans Mono for Powerline,8,-1,5,50,0,0,0,0,0
+Font=DejaVu Sans Mono for Powerline,9,-1,0,50,0,0,0,0,0
 
 [General]
 Environment=TERM=xterm-256color
