@@ -1,10 +1,18 @@
+#
+# prompt_mine
+#
+# A custom Powerline-style prompt that dynamically shows information as
+# needed to ensure the most important context information in the least
+# amount of space as possible.
+#
+
 prompt_mine_separator() {
     local bg=$1
 
     if [[ -n $sep_fg ]]; then
         if [[ $flat != true ]]; then
             if [[ $sep_fg == $bg ]]; then
-                print -n "%{${mycolors_bg[$bg]}${mycolors_fg[br-black]}%}%{${reset_color}%}"
+                print -n "%{${mycolors_bg[$bg]}${mycolors_fg[base01]}%}%{${reset_color}%}"
             else
                 print -n "%{${mycolors_bg[$bg]}${mycolors_fg[$sep_fg]}%}%{${reset_color}%}"
             fi
@@ -59,16 +67,6 @@ prompt_mine_cwd() {
     # Split at /
     components=(${(s:/:)cwd})
 
-#    # Print the first n-1 directory components
-#    for c in $components[1,-2]; do
-#        prompt_mine_segment " ${c} " br-white
-#        [[ $flat == true ]] && prompt_mine_segment '>' default white
-#    done
-#
-#    # Print the last component in bold
-#    prompt_mine_segment " ${components[-1]} " br-white default bold
-
-
     if [[ ${#components} > 1 ]]; then
         if [[ ${components[1]} != '~' ]]; then
             formatted='/'
@@ -95,25 +93,31 @@ prompt_mine_ro() {
     fi
 
     if [[ ! -w . ]]; then
-        prompt_mine_segment $content yellow black
+        prompt_mine_segment $content yellow base01
     fi
 }
 
 prompt_mine_bg() {
     if [[ $(jobs | wc -l) -gt 0 ]]; then
-        prompt_mine_segment ' %j ' green black
+        prompt_mine_segment ' %j ' green base01
     fi
 }
 
 prompt_mine_userinfo() {
     if [[ $root == true ]]; then
         prompt_mine_segment '' red
-    else
-        prompt_mine_segment '' blue
     fi
 
     if [[ $admin == true ]]; then
-        prompt_mine_segment '' red
+        prompt_mine_segment '' base09
+    fi
+}
+
+prompt_mine_vimode() {
+    if [[ $KEYMAP = 'vicmd' ]]; then
+        prompt_mine_segment '' blue
+    else
+        prompt_mine_segment '' green
     fi
 }
 
@@ -130,15 +134,17 @@ prompt_mine_build_prompt() {
     prompt_mine_ro
     prompt_mine_bg
     prompt_mine_userinfo
+    prompt_mine_vimode
     prompt_mine_end
 }
 
-prompt_mine_precmd() {
-    local uniq_cwd
-    local admin_title
-
+prompt_mine_disambiguate_cwd() {
     disambiguate -k "$(print -P "%~")"
     uniq_cwd=$REPLY
+}
+
+prompt_mine_update() {
+    local admin_title
 
     if [[ $admin == true ]]; then
         admin_title='/admin'
@@ -152,6 +158,7 @@ prompt_mine_precmd() {
     esac
 
     PROMPT="$(prompt_mine_build_prompt $uniq_cwd) "
+    zle reset-prompt
 }
 
 prompt_mine_setup() {
@@ -188,6 +195,11 @@ prompt_mine_setup() {
         mycolors_fg[base02]="\e[38;2;80;80;80m"
         mycolors_bg[base03]="\e[48;2;176;176;176m"
         mycolors_fg[base03]="\e[38;2;176;176;176m"
+        mycolors_bg[base09]="\e[48;2;252;109;36m"
+        mycolors_fg[base09]="\e[38;2;252;109;36m"
+    else
+        mycolors_bg[base09]="$mycolors_bg[yellow]"
+        mycolors_fg[base09]="$mycolors_fg[yellow]"
     fi
 
     zstyle -s ':prompt:mine' hide-users hide_users
@@ -195,9 +207,11 @@ prompt_mine_setup() {
     zstyle -s ':prompt:mine' admin admin
     zstyle -s ':prompt:mine' flat flat
 
-    add-zsh-hook precmd prompt_mine_precmd
+    add-zsh-hook chpwd prompt_mine_disambiguate_cwd
+    add-zsh-hook-widget line-init prompt_mine_update
+    add-zsh-hook-widget keymap-select prompt_mine_update
 }
 
 prompt_mine_setup "$@"
 
-# vim: syntax=zsh
+# vim: filetype=zsh

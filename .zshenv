@@ -1,10 +1,10 @@
-# always use unicode
+# Always use unicode
 export LANG=en_US.UTF-8
 
 
-# set path
+# Set path
 if [[ -e /etc/glue/restrict ]]; then
-    # glue does special stuff in bash/tcsh shells
+    # Glue does special stuff in bash/tcsh shells
     source ~/.bashrc
 else
     typeset -U path
@@ -14,7 +14,7 @@ else
 fi
 
 
-# editor is vim if it exists
+# Editor is vim if it exists
 vim=$(whence vim)
 if [[ -x $vim ]]; then
     export EDITOR="$vim"
@@ -23,21 +23,21 @@ else
 fi
 
 
-# set some standard programs
+# Set some standard programs
 export VISUAL=$EDITOR
 export PAGER="less"
 
 
-# degrade shell on Solaris
+# Degrade shell on Solaris
 if [[ $OSNAME = "solaris" && $TERM = *256color ]]; then
     export TERM=${TERM%-256color}
 fi
 
 
-# load extra functions
+# Load extra functions
 typeset -U fpath
 fpath=("$HOME/.zsh/functions" $fpath)
 
 
-# extra evironmental variables
+# Extra environmental variables
 export DISTCC_DIR="/var/tmp/portage/.distcc/"
