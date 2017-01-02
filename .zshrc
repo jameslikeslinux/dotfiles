@@ -51,6 +51,9 @@ stty -ixon      # I want ^S for something other than stopping the terminal
 bindkey '^S' history-incremental-pattern-search-forward
 bindkey -M vicmd '^S' history-incremental-pattern-search-forward
 
+# Use system clipboard for copy/paste operations
+source "${HOME}/.zsh/vi-clip.zsh"
+
 
 # Show user name at prompt if not one of my usual ones
 zstyle ':prompt:mine' hide-users '(james|jlee|jtl|root)'
