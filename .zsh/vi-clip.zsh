@@ -11,7 +11,6 @@
     }
 
     zle_cut_widgets=(
-        vi-backward-delete-char
         vi-change
         vi-change-eol
         vi-change-whole-line
