@@ -56,7 +56,7 @@ if [[ $EUID == 0 || ($OS == 'Windows_NT' && -w '/cygdrive/c') ]]; then
 fi
 
 # Figure out if I'm running with Glue admin rights
-if (( $+commands['klist'] )) && klist 2>&1 | grep jtl/admin > /dev/null; then
+if [[ -x $(whence klist) ]] && klist 2>&1 | grep jtl/admin > /dev/null; then
     zstyle ':prompt:mine' admin true
 fi
 
@@ -73,7 +73,7 @@ prompt mine
 autoload -U compinit && compinit -u
 
 # Color list autocompletion
-if (( $+commands['klist'] )); then
+if [[ -x $(whence dircolors) ]]; then
     eval $(dircolors)
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 fi

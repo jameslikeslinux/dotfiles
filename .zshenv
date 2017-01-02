@@ -13,7 +13,7 @@ else
 fi
 
 # Editor is vim if it exists
-if (( $+commands['vim'] )); then
+if [[ -x $(whence vim) ]]; then
     export EDITOR="vim"
 else
     export EDITOR="vi"
