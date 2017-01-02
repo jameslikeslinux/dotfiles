@@ -43,7 +43,7 @@ prompt_mine_segment() {
 
 prompt_mine_username() {
     if [[ ! $(print -P '%n') =~ $hide_users ]]; then
-        prompt_mine_segment ' %n ' blue black bold
+        prompt_mine_segment ' %n ' blue base01 bold
     fi
 }
 
