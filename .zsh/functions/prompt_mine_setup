@@ -114,11 +114,22 @@ prompt_mine_userinfo() {
 }
 
 prompt_mine_vimode() {
-    if [[ $KEYMAP = 'vicmd' ]]; then
-        prompt_mine_segment '' blue
-    else
-        prompt_mine_segment '' green
-    fi
+    case "$KEYMAP" in
+        'viins')
+            vimode_color='green'
+            ;;
+        'visual')
+            vimode_color='base09'
+            ;;
+        'isearch')
+            # keep existing color
+            ;;
+        *)
+            vimode_color='blue'
+            ;;
+    esac
+
+    prompt_mine_segment '' "$vimode_color"
 }
 
 prompt_mine_end() {

@@ -44,8 +44,12 @@ bindkey -v
 # Make mode switches faster
 export KEYTIMEOUT=1
 
-# Restore Ctrl+R history search
+# Enable incremental history search
 bindkey '^R' history-incremental-pattern-search-backward
+bindkey -M vicmd '^R' history-incremental-pattern-search-backward
+stty -ixon      # I want ^S for something other than stopping the terminal
+bindkey '^S' history-incremental-pattern-search-forward
+bindkey -M vicmd '^S' history-incremental-pattern-search-forward
 
 
 # Show user name at prompt if not one of my usual ones
@@ -90,6 +94,10 @@ alias mv="mv -f"
 alias rm="rm -f"
 alias glue="ssh -qt stowe.umd.edu"
 alias bigsnaps="zfs list -t snapshot -s used"
+unalias suafs 2>/dev/null
+unalias a 2>/dev/null
+compdef a=sudo
+compdef s=sudo
 
 
 # Set standard umask

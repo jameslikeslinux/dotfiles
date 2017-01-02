@@ -1,0 +1,23 @@
+#!/usr/bin/env zsh
+#
+# A better version of 'suafs'
+#
+
+# Quote each command argument
+command=(${(q)argv})
+
+if [[ -x $(whence suafs) ]]; then
+    if [[ $# -eq 0 ]]; then
+        exec suafs
+    else
+        exec suafs -c "$command"
+    fi
+elif [[ -x $(whence pagsh) ]]; then
+    if [[ $# -eq 0 ]]; then
+        exec pagsh -c "kinit jtl/admin && (${SHELL}; kdestroy)"
+    else
+        exec pagsh -c "kinit jtl/admin && (${SHELL} -c ${(qq)command}; kdestroy)"
+    fi
+else
+    print "${0} is not compatible with this system"
+fi
