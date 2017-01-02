@@ -1,6 +1,10 @@
 " Behave less like vi
 set nocompatible
 
+" Except enable the vi backspace behavior to force myself out of insert mode
+" (run as autocmd to avoid conflict with vim-sensible plugin)
+autocmd VimEnter,BufNewFile,BufReadPost * silent set backspace=0
+
 " Allow unsaved buffers
 set hidden
 
@@ -94,6 +98,3 @@ let g:airline_theme='base16'
 " Use Ctrl+P to invoke CtrlP plugin
 let g:ctrlp_map = '<C-P>'
 let g:ctrlp_cmd = 'CtrlP'
-
-" Try to force myself out of insert mode
-set backspace=0
