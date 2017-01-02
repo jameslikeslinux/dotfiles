@@ -6,11 +6,9 @@ if ! is-at-least 5.2; then
     done
 fi
 
-
 # /etc/zsh/zprofile overwrites stuff set in .zshenv
 # This is kind of a hack, but not that big of a deal
 [[ -e /etc/zsh/zprofile ]] && source $HOME/.zshenv
-
 
 # XXX: Rename histfile
 [[ -f ~/.histfile.$HOST ]] && mv -f ~/.histfile.$HOST ~/.history.$HOST
@@ -33,10 +31,8 @@ if [[ ! -w $HISTFILE ]]; then
     echo
 fi
 
-
 # Restore default redirect behavior
 setopt clobber
-
 
 # Enable vi keybindings
 bindkey -v
@@ -47,10 +43,9 @@ export KEYTIMEOUT=1
 # Enable incremental history search
 bindkey '^R' history-incremental-pattern-search-backward
 bindkey -M vicmd '^R' history-incremental-pattern-search-backward
-stty -ixon      # I want ^S for something other than stopping the terminal
 bindkey '^S' history-incremental-pattern-search-forward
 bindkey -M vicmd '^S' history-incremental-pattern-search-forward
-
+stty -ixon      # make ^S available to shell
 
 # Show user name at prompt if not one of my usual ones
 zstyle ':prompt:mine' hide-users '(james|jlee|jtl|root)'
@@ -61,7 +56,7 @@ if [[ $EUID == 0 || ($OS == 'Windows_NT' && -w '/cygdrive/c') ]]; then
 fi
 
 # Figure out if I'm running with Glue admin rights
-if [[ -x $(whence klist) ]] && klist 2>&1 | grep jtl/admin > /dev/null; then
+if (( $+commands['klist'] )) && klist 2>&1 | grep jtl/admin > /dev/null; then
     zstyle ':prompt:mine' admin true
 fi
 
@@ -74,17 +69,14 @@ fi
 autoload -U promptinit && promptinit
 prompt mine
 
-
 # Enable command autocompletion
 autoload -U compinit && compinit -u
 
-
 # Color list autocompletion
-if [[ -x $(whence dircolors) ]]; then
+if (( $+commands['klist'] )); then
     eval $(dircolors)
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 fi
-
 
 # Aliases
 ls --help 2>&1 | grep -- '--color' > /dev/null && alias ls="ls --color"
@@ -99,10 +91,8 @@ unalias a 2>/dev/null
 compdef a=sudo
 compdef s=sudo
 
-
 # Set standard umask
 umask 022
-
 
 # Enable X apps through sudo (along with env_keep)
 export XAUTHORITY="${XAUTHORITY-$HOME/.Xauthority}"
