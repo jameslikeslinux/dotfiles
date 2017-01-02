@@ -1,0 +1,26 @@
+#compdef a=sudo
+#
+# A better version of 'suafs'
+#
+unalias suafs 2>/dev/null
+unalias a 2>/dev/null
+a() {
+    # quote each command argument
+    command=(${(q)argv})
+
+    if [[ -x $(whence suafs) ]]; then
+        if [[ $# -eq 0 ]]; then
+            suafs
+        else
+            suafs -c "$command"
+        fi
+    else
+        if [[ $# -eq 0 ]]; then
+            pagsh -c "kinit jtl/admin && (${SHELL}; kdestroy)"
+        else
+            pagsh -c "kinit jtl/admin && (${SHELL} -c ${(qq)command}; kdestroy)"
+        fi
+    fi
+}
+
+# vim: filetype=zsh

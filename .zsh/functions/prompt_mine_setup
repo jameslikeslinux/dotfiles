@@ -139,12 +139,10 @@ prompt_mine_build_prompt() {
 }
 
 prompt_mine_disambiguate_cwd() {
+    local admin_title
+
     disambiguate -k "$(print -P "%~")"
     uniq_cwd=$REPLY
-}
-
-prompt_mine_update() {
-    local admin_title
 
     if [[ $admin == true ]]; then
         admin_title='/admin'
@@ -156,7 +154,10 @@ prompt_mine_update() {
             print -Pn "\e]0;%n${admin_title}@%m:${uniq_cwd}\a"
             ;;
     esac
+}
 
+function zle-line-init zle-keymap-select {
+    [[ -n $uniq_cwd ]] || prompt_mine_disambiguate_cwd
     PROMPT="$(prompt_mine_build_prompt $uniq_cwd) "
     zle reset-prompt
 }
@@ -208,8 +209,8 @@ prompt_mine_setup() {
     zstyle -s ':prompt:mine' flat flat
 
     add-zsh-hook chpwd prompt_mine_disambiguate_cwd
-    add-zsh-hook-widget line-init prompt_mine_update
-    add-zsh-hook-widget keymap-select prompt_mine_update
+    zle -N zle-line-init
+    zle -N zle-keymap-select
 }
 
 prompt_mine_setup "$@"

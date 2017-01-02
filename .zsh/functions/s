@@ -1,0 +1,37 @@
+#compdef s=sudo
+#
+# Simple privilege escalation
+#
+# Provide a consistent sudo-like way to escalate
+# privileges across a variety of platforms.
+#
+s() {
+    # quote each command argument
+    command=(${(q)argv})
+
+    if [[ $OS == 'Windows_NT' ]]; then
+        if [[ $# -eq 0 ]]; then
+            cygstart --action=runas mintty -
+        else
+            cygstart --action=runas mintty -e "$SHELL -c ${(qq)command}"
+        fi
+    elif [[ -e /etc/glue/restrict ]]; then
+        # legacy glue
+        if [[ $# -eq 0 ]]; then
+            su -m -c "${SHELL}; kdestroy"
+        else
+            su -m -c "${SHELL} -c ${(qq)command}; kdestroy"
+        fi
+    elif [[ -e /etc/glue ]]; then
+        # new glue
+        if [[ $# -eq 0 ]]; then
+            su
+        else
+            su -c "$command"
+        fi
+    else
+        sudo "${@:--s}"
+    fi
+}
+
+# vim: filetype=zsh

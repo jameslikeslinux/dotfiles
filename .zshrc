@@ -16,7 +16,7 @@ fi
 [[ -f ~/.histfile.$HOST ]] && mv -f ~/.histfile.$HOST ~/.history.$HOST
 
 # History settings
-HISTFILE=~/.histfile.$HOST
+HISTFILE=~/.history.$HOST
 HISTSIZE=10000
 SAVEHIST=10000
 setopt inc_append_history
