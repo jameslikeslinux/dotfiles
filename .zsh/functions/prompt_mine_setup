@@ -126,7 +126,7 @@ prompt_mine_end() {
 }
 
 prompt_mine_build_prompt() {
-    local uniq_cwd=$1
+    local admin_title
 
     prompt_mine_username
     prompt_mine_hostinfo
@@ -136,13 +136,6 @@ prompt_mine_build_prompt() {
     prompt_mine_userinfo
     prompt_mine_vimode
     prompt_mine_end
-}
-
-prompt_mine_disambiguate_cwd() {
-    local admin_title
-
-    disambiguate -k "$(print -P "%~")"
-    uniq_cwd=$REPLY
 
     if [[ $admin == true ]]; then
         admin_title='/admin'
@@ -156,9 +149,14 @@ prompt_mine_disambiguate_cwd() {
     esac
 }
 
+prompt_mine_disambiguate_cwd() {
+    disambiguate -k "$(print -P "%~")"
+    uniq_cwd=$REPLY
+}
+
 function zle-line-init zle-keymap-select {
     [[ -n $uniq_cwd ]] || prompt_mine_disambiguate_cwd
-    PROMPT="$(prompt_mine_build_prompt $uniq_cwd) "
+    PROMPT="$(prompt_mine_build_prompt) "
     zle reset-prompt
 }
 
