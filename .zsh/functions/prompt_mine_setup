@@ -157,7 +157,6 @@ prompt_mine_precmd() {
 }
 
 function zle-line-init zle-keymap-select {
-    [[ -n $uniq_cwd ]] || prompt_mine_disambiguate_cwd
     PROMPT="$(prompt_mine_build_prompt) "
     zle reset-prompt
 }
@@ -207,6 +206,8 @@ prompt_mine_setup() {
     zstyle -s ':prompt:mine' root root
     zstyle -s ':prompt:mine' admin admin
     zstyle -s ':prompt:mine' flat flat
+
+    prompt_mine_disambiguate_cwd
 
     add-zsh-hook precmd prompt_mine_precmd
     add-zsh-hook chpwd prompt_mine_disambiguate_cwd
