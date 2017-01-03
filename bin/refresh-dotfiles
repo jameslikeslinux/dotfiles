@@ -7,7 +7,8 @@
 #
 
 # A place to keep track of what this script manages
-DOT_TEMPLATES="${HOME}/.dottemplates"
+mv -f "${HOME}/.dottemplates ${HOME}/.templates"
+DOT_TEMPLATES="${HOME}/.templates"
 
 #
 # Read and parse command line options
@@ -103,5 +104,5 @@ if [[ -z $no_fetch ]]; then
 fi
 
 # Process templates with Puppet
-puppet module install puppetlabs/stdlib
+puppet module install puppetlabs-stdlib
 puppet apply <(generate_manifest)
