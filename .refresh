@@ -1,2 +1,3 @@
 #!/bin/sh
+HOME=~; export HOME
 exec $HOME/bin/refresh-dotfiles --no-fetch
