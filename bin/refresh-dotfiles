@@ -1,0 +1,107 @@
+#!/bin/bash
+#
+# refresh-dotfiles
+#
+# Pull the latest configuration changes from GitHub and
+# process ERB templates with Puppet
+#
+
+# A place to keep track of what this script manages
+DOT_TEMPLATES="${HOME}/.dottemplates"
+
+#
+# Read and parse command line options
+#
+usage() {
+    cat >&2 <<END
+Usage: refresh-dotfiles [options]
+
+Options:
+  --no-fetch    don't fetch updates from git
+  -h, --help    display this help message and exit
+
+END
+}
+
+ARGS=$(getopt -o 'h' -l 'no-fetch,help' -n 'refresh-dotfiles' -- "$@")
+
+if [ $? -ne 0 ]; then
+    usage
+    exit 1
+fi
+
+eval set -- "$ARGS"
+
+while true; do
+    case "$1" in
+        '--no-fetch')
+            shift
+            no_fetch="yes"
+            ;;
+        '-h'|'--help')
+            shift
+            usage
+            exit 0
+            ;;
+        '--')
+            shift
+            break
+            ;;
+    esac
+done
+
+
+generate_manifest() {
+    # Create/update dotfiles from templates in git
+    git ls-files '*.erb' | while read template; do
+        mode="$(stat -c '%a' "$template")"
+        cat <<END
+file { '${HOME}/${template%.erb}':
+  mode    => '${mode}',
+  content => template('${HOME}/${template}'),
+}
+
+file_line { '${template%.erb}':
+  path    => '${DOT_TEMPLATES}',
+  line    => '${template%.erb}',
+  require => File['${HOME}/${template%.erb}',
+}
+END
+    done
+
+    # Remove dotfiles that we've managed in the past that are not in git
+    while read dotfile; do
+        if [[ ! -f "${dotfile}.erb" ]]; then
+            cat <<END
+file { '${HOME}/${dotfile}':
+  ensure => absent,
+}
+
+file_line { '${dotfile}':
+  ensure  => absent,
+  path    => '${DOT_TEMPLATES}',
+  line    => '${dotfile}',
+  require => File['${HOME}/${dotfile}'],
+}
+END
+        fi
+    done < "$DOT_TEMPLATES"
+}
+
+
+#
+# Main program
+#
+cd "$HOME"
+touch "$DOT_TEMPLATES"
+
+# Grab latest updates from git
+if [[ -z $no_fetch ]]; then
+    branch="$(git rev-parse --abbrev-ref HEAD)"
+    git fetch origin "$branch"
+    git reset --hard "origin/${branch}"
+fi
+
+# Process templates with Puppet
+puppet module install puppetlabs/stdlib
+echo puppet apply -e "$(generate_manifest)"
