@@ -11,7 +11,11 @@ fi
 [[ -e /etc/zsh/zprofile ]] && source $HOME/.zshenv
 
 # XXX: Rename histfile
-[[ -f ~/.histfile.$HOST ]] && mv -f ~/.histfile.$HOST ~/.history.$HOST
+if [[ -f ~/.histfile.$HOST -a ! -f ~/.history.$HOST ]]; then
+    mv -f ~/.histfile.$HOST ~/.history.$HOST
+elif [[ -f ~/.histfile.$HOST ]]; then
+    rm -f ~/.histfile.$HOST
+fi
 
 # History settings
 HISTFILE=~/.history.$HOST
