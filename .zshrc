@@ -94,6 +94,12 @@ unalias a 2>/dev/null
 compdef a=sudo
 compdef s=sudo
 
+# Easy way to switch to project
+p() {
+    cd "${HOME}/projects/${1}" && ls
+}
+compdef "_files -W ${HOME}/projects" p
+
 # Set standard umask
 umask 022
 
