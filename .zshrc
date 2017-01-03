@@ -44,11 +44,10 @@ bindkey -v
 # Make mode switches faster
 export KEYTIMEOUT=1
 
-# Enable incremental history search
+# Enable incremental history search from emacs mode
+# (just too useful)
 bindkey '^R' history-incremental-pattern-search-backward
-bindkey -M vicmd '^R' history-incremental-pattern-search-backward
 bindkey '^S' history-incremental-pattern-search-forward
-bindkey -M vicmd '^S' history-incremental-pattern-search-forward
 stty -ixon      # make ^S available to shell
 
 # Show user name at prompt if not one of my usual ones
