@@ -1,0 +1,15 @@
+<% if @fqdn =~ /\.umd\.edu$/ -%>
+[user]
+	name = James T. Lee
+	email = jtl@umd.edu
+[color]
+	ui = false
+<% else -%>
+[user]
+	name = James T. Lee
+	email = james@james.tl
+[color]
+	ui = auto
+[push]
+	default = simple
+<% end -%>
