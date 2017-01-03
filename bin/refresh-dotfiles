@@ -64,7 +64,7 @@ file { '${HOME}/${template%.erb}':
 file_line { '${template%.erb}':
   path    => '${DOT_TEMPLATES}',
   line    => '${template%.erb}',
-  require => File['${HOME}/${template%.erb}',
+  require => File['${HOME}/${template%.erb}'],
 }
 END
     done
@@ -104,4 +104,4 @@ fi
 
 # Process templates with Puppet
 puppet module install puppetlabs/stdlib
-echo puppet apply -e "$(generate_manifest)"
+puppet apply -e "$(generate_manifest)"
