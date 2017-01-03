@@ -104,4 +104,4 @@ fi
 
 # Process templates with Puppet
 puppet module install puppetlabs/stdlib
-puppet apply -e "$(generate_manifest)"
+puppet apply <(generate_manifest)
