@@ -1,2 +1,2 @@
 #!/bin/sh
-exec ~/bin/refresh-dotfiles --no-fetch
+exec $HOME/bin/refresh-dotfiles --no-fetch
