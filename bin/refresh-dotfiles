@@ -7,7 +7,7 @@
 #
 
 # A place to keep track of what this script manages
-mv -f "${HOME}/.dottemplates ${HOME}/.templates"
+mv -f "${HOME}/.dottemplates" "${HOME}/.templates"
 DOT_TEMPLATES="${HOME}/.templates"
 
 #
