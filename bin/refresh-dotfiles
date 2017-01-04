@@ -7,7 +7,7 @@
 #
 
 # A place to keep track of what this script manages
-mv -f "${HOME}/.dottemplates" "${HOME}/.templates"
+[[ -f "${HOME}/.dottemplates" ]] && mv -f "${HOME}/.dottemplates" "${HOME}/.templates"
 DOT_TEMPLATES="${HOME}/.templates"
 
 #
@@ -105,4 +105,4 @@ fi
 
 # Process templates with Puppet
 puppet module install puppetlabs-stdlib
-puppet apply <(generate_manifest)
+RUBYLIB="${HOME}/lib/ruby" puppet apply <(generate_manifest)
