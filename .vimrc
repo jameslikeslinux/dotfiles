@@ -35,6 +35,9 @@ set relativenumber
 " Disable wrapping, show indicators on overflow, scroll smoothly
 set nowrap list sidescroll=1
 
+" Use more bash-like file completion (don't cycle through options)
+set wildmode=longest,list
+
 " Default to four spaces for tabs
 set shiftwidth=4
 set expandtab
