@@ -1,3 +1,5 @@
+<% require 'colorscheme'
+c = ColorScheme.new -%>
 #
 # prompt_mine
 #
@@ -173,35 +175,36 @@ prompt_mine_setup() {
 
     integer color_code=0
     for color in black red green yellow blue magenta cyan white; do
-        if [[ $terminfo[colors] -lt 16 ]]; then
-            # We don't have "bright colors"...use regular instead
-            mycolors_bg[br-${color}]=$bg[$color]
-            mycolors_fg[br-${color}]=$fg[$color]
-        else
-            mycolors_bg[${color}]="\e[48;5;${color_code}m"
-            mycolors_fg[${color}]="\e[38;5;${color_code}m"
-            mycolors_bg[br-${color}]="\e[48;5;$((color_code + 8))m"
-            mycolors_fg[br-${color}]="\e[38;5;$((color_code++ + 8))m"
-        fi
+        mycolors_bg[${color}]="\e[48;5;${color_code}m"
+        mycolors_fg[${color}]="\e[38;5;${color_code}m"
+        mycolors_bg[br-${color}]="\e[48;5;$((color_code + 8))m"
+        mycolors_fg[br-${color}]="\e[38;5;$((color_code++ + 8))m"
     done
 
-    # While Konsole doesn't support setting all the Base16 colors
-    # (https://bugs.kde.org/show_bug.cgi?id=344181), manually define
-    # the ones we want to use from the base16-bright theme.
-    # See: https://gist.github.com/XVilka/8346728
-    # See: https://github.com/chriskempson/base16-builder/blob/master/schemes/bright.yml
+    # Set the Base16 colors
+<% c.base.keys.each do |base| -%>
+    mycolors_bg[base<%= base %>]="\e[48;5;<%= ColorScheme.base_to_ansi(base) %>m"
+    mycolors_fg[base<%= base %>]="\e[38;5;<%= ColorScheme.base_to_ansi(base) %>m"
+<% end -%>
+
     if [[ $terminfo[colors] -ge 256 ]]; then
-        mycolors_bg[base01]="\e[48;2;48;48;48m"
-        mycolors_fg[base01]="\e[38;2;48;48;48m"
-        mycolors_bg[base02]="\e[48;2;80;80;80m"
-        mycolors_fg[base02]="\e[38;2;80;80;80m"
-        mycolors_bg[base03]="\e[48;2;176;176;176m"
-        mycolors_fg[base03]="\e[38;2;176;176;176m"
-        mycolors_bg[base09]="\e[48;2;252;109;36m"
-        mycolors_fg[base09]="\e[38;2;252;109;36m"
+        # While Konsole doesn't support setting all the Base16 colors
+        # (https://bugs.kde.org/show_bug.cgi?id=344181), manually define
+        # the ones we want to use from the base16-bright theme.
+        # See: https://gist.github.com/XVilka/8346728
+        # See: https://github.com/chriskempson/base16-builder/blob/master/schemes/bright.yml
+        if [[ $TERM == 'konsole-256color' ]]; then
+<% c.base.keys.each do |base| -%>
+            mycolors_bg[base<%= base %>]="\e[48;2;<%= c.base[base].rgb.join(';') %>m"
+            mycolors_fg[base<%= base %>]="\e[38;2;<%= c.base[base].rgb.join(';') %>m"
+<% end -%>
+        fi
     else
-        mycolors_bg[base09]="$mycolors_bg[yellow]"
-        mycolors_fg[base09]="$mycolors_fg[yellow]"
+        # We're a lowly terminal; approximate bases we can't display
+<% c.base.keys.drop(16).each do |base| -%>
+        mycolors_bg[base<%= base %>]="$mycolors_bg[base<%= c.terminal_safe_approximation_base(base) %>]"
+        mycolors_fg[base<%= base %>]="$mycolors_fg[base<%= c.terminal_safe_approximation_base(base) %>]"
+<% end -%>
     fi
 
     zstyle -s ':prompt:mine' hide-users hide_users

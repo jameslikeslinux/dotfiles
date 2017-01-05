@@ -48,13 +48,22 @@ class ColorScheme
     def rgb
       [r, g, b]
     end
+
+    # XXX: This doesn't take into account human perception
+    def -@(other)
+      Math.sqrt((r - other.r) ** 2 + (g - other.g) ** 2 + (b - other.b) ** 2)
+    end
   end
+
+  BASES = ['00', '08', '0B', '0A', '0D', '0E', '0C', '05',
+           '03', '08', '0B', '0A', '0D', '0E', '0C', '07',
+           '09', '0F', '01', '02', '04', '06']
 
   attr_reader :base
 
   def initialize
     @scheme_data = YAML.load_file(File.join(Dir.home, '.colorscheme.yaml'))
-    @base = (0x0..0xf).each_with_object({}) do |i, acc|
+    @base = (0x0..0xf).each_with_object(Hash.new) do |i, acc|
       code = "%02X" % i
       acc[code] = Color.new(self, @scheme_data["base#{code}"])
       acc
@@ -62,9 +71,7 @@ class ColorScheme
   end
 
   def terminal
-    ['00', '08', '0B', '0A', '0D', '0E', '0C', '05',
-     '03', '08', '0B', '0A', '0D', '0E', '0C', '07',
-     '09', '0F', '01', '02', '04', '06'].map { |code| base[code] }
+    BASES.map { |code| base[code] }
   end
 
   def foreground
@@ -77,5 +84,17 @@ class ColorScheme
 
   def cursor
     base['05']
+  end
+
+  def terminal_safe_approximation_base(code)
+    safe_bases = BASES.take(16)
+    differences = safe_bases.map { |i| base[i] - base[code] }
+    min = differences.min
+    closest_base = safe_bases[differences.find_index(min)]
+    closest_base
+  end
+
+  def self.base_to_ansi(code)
+    BASES.find_index(code)
   end
 end
