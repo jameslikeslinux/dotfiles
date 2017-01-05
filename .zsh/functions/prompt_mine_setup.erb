@@ -152,7 +152,7 @@ prompt_mine_precmd() {
 
     # Set terminal title
     case $TERM in
-        xterm*|screen*)
+        rxvt*|xterm*|screen*)
             print -Pn "\e]0;%n${admin_title}@%m:${uniq_cwd}\a"
             ;;
     esac
