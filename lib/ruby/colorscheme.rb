@@ -74,17 +74,21 @@ class ColorScheme
   end
 
   def base_to_ansi(term_colors = 256)
-    bases.keys.each_with_object(Hash.new) do |code, acc|
-      acc[code] = BASE_TO_ANSI[term_colors].find_index(code)
+    canonical_mapping = BASE_TO_ANSI[256]
+    bases.keys.each_with_object(Hash.new) do |canonical_code, acc|
+      index = canonical_mapping.find_index(canonical_code)
+      actual_code = BASE_TO_ANSI[term_colors][index]
+      acc[canonical_code] = BASE_TO_ANSI[term_colors].find_index(actual_code) % term_colors
       acc
     end
   end
 
   def base_to_colors(term_colors = 256)
-    bases.keys.each_with_object(Hash.new) do |code, acc|
-      acc[code] = bases[BASE_TO_ANSI[term_colors]]
-      acc
+    mapping = Hash.new
+    base_to_ansi(term_colors).each do |code, ansi|
+      mapping[code] = colors(term_colors)[ansi]
     end
+    mapping
   end
 
   def colors(term_colors = 256)

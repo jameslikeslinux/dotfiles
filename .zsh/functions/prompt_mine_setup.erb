@@ -192,12 +192,12 @@ prompt_mine_setup() {
 <% end -%>
         fi
     elif [[ $terminfo[colors] -ge 16 ]]; then
-<% c.base_to_ansi(16) do |base, ansi| -%>
+<% c.base_to_ansi(16).each do |base, ansi| -%>
             mycolors_bg[base<%= base %>]="\e[48;5;<%= ansi %>m"
             mycolors_fg[base<%= base %>]="\e[38;5;<%= ansi %>m"
 <% end -%>
     else
-<% c.base_to_ansi(8) do |base| -%>
+<% c.base_to_ansi(8).each do |base, ansi| -%>
             mycolors_bg[base<%= base %>]="\e[48;5;<%= ansi %>m"
             mycolors_fg[base<%= base %>]="\e[38;5;<%= ansi %>m"
 <% end -%>
