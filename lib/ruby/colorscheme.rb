@@ -24,8 +24,8 @@ class ColorScheme
 
       Color.new(@colorscheme, "%02x%02x%02x" % [
         (color.r * w1 + r * w2).to_i,
-        (color.g * w1 + r * w2).to_i,
-        (color.b * w1 + r * w2).to_i,
+        (color.g * w1 + g * w2).to_i,
+        (color.b * w1 + b * w2).to_i,
       ])
     end
 
