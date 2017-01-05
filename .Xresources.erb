@@ -3,9 +3,9 @@ c = ColorScheme.new
 c.terminal.each_with_index do |color, i| -%>
 *color<%= i %>: rgb:<%= color.x11 %>
 <% end -%>
-*foreground: <%= c.foreground.x11 %>
-*background: <%= c.background.x11 %>
-*cursorColor: <%= c.cursor.x11 %>
+*foreground: rgb:<%= c.foreground.x11 %>
+*background: rgb:<%= c.background.x11 %>
+*cursorColor: rgb:<%= c.cursor.x11 %>
 
 URxvt.font: xft:monospace:size=9
 URxvt.perl-ext-common: font-size
