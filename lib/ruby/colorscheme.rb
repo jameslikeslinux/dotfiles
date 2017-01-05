@@ -48,20 +48,20 @@ class ColorScheme
     def rgb
       [r, g, b]
     end
-
-    # Based on http://www.compuphase.com/cmetric.htm
-    def -(other)
-      rmean = (r + other.r) / 2
-      rdiff = r - other.r
-      gdiff = g - other.g
-      bdiff = b - other.b
-      Math.sqrt((((512 + rmean) * rdiff ** 2) >> 8) + 4 * gdiff ** 2 + (((767 - rmean) * bdiff ** 2) >> 8))
-    end
   end
 
   BASES = ['00', '08', '0B', '0A', '0D', '0E', '0C', '05',
            '03', '08', '0B', '0A', '0D', '0E', '0C', '07',
            '09', '0F', '01', '02', '04', '06']
+
+  APPROXIMATIONS = {
+    '09' => '0A',
+    '0F' => '08',
+    '01' => '00',
+    '02' => '03',
+    '04' => '05',
+    '06' => '07',
+  }
 
   attr_reader :base
 
@@ -90,19 +90,11 @@ class ColorScheme
     base['05']
   end
 
-  def terminal_safe_approximation_base(code)
-    safe_bases = BASES.take(16)
-    differences = safe_bases.map { |i| base[i] - base[code] }
-    min = differences.min
-    closest_base = safe_bases[differences.find_index(min)]
-    closest_base
-  end
-
   def self.base_to_ansi(code)
     BASES.find_index(code)
   end
 
-  def self.terminal_bases
-    BASES
+  def self.base_approximations
+    APPROXIMATIONS
   end
 end

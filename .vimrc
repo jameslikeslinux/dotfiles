@@ -11,6 +11,9 @@ set hidden
 " Set terminal title
 set title
 
+" Highlight current line
+set cursorline
+
 " Enable mouse (primarily so mouse selections use visual mode)
 set mouse=a
 
@@ -72,25 +75,19 @@ let g:airline_skip_empty_sections = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 
-" We purposefully make Konsole misidentify itself because it's stupid
-" See: https://bugs.kde.org/show_bug.cgi?id=344181
-if $TERM == 'konsole-256color'
-    set term=xterm-256color
-endif
-
-" Use nicer colors except on the Linux console
-if $TERM !~# '^linux'
-    if has("termguicolors")
-        set termguicolors
-    endif
-
-    " Highlight current line
-    set cursorline
-endif
-
 " On modern terminals or GUI, enable Powerline characters
 if &t_Co >= 256 || has("gui_running")
     let g:airline_powerline_fonts = 1
+endif
+
+" Konsole doesn't support special Base16 colors despite advertising itself
+" as xterm-265color by default.  I configure it to say it's konsole-256color
+" so I can detect it here and enable true color support.
+if $TERM ==# 'konsole-256color'
+    set term=xterm-256color
+    set termguicolors
+elseif $TERM =~# '-256color$'
+    set base16colorspace=256
 endif
 
 " Base16 has a confusing match paren color;
