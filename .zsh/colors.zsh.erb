@@ -4,11 +4,14 @@ xterm_escapes = ""
 linux_escapes = ""
 c.terminal.each_with_index do |color, i|
     xterm_escapes += "\\e]4;#{i};rgb:#{color.x11}\\a"
-    linux_escapes += "\\e]P%x%s" % [i, color.hex]
+    linux_escapes += '\e]P%x%s' % [i, color.hex] if i < 16
 end
 xterm_escapes += "\\e]10;rgb:#{c.foreground.x11}\\a"
 xterm_escapes += "\\e]11;rgb:#{c.background.x11}\\a"
-xterm_escapes += "\\e]12;rgb:#{c.cursor.x11}\\a" -%>
+xterm_escapes += "\\e]12;rgb:#{c.cursor.x11}\\a"
+
+# Clear the screen on console to hide some screen corruption
+linux_escapes += '\e[H\e2J' -%>
 case $TERM in
     rxvt*256color|'xterm-256color')
         print -Pn '<%= xterm_escapes %>'
