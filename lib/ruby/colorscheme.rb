@@ -49,9 +49,9 @@ class ColorScheme
       [r, g, b]
     end
 
-    # XXX: This doesn't take into account human perception
+    # XXX: I don't think this is very accurate, but we'll see
     def -(other)
-      Math.sqrt((r - other.r) ** 2 + (g - other.g) ** 2 + (b - other.b) ** 2)
+      Math.sqrt(0.2989 * (r - other.r) ** 2 + 0.5870 * (g - other.g) ** 2 + 0.1140 * (b - other.b) ** 2)
     end
   end
 
