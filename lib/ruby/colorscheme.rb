@@ -97,4 +97,8 @@ class ColorScheme
   def self.base_to_ansi(code)
     BASES.find_index(code)
   end
+
+  def self.terminal_bases
+    BASES
+  end
 end

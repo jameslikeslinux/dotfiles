@@ -201,7 +201,7 @@ prompt_mine_setup() {
         fi
     else
         # We're a lowly terminal; approximate bases we can't display
-<% c.base.keys.drop(16).each do |base| -%>
+<% ColorScheme.terminal_bases.drop(16).each do |base| -%>
         mycolors_bg[base<%= base %>]="$mycolors_bg[base<%= c.terminal_safe_approximation_base(base) %>]"
         mycolors_fg[base<%= base %>]="$mycolors_fg[base<%= c.terminal_safe_approximation_base(base) %>]"
 <% end -%>
