@@ -49,9 +49,13 @@ class ColorScheme
       [r, g, b]
     end
 
-    # XXX: I don't think this is very accurate, but we'll see
+    # Based on http://www.compuphase.com/cmetric.htm
     def -(other)
-      Math.sqrt(0.2989 * (r - other.r) ** 2 + 0.5870 * (g - other.g) ** 2 + 0.1140 * (b - other.b) ** 2)
+      rmean = (r + other.r) / 2
+      rdiff = r - other.r
+      gdiff = g - other.g
+      bdiff = b - other.b
+      Math.sqrt((((512 + rmean) * rdiff ** 2) >> 8) + 4 * gdiff ** 2 + (((767 - rmean) * bdiff ** 2) >> 8))
     end
   end
 
