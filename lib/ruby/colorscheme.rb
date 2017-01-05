@@ -32,13 +32,13 @@ class ColorScheme
     # Add a bit of 'white' to a color.  White is defined by color 7, the end of the
     # gray scale in a color scheme.  (This is usually #FFFFFF, or close.)
     def tint(weight = 50)
-      mix(@colorscheme.base['07'], weight)
+      mix(@colorscheme.bases['07'], weight)
     end
 
     # Add a bit of 'black' to a color.  White is defined by color 0, the end of the
     # gray scale in a color scheme.  (This is usually #000000, or close.)
     def shade(color, weight = 50)
-      mix(@colorscheme.base['00'], weight)
+      mix(@colorscheme.bases['00'], weight)
     end
 
     def x11
