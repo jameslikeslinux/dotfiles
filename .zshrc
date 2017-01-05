@@ -50,6 +50,9 @@ bindkey '^R' history-incremental-pattern-search-backward
 bindkey '^S' history-incremental-pattern-search-forward
 stty -ixon      # make ^S available to shell
 
+# Load colors
+source "${HOME}/.zsh/colors.zsh"
+
 # Show user name at prompt if not one of my usual ones
 zstyle ':prompt:mine' hide-users '(james|jlee|jtl|root)'
 
