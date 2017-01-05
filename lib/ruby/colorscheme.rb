@@ -50,58 +50,64 @@ class ColorScheme
     end
   end
 
-  BASES = ['00', '08', '0B', '0A', '0D', '0E', '0C', '05',
-           '03', '08', '0B', '0A', '0D', '0E', '0C', '07',
-           '09', '0F', '01', '02', '04', '06']
-
-  LINUX_BASES = ['00', '08', '0B', '0A', '0D', '0E', '0C', '05',
-                 '02', '08', '0B', '0A', '0D', '0E', '0C', '07']
-
-  APPROXIMATIONS = {
-    '09' => '0A',
-    '0F' => '08',
-    '01' => '00',
-    '02' => '03',
-    '04' => '05',
-    '06' => '07',
+  BASE_TO_ANSI = {
+    256 => ['00', '08', '0B', '0A', '0D', '0E', '0C', '05',
+            '03', '08', '0B', '0A', '0D', '0E', '0C', '07',
+            '09', '0F', '01', '02', '04', '06'],
+    16  => ['00', '08', '0B', '0A', '0D', '0E', '0C', '05',
+            '03', '08', '0B', '0A', '0D', '0E', '0C', '07',
+            '0A', '08', '00', '03', '05', '07'],
+    8   => ['00', '08', '0B', '0A', '0D', '0E', '0C', '05',
+            '02', '08', '0B', '0A', '0D', '0E', '0C', '07',
+            '0A', '08', '00', '00', '05', '05'],
   }
 
-  attr_reader :base
+  attr_reader :bases
 
   def initialize
     @scheme_data = YAML.load_file(File.join(Dir.home, '.colorscheme.yaml'))
-    @base = (0x0..0xf).each_with_object(Hash.new) do |i, acc|
+    @bases = (0x0..0xf).each_with_object(Hash.new) do |i, acc|
       code = "%02X" % i
       acc[code] = Color.new(self, @scheme_data["base#{code}"])
       acc
     end
   end
 
-  def console
-    LINUX_BASES.map { |code| base[code] }
+  def base_to_ansi(term_colors = 256)
+    bases.keys.each_with_object(Hash.new) do |code, acc|
+      acc[code] = BASE_TO_ANSI[term_colors].find_index(code)
+      acc
+    end
+  end
+
+  def base_to_colors(term_colors = 256)
+    bases.keys.each_with_object(Hash.new) do |code, acc|
+      acc[code] = bases[BASE_TO_ANSI[term_colors]]
+      acc
+    end
+  end
+
+  def colors(term_colors = 256)
+    BASE_TO_ANSI[term_colors].map { |code| bases[code] }
   end
 
   def terminal
-    BASES.map { |code| base[code] }
+    colors(256)
+  end
+
+  def console
+    colors(8).take(16)
   end
 
   def foreground
-    base['05']
+    bases['05']
   end
 
   def background
-    base['00']
+    bases['00']
   end
 
   def cursor
-    base['05']
-  end
-
-  def self.base_to_ansi(code)
-    BASES.find_index(code)
-  end
-
-  def self.base_approximations
-    APPROXIMATIONS
+    bases['05']
   end
 end
