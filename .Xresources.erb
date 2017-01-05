@@ -1,0 +1,19 @@
+<% require 'colorscheme'
+c = ColorScheme.new
+c.terminal.each_with_index do |color, i| -%>
+*color<%= i %>: rgb:<%= color.x11 %>
+<% end -%>
+*foreground: <%= c.foreground.x11 %>
+*background: <%= c.background.x11 %>
+*cursorColor: <%= c.cursor.x11 %>
+
+URxvt.font: xft:monospace:size=9
+URxvt.perl-ext-common: font-size
+URxvt.keysym.Control-0x2b: perl:font-size:increase
+URxvt.keysym.Control-0x2d: perl:font-size:decrease
+URxvt.scrollBar: false
+
+xterm*termName: xterm-256color
+xterm*faceName: monospace
+xterm*faceSize: 9
+xterm*savelines: 10000
