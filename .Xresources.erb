@@ -8,9 +8,10 @@ c.terminal.each_with_index do |color, i| -%>
 *cursorColor: rgb:<%= c.cursor.x11 %>
 
 URxvt.font: xft:monospace:size=9
-URxvt.perl-ext-common: font-size
+URxvt.perl-ext-common: font-size,new-window
 URxvt.keysym.Control-0x2b: perl:font-size:increase
 URxvt.keysym.Control-0x2d: perl:font-size:decrease
+URxvt.keysym.Control-Shift-N: perl:new-window
 URxvt.scrollBar: false
 URxvt.secondaryWheel: true
 
