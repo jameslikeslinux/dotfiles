@@ -52,10 +52,10 @@ if exists('base16colorspace') && base16colorspace == "256"
   let s:cterm0F = "17"
 else
   let s:cterm01 = "00"
-  let s:cterm02 = "00"
-  let s:cterm04 = "06"
-  let s:cterm06 = "07"
-  let s:cterm09 = "02"
+  let s:cterm02 = "08"
+  let s:cterm04 = "07"
+  let s:cterm06 = "15"
+  let s:cterm09 = "03"
   let s:cterm0F = "01"
 endif
 
