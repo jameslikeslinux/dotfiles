@@ -50,7 +50,7 @@ class ColorScheme
     end
 
     # XXX: This doesn't take into account human perception
-    def -@(other)
+    def -(other)
       Math.sqrt((r - other.r) ** 2 + (g - other.g) ** 2 + (b - other.b) ** 2)
     end
   end
