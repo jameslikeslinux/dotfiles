@@ -44,6 +44,10 @@ class ColorScheme
     def x11
       "#{hexr}/#{hexg}/#{hexb}"
     end
+
+    def rgb
+      [r, g, b]
+    end
   end
 
   attr_reader :base

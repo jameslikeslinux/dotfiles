@@ -1,5 +1,5 @@
 [Appearance]
-ColorScheme=base16-bright
+ColorScheme=mine
 Font=Monospace,9,-1,0,50,0,0,0,0,0
 
 [General]

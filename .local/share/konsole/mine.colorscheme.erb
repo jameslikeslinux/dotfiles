@@ -1,0 +1,35 @@
+<% require 'colorscheme'
+c = ColorScheme.new
+c.terminal.take(8).each_with_index do |color, i| -%>
+[Color<%= i %>]
+Color=<%= color.rgb.join(',') %>
+
+[Color<%= i %>Faint]
+Color=<%= color.tint.rgb.join(',') %>
+
+[Color<%= i %>Intense]
+Color=<%= color.rgb.join(',') %>
+<% end -%>
+
+[Background]
+Color=<%= c.background.rgb.join(',') %>
+
+[BackgroundFaint]
+Color=<%= c.background.tint.rgb.join(',') %>
+
+[BackgroundIntense]
+Color=<%= c.background.rgb.join(',') %>
+
+[Foreground]
+Color=<%= c.foreground.rgb.join(',') %>
+
+[ForegroundFaint]
+Color=<%= c.foreground.tint.rgb.join(',') %>
+
+[ForegroundIntense]
+Color=<%= c.foreground.rgb.join(',') %>
+
+[General]
+Description=Mine
+Opacity=1
+Wallpaper=
