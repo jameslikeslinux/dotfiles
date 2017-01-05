@@ -92,10 +92,10 @@ endif
 
 " Base16 has a confusing match paren color;
 " change it to invert the paren (base0F) and cursor (base06) colors
-autocmd ColorScheme base16-bright highlight MatchParen ctermbg=07 ctermfg=00 guibg=#be643c guifg=#e0e0e0
+autocmd ColorScheme base16-tomorrow-night highlight MatchParen ctermbg=07 ctermfg=00 guibg=#a3685a guifg=#c5c8c6
 
 " Set color scheme
-colorscheme base16-bright
+colorscheme base16-tomorrow-night
 
 " Airline comes with a base16-bright theme
 " but I like the base base16 theme better

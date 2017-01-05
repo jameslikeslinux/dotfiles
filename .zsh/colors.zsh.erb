@@ -2,10 +2,15 @@
 c = ColorScheme.new
 xterm_escapes = ""
 linux_escapes = ""
+
 c.terminal.each_with_index do |color, i|
     xterm_escapes += "\\e]4;#{i};rgb:#{color.x11}\\a"
-    linux_escapes += '\e]P%x%s' % [i, color.hex] if i < 16
+
+    # Linux console uses color 8 for bold 0 (black); use one base darker
+    linux_color = i == 8 ? c.base['02'].hex : color.hex
+    linux_escapes += '\e]P%x%s' % [i, linux_color] if i < 16
 end
+
 xterm_escapes += "\\e]10;rgb:#{c.foreground.x11}\\a"
 xterm_escapes += "\\e]11;rgb:#{c.background.x11}\\a"
 xterm_escapes += "\\e]12;rgb:#{c.cursor.x11}\\a" -%>
