@@ -54,6 +54,9 @@ class ColorScheme
            '03', '08', '0B', '0A', '0D', '0E', '0C', '07',
            '09', '0F', '01', '02', '04', '06']
 
+  LINUX_BASES = ['02', '08', '0B', '0A', '0D', '0E', '0C', '05',
+                 '00', '08', '0B', '0A', '0D', '0E', '0C', '07']
+
   APPROXIMATIONS = {
     '09' => '0A',
     '0F' => '08',
@@ -72,6 +75,10 @@ class ColorScheme
       acc[code] = Color.new(self, @scheme_data["base#{code}"])
       acc
     end
+  end
+
+  def console
+    LINUX_BASES.map { |code| base[code] }
   end
 
   def terminal
