@@ -87,7 +87,7 @@ if $TERM ==# 'konsole-256color'
     set term=xterm-256color
     set termguicolors
 elseif $TERM =~# '-256color$'
-    set base16colorspace=256
+    let base16colorspace=256
 endif
 
 " Base16 has a confusing match paren color;
