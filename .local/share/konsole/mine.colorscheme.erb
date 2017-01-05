@@ -1,6 +1,7 @@
 <% require 'colorscheme'
 c = ColorScheme.new
-c.terminal.take(8).each_with_index do |color, i| -%>
+colors = c.terminal
+colors.take(8).each_with_index do |color, i| -%>
 [Color<%= i %>]
 Color=<%= color.rgb.join(',') %>
 
@@ -8,7 +9,7 @@ Color=<%= color.rgb.join(',') %>
 Color=<%= color.tint.rgb.join(',') %>
 
 [Color<%= i %>Intense]
-Color=<%= color.rgb.join(',') %>
+Color=<%= colors[i + 8].rgb.join(',') %>
 
 <% end -%>
 [Background]
