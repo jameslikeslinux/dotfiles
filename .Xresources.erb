@@ -9,9 +9,10 @@ c.terminal.each_with_index do |color, i| -%>
 
 URxvt.font: xft:monospace:size=9
 URxvt.perl-ext-common: font-size,new-window
-URxvt.keysym.Control-0x2b: perl:font-size:increase
-URxvt.keysym.Control-0x2d: perl:font-size:decrease
-URxvt.keysym.Control-Shift-N: perl:new-window
+URxvt.keysym.C-M-equal: perl:font-size:increase
+URxvt.keysym.C-M-plus: perl:font-size:increase
+URxvt.keysym.C-M-minus: perl:font-size:decrease
+URxvt.keysym.C-M-n: perl:new-window
 URxvt.scrollBar: false
 URxvt.secondaryWheel: true
 
