@@ -1,11 +1,3 @@
-# Check for newer local version of zsh
-autoload -U is-at-least
-if ! is-at-least 5.2; then
-    for zsh in $HOME/local/bin/zsh; do
-        [[ -x $zsh ]] && exec $zsh
-    done
-fi
-
 # /etc/zsh/zprofile overwrites stuff set in .zshenv
 # This is kind of a hack, but not that big of a deal
 [[ -e /etc/zsh/zprofile ]] && source $HOME/.zshenv
@@ -49,9 +41,6 @@ export KEYTIMEOUT=1
 bindkey '^R' history-incremental-pattern-search-backward
 bindkey '^S' history-incremental-pattern-search-forward
 stty -ixon      # make ^S available to shell
-
-# Load colors
-source "${HOME}/.zsh/colors.zsh"
 
 # Show user name at prompt if not one of my usual ones
 zstyle ':prompt:mine' hide-users '(james|jlee|jtl|root)'
@@ -106,8 +95,15 @@ compdef "_files -W ${HOME}/projects" p
 # Set standard umask
 umask 022
 
-# Enable X apps through sudo (along with env_keep)
-export XAUTHORITY="${XAUTHORITY-$HOME/.Xauthority}"
-
-# Glue polutes my shell
-unset LESS LESSOPEN
+# Configure color palette on modern terminals
+<% require 'colorscheme'
+c = ColorScheme.new
+xterm_escapes = c.terminal.each_with_index.map do |color, i|
+  "\\e]4;#{i};#{color.x11}\\a"
+end.join
+xterm_escapes += "\\e]10;#{c.foreground.x11}\\a"
+xterm_escapes += "\\e]11;#{c.background.x11}\\a"
+xterm_escapes += "\\e]12;#{c.cursor.x11}\\a" -%>
+if [[ $TERM == *256color ]]; then
+    print -Pn '<%= xterm_escapes %>'
+fi

@@ -42,7 +42,7 @@ class ColorScheme
     end
 
     def x11
-      "#{hexr}/#{hexg}/#{hexb}"
+      "rgb:#{hexr}/#{hexg}/#{hexb}"
     end
 
     def rgb

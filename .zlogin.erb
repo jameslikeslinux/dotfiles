@@ -1,0 +1,10 @@
+# Configure color palette on Linux console
+<% require 'colorscheme'
+c = ColorScheme.new
+linux_escapes = c.console.each_with_index.map do |color, i|
+  '\e]P%x%s' % [i, color.hex]
+end.join -%>
+if [[ $TERM == 'linux' ]]; then
+    print -Pn '<%= linux_escapes %>'
+    clear
+fi

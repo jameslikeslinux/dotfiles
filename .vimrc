@@ -84,7 +84,6 @@ endif
 " as xterm-265color by default.  I configure it to say it's konsole-256color
 " so I can detect it here and enable true color support.
 if $TERM ==# 'konsole-256color'
-    set term=xterm-256color
     set termguicolors
 elseif $TERM =~# '-256color$'
     let base16colorspace=256
@@ -102,5 +101,5 @@ colorscheme base16-tomorrow-night
 let g:airline_theme='base16'
 
 " Use Ctrl+P to invoke CtrlP plugin
-let g:ctrlp_map = '<C-P>'
+let g:ctrlp_map = '<C-p>'
 let g:ctrlp_cmd = 'CtrlP'
