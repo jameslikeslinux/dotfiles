@@ -1,3 +1,11 @@
+# Check for newer local version of zsh
+autoload -U is-at-least
+if ! is-at-least 5.2; then
+    for zsh in $HOME/local/bin/zsh; do
+        [[ -x $zsh ]] && exec $zsh
+    done
+fi
+
 # /etc/zsh/zprofile overwrites stuff set in .zshenv
 # This is kind of a hack, but not that big of a deal
 [[ -e /etc/zsh/zprofile ]] && source $HOME/.zshenv
@@ -107,3 +115,7 @@ xterm_escapes += "\\e]12;#{c.cursor.x11}\\a" -%>
 if [[ $TERM == *256color ]]; then
     print -Pn '<%= xterm_escapes %>'
 fi
+
+# Glue polutes my shell
+# (for some reason these have to go here, not .zshenv)
+unset LESS LESSOPEN

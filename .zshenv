@@ -1,11 +1,3 @@
-# Check for newer local version of zsh
-autoload -U is-at-least
-if ! is-at-least 5.2; then
-    for zsh in $HOME/local/bin/zsh; do
-        [[ -x $zsh ]] && exec $zsh
-    done
-fi
-
 # Always use unicode
 export LANG=en_US.UTF-8
 
@@ -41,6 +33,3 @@ export TERMINFO="${HOME}/.terminfo"
 
 # Enable X apps through sudo (along with env_keep)
 export XAUTHORITY="${XAUTHORITY-$HOME/.Xauthority}"
-
-# Glue polutes my shell
-unset LESS LESSOPEN
