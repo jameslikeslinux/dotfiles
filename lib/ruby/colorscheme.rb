@@ -37,7 +37,7 @@ class ColorScheme
 
     # Add a bit of 'black' to a color.  White is defined by color 0, the end of the
     # gray scale in a color scheme.  (This is usually #000000, or close.)
-    def shade(color, weight = 50)
+    def shade(weight = 50)
       mix(@colorscheme.bases['00'], weight)
     end
 
