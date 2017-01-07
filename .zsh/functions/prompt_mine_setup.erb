@@ -180,26 +180,26 @@ prompt_mine_setup() {
         # See: https://gist.github.com/XVilka/8346728
         # See: https://github.com/chriskempson/base16-builder/blob/master/schemes/bright.yml
         if [[ $TERM == 'konsole-256color' ]]; then
-<% c.colors_by_base.each do |base, color| -%>
-            mycolors_bg[base<%= base %>]="\e[48;2;<%= color.rgb.join(';') %>m"
-            mycolors_fg[base<%= base %>]="\e[38;2;<%= color.rgb.join(';') %>m"
+<% c.colors_by_base.each do |color| -%>
+            mycolors_bg[base<%= color.base %>]="\e[48;2;<%= color.rgb.join(';') %>m"
+            mycolors_fg[base<%= color.base %>]="\e[38;2;<%= color.rgb.join(';') %>m"
 <% end -%>
         else
             # Set the Base16 colors
-<% c.colors_by_base.each do |base, color| -%>
-            mycolors_bg[base<%= base %>]="\e[48;5;<%= color.ansi %>m"
-            mycolors_fg[base<%= base %>]="\e[38;5;<%= color.ansi %>m"
+<% c.colors_by_base.each do |color| -%>
+            mycolors_bg[base<%= color.base %>]="\e[48;5;<%= color.ansi %>m"
+            mycolors_fg[base<%= color.base %>]="\e[38;5;<%= color.ansi %>m"
 <% end -%>
         fi
     elif [[ $terminfo[colors] -ge 16 ]]; then
-<% c.colors_by_base(16).each do |base, color| -%>
-            mycolors_bg[base<%= base %>]="\e[48;5;<%= color.ansi %>m"
-            mycolors_fg[base<%= base %>]="\e[38;5;<%= color.ansi %>m"
+<% c.colors_by_base(16).each do |color| -%>
+            mycolors_bg[base<%= color.base %>]="\e[48;5;<%= color.ansi %>m"
+            mycolors_fg[base<%= color.base %>]="\e[38;5;<%= color.ansi %>m"
 <% end -%>
     else
-<% c.colors_by_base(8).each do |base, color| -%>
-            mycolors_bg[base<%= base %>]="\e[48;5;<%= color.ansi %>m"
-            mycolors_fg[base<%= base %>]="\e[38;5;<%= color.ansi %>m"
+<% c.colors_by_base(8).each do |color| -%>
+            mycolors_bg[base<%= color.base %>]="\e[48;5;<%= color.ansi %>m"
+            mycolors_fg[base<%= color.base %>]="\e[38;5;<%= color.ansi %>m"
 <% end -%>
     fi
 

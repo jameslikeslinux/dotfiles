@@ -6,29 +6,29 @@
 " GUI color definitions
 <% require 'colorscheme'
 c = ColorScheme.new
-c.colors_by_base.each do |base, color| -%>
-let s:gui<%= base %> = "<%= color.hex %>"
+c.colors_by_base.each do |color| -%>
+let s:gui<%= color.base %> = "<%= color.hex %>"
 <% end -%>
 
 " Terminal color definitions
 if &t_Co >= 256
-<% c.colors_by_base.each do |base, color| -%>
-    let s:cterm<%= base %> = "<%= color.ansi %>"
-    let s:bold<%= base %> = <%= color.bold ? 1 : 0 %>
+<% c.colors_by_base.each do |color| -%>
+    let s:cterm<%= color.base %> = "<%= color.ansi %>"
+    let s:bold<%= color.base %> = <%= color.bold ? 1 : 0 %>
 <% end -%>
     let s:visualfg = ""
     let s:visualbg = s:cterm02
 elseif &t_Co >= 16
-<% c.colors_by_base(16).each do |base, color| -%>
-    let s:cterm<%= base %> = "<%= color.ansi %>"
-    let s:bold<%= base %> = <%= color.bold ? 1 : 0 %>
+<% c.colors_by_base(16).each do |color| -%>
+    let s:cterm<%= color.base %> = "<%= color.ansi %>"
+    let s:bold<%= color.base %> = <%= color.bold ? 1 : 0 %>
 <% end -%>
     let s:visualfg = s:cterm00
     let s:visualbg = s:cterm05
 else
-<% c.colors_by_base(8).each do |base, color| -%>
-    let s:cterm<%= base %> = "<%= color.ansi %>"
-    let s:bold<%= base %> = <%= color.bold ? 1 : 0 %>
+<% c.colors_by_base(8).each do |color| -%>
+    let s:cterm<%= color.base %> = "<%= color.ansi %>"
+    let s:bold<%= color.base %> = <%= color.bold ? 1 : 0 %>
 <% end -%>
     let s:visualfg = s:cterm05
     let s:visualbg = s:cterm00
@@ -36,9 +36,9 @@ endif
 
 " Only base{03,0F} will ever be bold, but this is easier to generate.
 " I save myself the trouble of using most of these down below.
-<% c.colors_by_base.keys.each do |base| -%>
-let s:bold<%= base %>unset = s:bold<%= base %> ? "bold" : ""
-let s:bold<%= base %>none = s:bold<%= base %> ? "bold" : "none"
+<% c.colors_by_base.each do |color| -%>
+let s:bold<%= color.base %>unset = s:bold<%= color.base %> ? "bold" : ""
+let s:bold<%= color.base %>none = s:bold<%= color.base %> ? "bold" : "none"
 <% end -%>
 
 " Theme setup
@@ -265,5 +265,5 @@ delf <sid>hi
 " Remove color variables
 unlet s:gui00 s:gui01 s:gui02 s:gui03  s:gui04  s:gui05  s:gui06  s:gui07  s:gui08  s:gui09 s:gui0A  s:gui0B  s:gui0C  s:gui0D  s:gui0E  s:gui0F
 unlet s:cterm00 s:cterm01 s:cterm02 s:cterm03 s:cterm04 s:cterm05 s:cterm06 s:cterm07 s:cterm08 s:cterm09 s:cterm0A s:cterm0B s:cterm0C s:cterm0D s:cterm0E s:cterm0F
-unlet <%= c.colors_by_base.keys.map { |base| "s:bold#{base} s:bold#{base}unset s:bold#{base}none" }.join(' ') %>
+unlet <%= c.colors_by_base.map { |color| "s:bold#{color.base} s:bold#{color.base}unset s:bold#{color.base}none" }.join(' ') %>
 unlet s:visualfg s:visualbg

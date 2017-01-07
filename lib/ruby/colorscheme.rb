@@ -36,13 +36,13 @@ class ColorScheme
     # Add a bit of 'white' to a color.  White is defined by color 7, the end of the
     # gray scale in a color scheme.  (This is usually #FFFFFF, or close.)
     def tint(weight = 50)
-      mix(@colorscheme.colors_by_base['07'], weight)
+      mix(@colorscheme.colors_by_base[0x07], weight)
     end
 
     # Add a bit of 'black' to a color.  White is defined by color 0, the end of the
     # gray scale in a color scheme.  (This is usually #000000, or close.)
     def shade(weight = 50)
-      mix(@colorscheme.colors_by_base['00'], weight)
+      mix(@colorscheme.colors_by_base[0x00], weight)
     end
 
     def x11
@@ -59,22 +59,24 @@ class ColorScheme
   # by look (https://chriskempson.github.io/base16/) and style guidelines
   # (https://github.com/chriskempson/base16/blob/master/styling.md).
   BASE_TO_ANSI = {
-          # 00  01  02  03  04  05  06  07  08  09  0A  0B  0C  0D  0E  0F
-    256 => [ 0, 18, 19,  8, 20,  7, 21, 15,  1, 16,  3,  2,  6,  4,  5, 17],
-    16  => [ 0,  0,  0,  8,  7,  7, 15, 15,  1,  3,  3,  2,  6,  4,  5,  8],
-    8   => [ 0,  0,  0,'0',  7,  7,'7','7',  1,  3,  3,  2,  6,  4,  5,'0'],
+          # 00  01  02  03  04  05  06  07    08  09     0A     0B     0C     0D    0E   0F
+    256 => [ 0, 18, 19,  8, 20,  7, 21, 15,[1,9], 16,[3,11],[2,10],[6,14],[4,12],[5,13], 17],
+    16  => [ 0,  0,  0,  8,  7,  7, 15, 15,[1,9],  3,[3,11],[2,10],[6,14],[4,12],[5,13],  8],
+    8   => [ 0,  0,  0,'0',  7,  7,'7','7',    1,  3,     3,     2,     6,     4,     5,'0'],
                       # quoted means bold; as in "sorta 0", "sorta 7" ;)
   }
 
   def initialize
     @scheme_data = YAML.load_file(File.join(Dir.home, '.colorscheme.yaml'))
     @colors = BASE_TO_ANSI.keys.each_with_object(Hash.new) do |term_colors, colors_acc|
-      colors_acc[term_colors] = BASE_TO_ANSI[term_colors].each_with_index.map do |ansi, base|
+      colors_acc[term_colors] = BASE_TO_ANSI[term_colors].each_with_index.map do |ansis, base|
         basestr = '%02X' % base
         hex = @scheme_data["base#{basestr}"]
-        bold = ansi.is_a? String
-        Color.new(self, hex, basestr, ansi.to_i, bold)
-      end
+        Array(ansis).map do |ansi|
+          bold = ansi.is_a? String
+          Color.new(self, hex, basestr, ansi.to_i, bold)
+        end
+      end.flatten
       colors_acc
     end
   end
@@ -90,34 +92,36 @@ class ColorScheme
       else
         c1.ansi <=> c2.ansi
       end
-    end.each_with_object(Hash.new) do |color, acc|
-      acc[color.base] = color
-    end
+    end.uniq { |color| color.ansi }
   end
 
   def colors_by_base(term_colors = 256)
-    colors(term_colors).sort_by { |color| color.base }.each_with_object(Hash.new) do |color, acc|
-      acc[color.base] = color
-    end
+    @colors[term_colors].sort do |c1, c2|
+      if c1.base == c2.base
+        c1.ansi <=> c2.ansi
+      else
+        c1.base <=> c2.base
+      end
+    end.uniq { |color| color.base }
   end
 
   def terminal
-    colors_by_ansi(256).values
+    colors_by_ansi(256)
   end
 
   def console
-    colors_by_ansi(8).values.take(16)
+    colors_by_ansi(16)
   end
 
   def foreground
-    colors_by_base['05']
+    colors_by_base[0x05]
   end
 
   def background
-    colors_by_base['00']
+    colors_by_base[0x00]
   end
 
   def cursor
-    colors_by_base['05']
+    colors_by_base[0x05]
   end
 end
