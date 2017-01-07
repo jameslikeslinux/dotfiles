@@ -91,10 +91,6 @@ endif
 " Set color scheme
 colorscheme mine
 
-" Airline comes with a base16-bright theme
-" but I like the base base16 theme better
-let g:airline_theme='base16'
-
 " Use Ctrl+P to invoke CtrlP plugin
 let g:ctrlp_map = '<C-p>'
 let g:ctrlp_cmd = 'CtrlP'
