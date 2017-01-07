@@ -83,7 +83,7 @@ class ColorScheme
     end
   end
 
-  def base_to_colors(term_colors = 256)
+  def base_to_color(term_colors = 256)
     mapping = Hash.new
     base_to_ansi(term_colors).each do |code, ansi|
       mapping[code] = colors(term_colors)[ansi]
