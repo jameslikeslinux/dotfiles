@@ -1,10 +1,18 @@
-# Configure color palette on Linux console
 <% require 'colorscheme'
 c = ColorScheme.new
 linux_escapes = c.console.map do |color|
   '\e]P%x%s' % [color.ansi, color.hex]
 end.join -%>
 if [[ $TERM == 'linux' ]]; then
+    # Set Linux console color palette.  See console(4).
     print -Pn '<%= linux_escapes %>'
     clear
+elif [[ $TERM == 'vt220' ]]; then
+    # Make serial consoles more bearable.
+    # Yes, this is ugly, but I'm almost always using an xterm-compatible
+    # terminal so there's no point in fighting with the limitations of an
+    # ancient terminal type that I'm not actually even using.
+    print 'Setting TERM=xterm'
+    export TERM='xterm'
 fi
+<%# vim: set filetype=zsh: -%>
