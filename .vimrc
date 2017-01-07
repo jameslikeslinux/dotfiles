@@ -91,9 +91,25 @@ endif
 " Set color scheme
 colorscheme mine
 
-" Airline comes with a base16-bright theme
-" but I like the base base16 theme better
+" The base16 airline theme pulls colors from the main color scheme
 let g:airline_theme='base16'
+
+" But it's not perfect, so we modify it as follows
+function! AirlineThemePatch(palette)
+    if &t_Co <= 16
+        " On low color terminals bold changes color, so disable bold
+        let a:palette.accents.bold[4] = 'none'
+        let a:palette.normal.airline_a[4] = 'none'
+        let a:palette.insert.airline_a[4] = 'none'
+        let a:palette.visual.airline_a[4] = 'none'
+
+        " And just use plain reverse color for inactive status bars
+        let s:inactive = ['', '', '', '', 'reverse']
+        let a:palette.inactive = airline#themes#generate_color_map(s:inactive, s:inactive, s:inactive, s:inactive, s:inactive, s:inactive)
+        let a:palette.inactive_modified = a:palette.inactive
+    endif
+endfunction
+let g:airline_theme_patch_func = 'AirlineThemePatch'
 
 " Use Ctrl+P to invoke CtrlP plugin
 let g:ctrlp_map = '<C-p>'
