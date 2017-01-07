@@ -111,6 +111,7 @@ function! AirlineThemePatch(palette)
 endfunction
 let g:airline_theme_patch_func = 'AirlineThemePatch'
 
-" Use Ctrl+P to invoke CtrlP plugin
+" Configure fuzzy finder
 let g:ctrlp_map = '<C-p>'
 let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_show_hidden = 1
