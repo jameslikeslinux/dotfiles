@@ -12,6 +12,6 @@ ForegroundColour=<%= c.foreground.rgb.join(',') %>
 BackgroundColour=<%= c.background.rgb.join(',') %>
 CursorColour=<%= c.cursor.rgb.join(',') %>
 <% %w(Black Red Green Yellow Blue Magenta Cyan White).each_with_index do |name, i| -%>
-<%= name%>=<%= colors[i].rgb.join(',') %>
-Bold<%= name %>=<% colors[i + 8].rgb.join(',') %>
+<%= name %>=<%= colors[i].rgb.join(',') %>
+Bold<%= name %>=<%= colors[i + 8].rgb.join(',') %>
 <% end -%>

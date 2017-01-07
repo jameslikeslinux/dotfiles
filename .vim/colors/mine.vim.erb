@@ -8,25 +8,26 @@
 " GUI color definitions
 <% require 'colorscheme'
 c = ColorScheme.new
-c.base_to_color.each do |base, color| -%>
+c.colors_by_base.each do |base, color| -%>
 let s:gui<%= base %> = "<%= color.hex %>"
 <% end -%>
-let s:bold03 = 0
 
 " Terminal color definitions
 if &t_Co >= 256
-<% c.base_to_ansi.each do |base, ansi| -%>
-    let s:cterm<%= base %> = "<%= ansi %>"
+<% c.colors_by_base.each do |base, color| -%>
+    let s:cterm<%= base %> = "<%= color.ansi %>"
+    let s:bold<%= base %> = <%= color.bold ? 1 : 0 %>
 <% end -%>
 elseif &t_Co >= 16
-<% c.base_to_ansi(16).each do |base, ansi| -%>
-    let s:cterm<%= base %> = "<%= ansi %>"
+<% c.colors_by_base(16).each do |base, color| -%>
+    let s:cterm<%= base %> = "<%= color.ansi %>"
+    let s:bold<%= base %> = <%= color.bold ? 1 : 0 %>
 <% end -%>
 else
-<% c.base_to_ansi(8).each do |base, ansi| -%>
-    let s:cterm<%= base %> = "<%= ansi %>"
+<% c.colors_by_base(8).each do |base, color| -%>
+    let s:cterm<%= base %> = "<%= color.ansi %>"
+    let s:bold<%= base %> = <%= color.bold ? 1 : 0 %>
 <% end -%>
-    let s:bold03 = 1
 endif
 
 " Theme setup
@@ -253,4 +254,4 @@ delf <sid>hi
 " Remove color variables
 unlet s:gui00 s:gui01 s:gui02 s:gui03  s:gui04  s:gui05  s:gui06  s:gui07  s:gui08  s:gui09 s:gui0A  s:gui0B  s:gui0C  s:gui0D  s:gui0E  s:gui0F
 unlet s:cterm00 s:cterm01 s:cterm02 s:cterm03 s:cterm04 s:cterm05 s:cterm06 s:cterm07 s:cterm08 s:cterm09 s:cterm0A s:cterm0B s:cterm0C s:cterm0D s:cterm0E s:cterm0F
-unlet s:bold03
+unlet <%= c.colors_by_base.keys.map { |base| "s:bold#{base}" }.join(' ') %>

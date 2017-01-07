@@ -1,15 +1,15 @@
 <% require 'colorscheme'
 c = ColorScheme.new
 colors = c.terminal
-colors.take(8).each_with_index do |color, i| -%>
-[Color<%= i %>]
+colors.take(8).each do |color| -%>
+[Color<%= color.ansi %>]
 Color=<%= color.rgb.join(',') %>
 
-[Color<%= i %>Faint]
+[Color<%= color.ansi %>Faint]
 Color=<%= color.shade(33).rgb.join(',') %>
 
-[Color<%= i %>Intense]
-Color=<%= colors[i + 8].rgb.join(',') %>
+[Color<%= color.ansi %>Intense]
+Color=<%= colors[color.ansi + 8].rgb.join(',') %>
 
 <% end -%>
 [Background]

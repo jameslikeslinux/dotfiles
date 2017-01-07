@@ -106,8 +106,8 @@ umask 022
 # Configure color palette on modern terminals
 <% require 'colorscheme'
 c = ColorScheme.new
-xterm_escapes = c.terminal.each_with_index.map do |color, i|
-  "\\e]4;#{i};#{color.x11}\\a"
+xterm_escapes = c.terminal.each do |color|
+  "\\e]4;#{color.ansi};#{color.x11}\\a"
 end.join
 xterm_escapes += "\\e]10;#{c.foreground.x11}\\a"
 xterm_escapes += "\\e]11;#{c.background.x11}\\a"

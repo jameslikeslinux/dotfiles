@@ -1,7 +1,7 @@
 <% require 'colorscheme'
 c = ColorScheme.new
-c.terminal.each_with_index do |color, i| -%>
-*color<%= i %>: <%= color.x11 %>
+c.terminal.each do |color| -%>
+*color<%= color.ansi %>: <%= color.x11 %>
 <% end -%>
 *foreground: <%= c.foreground.x11 %>
 *background: <%= c.background.x11 %>
