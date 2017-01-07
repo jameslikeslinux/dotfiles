@@ -97,7 +97,7 @@ let g:airline_theme='base16'
 " But it's not perfect, so we modify it as follows
 function! AirlineThemePatch(palette)
     if &t_Co <= 16
-        " On low color terminals bold changes color, so disable bold
+        " On low color terminals bold can change color, so disable bold
         let a:palette.accents.bold[4] = 'none'
         let a:palette.normal.airline_a[4] = 'none'
         let a:palette.insert.airline_a[4] = 'none'
