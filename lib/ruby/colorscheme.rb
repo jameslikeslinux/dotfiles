@@ -58,6 +58,13 @@ class ColorScheme
   # colors.  Where approximations had to be made, they were done subjectively
   # by look (https://chriskempson.github.io/base16/) and style guidelines
   # (https://github.com/chriskempson/base16/blob/master/styling.md).
+  #
+  # Base0F is the hard one.  It's rarely used, has no historical mapping to
+  # any particular color, and varies wildly across different Base16 themes.
+  # This mapping approximates it to Base03 for low color terminals, which is
+  # usually a middle gray of similar luminance.  I've never seen it used for
+  # a background color, but if it is, it will take on the middle gray color
+  # on 16-color terminals, and the default background color on 8-color ones.
   BASE_TO_ANSI = {
           # 00  01  02  03  04  05  06  07    08  09     0A     0B     0C     0D    0E   0F
     256 => [ 0, 18, 19,  8, 20,  7, 21, 15,[1,9], 16,[3,11],[2,10],[6,14],[4,12],[5,13], 17],
