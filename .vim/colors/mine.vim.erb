@@ -34,6 +34,14 @@ else
     let s:visualbg = s:cterm00
 endif
 
+" Using bold to access additional colors is intended for low-color
+" terminals.  We don't need it in the GUI.
+if has("gui_running")
+<% c.colors_by_base.each do |color| -%>
+    let s:bold<%= color.base %> = 0
+<% end -%>
+endif
+
 " Only base{03,0F} will ever be bold, but this is easier to generate.
 " I save myself the trouble of using most of these down below.
 <% c.colors_by_base.each do |color| -%>
