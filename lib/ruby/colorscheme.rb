@@ -1,3 +1,16 @@
+#
+# colorscheme.rb
+#
+# My own take on the [Base16](https://github.com/chriskempson/base16)
+# builders and templates, primarily so I can integrate it into my
+# ERB-based dotfiles, managed by Puppet at:
+#
+# https://github.com/iamjamestl/dotfiles/blob/master/bin/refresh-dotfiles
+#
+# This has also been carefully extended to work well with low-color
+# terminals, like the Linux console.
+#
+
 require 'yaml'
 
 class ColorScheme
@@ -66,11 +79,10 @@ class ColorScheme
   # a background color, but if it is, it will take on the middle gray color
   # on 16-color terminals, and the default background color on 8-color ones.
   BASE_TO_ANSI = {
-          # 00  01  02  03  04  05  06  07    08  09     0A     0B     0C     0D    0E   0F
-    256 => [ 0, 18, 19,  8, 20,  7, 21, 15,[1,9], 16,[3,11],[2,10],[6,14],[4,12],[5,13], 17],
-    16  => [ 0,  0,  0,  8,  7,  7, 15, 15,[1,9],  3,[3,11],[2,10],[6,14],[4,12],[5,13],  8],
-    8   => [ 0,  0,  0,'0',  7,  7,'7','7',    1,  3,     3,     2,     6,     4,     5,'0'],
-                      # quoted means bold; as in "sorta 0", "sorta 7" ;)
+         # 00  01  02 03  04 05  06  07    08  09     0A     0B     0C     0D    0E   0F
+    256 => [0, 18, 19, 8, 20, 7, 21, 15,[1,9], 16,[3,11],[2,10],[6,14],[4,12],[5,13], 17],
+    16  => [0,  0,  0, 8,  7, 7, 15, 15,[1,9],  3,[3,11],[2,10],[6,14],[4,12],[5,13],  8],
+    8   => [0,  0,  0, 8,  7, 7, 15, 15,    1,  3,     3,     2,     6,     4,     5,  8],
   }
 
   def initialize
@@ -80,8 +92,13 @@ class ColorScheme
         basestr = '%02X' % base
         hex = @scheme_data["base#{basestr}"]
         Array(ansis).map do |ansi|
-          bold = ansi.is_a? String
-          Color.new(self, hex, basestr, ansi.to_i, bold)
+          # Map requested ansi color into the available color space.
+          # If a mapping is made, pass a flag that bold styling could be used
+          # to "jump" back to the original color (for example, on the Linux
+          # console, to be able to access all 16 colors from the 8 color space).
+          bold = ansi / term_colors > 0
+          ansi %= term_colors
+          Color.new(self, hex, basestr, ansi, bold)
         end
       end.flatten
       colors_acc
@@ -93,7 +110,7 @@ class ColorScheme
   end
 
   def colors_by_ansi(term_colors = 256)
-    @colors[term_colors].sort do |c1, c2|
+    colors(term_colors).sort do |c1, c2|
       if c1.ansi == c2.ansi
         c1.base <=> c2.base
       else
@@ -103,7 +120,7 @@ class ColorScheme
   end
 
   def colors_by_base(term_colors = 256)
-    @colors[term_colors].sort do |c1, c2|
+    colors(term_colors).sort do |c1, c2|
       if c1.base == c2.base
         c1.ansi <=> c2.ansi
       else
