@@ -110,7 +110,7 @@ class ColorScheme
   end
 
   def console
-    colors_by_ansi(16)
+    colors_by_ansi(256).take(16)
   end
 
   def foreground
