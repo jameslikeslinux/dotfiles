@@ -52,6 +52,10 @@ class ColorScheme
     def rgb
       [r, g, b]
     end
+
+    def basei
+      base.to_i(16)
+    end
   end
 
   # Map the base16 code to ansi number based on the number of available
@@ -88,7 +92,7 @@ class ColorScheme
   def colors_by_ansi(term_colors = 256)
     @colors[term_colors].sort do |c1, c2|
       if c1.ansi == c2.ansi
-        c1.base <=> c2.base
+        c1.basei <=> c2.basei
       else
         c1.ansi <=> c2.ansi
       end
@@ -100,7 +104,7 @@ class ColorScheme
       if c1.base == c2.base
         c1.ansi <=> c2.ansi
       else
-        c1.base <=> c2.base
+        c1.basei <=> c2.basei
       end
     end.uniq { |color| color.base }
   end
