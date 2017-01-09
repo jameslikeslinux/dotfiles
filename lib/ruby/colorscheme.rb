@@ -148,4 +148,8 @@ class ColorScheme
   def cursor
     colors_by_base[0x05]
   end
+
+  def bold_colors(term_colors = 256)
+    colors_by_base(term_colors).keep_if { |color| color.bold }
+  end
 end
