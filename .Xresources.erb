@@ -5,6 +5,7 @@ c.terminal.each do |color| -%>
 <% end -%>
 *foreground: <%= c.foreground.x11 %>
 *background: <%= c.background.x11 %>
+*borderColor: <%= c.background.x11 %>
 *cursorColor: <%= c.cursor.x11 %>
 
 URxvt.font: xft:Hack:size=9,xft:DejaVu Sans Mono
