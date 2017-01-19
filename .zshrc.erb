@@ -112,7 +112,7 @@ end.join
 xterm_escapes += "\\e]10;#{c.foreground.x11}\\a"
 xterm_escapes += "\\e]11;#{c.background.x11}\\a"
 xterm_escapes += "\\e]12;#{c.cursor.x11}\\a" -%>
-if [[ $TERM == *256color ]]; then
+if [[ $TERM == 'xterm-256color' || $TERM == rxvt*256color ]]; then
     print -Pn '<%= xterm_escapes %>'
 fi
 
