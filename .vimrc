@@ -80,6 +80,13 @@ if &t_Co >= 256 || has("gui_running")
     let g:airline_powerline_fonts = 1
 endif
 
+" But disable the separator characters everywhere
+" (the color and spacing differences between sections is enough)
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+
 " Konsole doesn't support special Base16 colors despite advertising itself
 " as xterm-265color by default.  I configure it to say it's konsole-256color
 " so I can detect it here and enable true color support.
