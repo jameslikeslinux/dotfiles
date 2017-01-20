@@ -17,6 +17,11 @@ set cursorline
 " Enable mouse (primarily so mouse selections use visual mode)
 set mouse=a
 
+" Vim defaults to ttymouse=xterm under tmux which doesn't work through SSH
+if $TERM =~# '^tmux'
+    set ttymouse=xterm2
+endif
+
 " Automatically copy visual selection to selection clipboard
 set clipboard=autoselect
 
