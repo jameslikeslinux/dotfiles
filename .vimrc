@@ -75,6 +75,10 @@ let g:airline_skip_empty_sections = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 
+" Don't use separators for the buffer/tab list
+let g:airline#extensions#tabline#left_sep = ''
+let g:airline#extensions#tabline#left_alt_sep = ''
+
 " On modern terminals or GUI, enable Powerline characters
 if &t_Co >= 256 || has("gui_running")
     let g:airline_powerline_fonts = 1
