@@ -25,14 +25,6 @@ endif
 " Automatically copy visual selection to selection clipboard
 set clipboard=autoselect
 
-" Let yanks go to selection clipboard
-set clipboard+=unnamed
-
-" If available, let all other default register actions go to primary clipboard
-if has('unnamedplus')
-    set clipboard+=unnamedplus
-endif
-
 " Enable more natural window splits
 set splitbelow
 set splitright
