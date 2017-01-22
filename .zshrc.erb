@@ -44,8 +44,10 @@ bindkey -v
 # Make mode switches faster
 export KEYTIMEOUT=1
 
-# Enable incremental history search from emacs mode
+# Enable history commands from emacs mode
 # (just too useful)
+bindkey '^P' up-history
+bindkey '^N' down-history
 bindkey '^R' history-incremental-pattern-search-backward
 bindkey '^S' history-incremental-pattern-search-forward
 stty -ixon      # make ^S available to shell
