@@ -57,6 +57,9 @@ nnoremap <Leader>1 :setlocal shiftwidth=2 tabstop=8 expandtab<CR>
 nnoremap <Leader>2 :setlocal shiftwidth=4 tabstop=4 noexpandtab<CR>
 " 8-space hard tab
 nnoremap <Leader>3 :setlocal shiftwidth=8 tabstop=8 noexpandtab<CR>
+" sturdiva mode (ugh)
+" (maintain existing shiftwidth, but also enable hard tabs)
+nnoremap <Leader>4 :setlocal tabstop=8 noexpandtab<CR>
 
 " Load Pathogen
 runtime bundle/vim-pathogen/autoload/pathogen.vim
@@ -116,3 +119,6 @@ let g:airline_theme_patch_func = 'AirlineThemePatch'
 let g:ctrlp_map = '<C-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_show_hidden = 1
+
+" http://vim.wikia.com/wiki/Always_start_on_first_line_of_git_commit_message
+autocmd FileType gitcommit call setpos('.', [0, 1, 1, 0])
