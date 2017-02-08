@@ -6,9 +6,11 @@
 # process ERB templates with Puppet
 #
 
+# Process files relative to this script
+BASEDIR="$(readlink -f "$(dirname "$0")/..")"
+
 # A place to keep track of what this script manages
-[[ -f "${HOME}/.dottemplates" ]] && mv -f "${HOME}/.dottemplates" "${HOME}/.templates"
-DOT_TEMPLATES="${HOME}/.templates"
+DOT_TEMPLATES="${BASEDIR}/.templates"
 
 #
 # Read and parse command line options
@@ -57,15 +59,15 @@ generate_manifest() {
     git ls-files '*.erb' | while read template; do
         mode="$(stat -c '%a' "$template")"
         cat <<END
-file { '${HOME}/${template%.erb}':
+file { '${BASEDIR}/${template%.erb}':
   mode    => '${mode}',
-  content => template('${HOME}/${template}'),
+  content => template('${BASEDIR}/${template}'),
 }
 
 file_line { '${template%.erb}':
   path    => '${DOT_TEMPLATES}',
   line    => '${template%.erb}',
-  require => File['${HOME}/${template%.erb}'],
+  require => File['${BASEDIR}/${template%.erb}'],
 }
 END
     done
@@ -74,7 +76,7 @@ END
     while read dotfile; do
         if [[ ! -f "${dotfile}.erb" ]]; then
             cat <<END
-file { '${HOME}/${dotfile}':
+file { '${BASEDIR}/${dotfile}':
   ensure => absent,
 }
 
@@ -82,7 +84,7 @@ file_line { '${dotfile}':
   ensure  => absent,
   path    => '${DOT_TEMPLATES}',
   line    => '${dotfile}',
-  require => File['${HOME}/${dotfile}'],
+  require => File['${BASEDIR}/${dotfile}'],
 }
 END
         fi
@@ -93,7 +95,7 @@ END
 #
 # Main program
 #
-cd "$HOME"
+cd "$BASEDIR"
 touch "$DOT_TEMPLATES"
 
 # Grab latest updates from git
@@ -105,4 +107,4 @@ fi
 
 # Process templates with Puppet
 puppet module install puppetlabs-stdlib
-RUBYLIB="${HOME}/lib/ruby" puppet apply <(generate_manifest)
+RUBYLIB="${BASEDIR}/lib/ruby" puppet apply <(generate_manifest)

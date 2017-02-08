@@ -1,3 +1,4 @@
-#!/bin/sh
-HOME=~; export HOME
-exec $HOME/bin/refresh-dotfiles --no-fetch
+#!/bin/bash
+export HOME=~
+BASEDIR="$(readlink -f "$(dirname "$0")/..")"
+exec "${BASEDIR}/bin/refresh-dotfiles" --no-fetch
