@@ -5,23 +5,23 @@
 
 " GUI color definitions
 <% require 'colorscheme'
-c = ColorScheme.new -%>
-let s:gui = <%= c.colors_by_base.map { |color| color.hex } %>
+cs = ColorScheme.new -%>
+let s:gui = <%= cs.colors_by_base.map { |c| c.hex } %>
 
 " Terminal color definitions
 if &t_Co >= 256
-  let s:cterm = <%= c.colors_by_base.map { |color| color.ansi } %>
-  let s:bold = <%= c.bold_colors.map { |color| color.base } %>
+  let s:cterm = <%= cs.colors_by_base.map { |c| c.ansi } %>
+  let s:bold = <%= cs.bold_colors.map { |c| c.base } %>
   let s:visualfg = ""
   let s:visualbg = "02"
 elseif &t_Co >= 16
-  let s:cterm = <%= c.colors_by_base(16).map { |color| color.ansi } %>
-  let s:bold = <%= c.bold_colors(16).map { |color| color.base } %>
+  let s:cterm = <%= cs.colors_by_base(16).map { |c| c.ansi } %>
+  let s:bold = <%= cs.bold_colors(16).map { |c| c.base } %>
   let s:visualfg = "00"
   let s:visualbg = "05"
 else
-  let s:cterm = <%= c.colors_by_base(8).map { |color| color.ansi } %>
-  let s:bold = <%= c.bold_colors(8).map { |color| color.base } %>
+  let s:cterm = <%= cs.colors_by_base(8).map { |c| c.ansi } %>
+  let s:bold = <%= cs.bold_colors(8).map { |c| c.base } %>
   let s:visualfg = "05"
   let s:visualbg = "00"
 endif

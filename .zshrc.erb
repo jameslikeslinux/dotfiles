@@ -107,13 +107,13 @@ umask 022
 
 # Configure color palette on modern terminals
 <% require 'colorscheme'
-c = ColorScheme.new
-xterm_escapes = c.terminal.map do |color|
-  "\\e]4;#{color.ansi};#{color.x11}\\a"
+cs = ColorScheme.new
+xterm_escapes = cs.terminal.map do |c|
+  "\\e]4;#{c.ansi};#{c.x11}\\a"
 end.join
-xterm_escapes += "\\e]10;#{c.foreground.x11}\\a"
-xterm_escapes += "\\e]11;#{c.background.x11}\\a"
-xterm_escapes += "\\e]12;#{c.cursor.x11}\\a" -%>
+xterm_escapes += "\\e]10;#{cs.foreground.x11}\\a"
+xterm_escapes += "\\e]11;#{cs.background.x11}\\a"
+xterm_escapes += "\\e]12;#{cs.cursor.x11}\\a" -%>
 if [[ $TERM == 'xterm-256color' || $TERM == rxvt*256color ]]; then
     print -Pn '<%= xterm_escapes %>'
 fi

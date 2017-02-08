@@ -6,11 +6,11 @@ CursorType=block
 Scrollbar=none
 CursorBlinks=no
 <% require 'colorscheme'
-c = ColorScheme.new
-colors = c.terminal -%>
-ForegroundColour=<%= c.foreground.rgb.join(',') %>
-BackgroundColour=<%= c.background.rgb.join(',') %>
-CursorColour=<%= c.cursor.rgb.join(',') %>
+cs = ColorScheme.new
+colors = cs.terminal -%>
+ForegroundColour=<%= cs.foreground.rgb.join(',') %>
+BackgroundColour=<%= cs.background.rgb.join(',') %>
+CursorColour=<%= cs.cursor.rgb.join(',') %>
 <% %w(Black Red Green Yellow Blue Magenta Cyan White).each_with_index do |name, i| -%>
 <%= name %>=<%= colors[i].rgb.join(',') %>
 Bold<%= name %>=<%= colors[i + 8].rgb.join(',') %>

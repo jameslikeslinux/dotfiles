@@ -1,7 +1,7 @@
 <% require 'colorscheme'
-c = ColorScheme.new
-linux_escapes = c.console.map do |color|
-  '\e]P%x%s' % [color.ansi, color.hex]
+cs = ColorScheme.new
+linux_escapes = cs.console.map do |c|
+  '\e]P%x%s' % [c.ansi, c.hex]
 end.join -%>
 if [[ $TERM == 'linux' ]]; then
     # Set Linux console color palette.  See console(4).

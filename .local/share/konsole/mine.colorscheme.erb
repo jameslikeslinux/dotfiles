@@ -1,34 +1,34 @@
 <% require 'colorscheme'
-c = ColorScheme.new
-colors = c.terminal
-colors.take(8).each do |color| -%>
-[Color<%= color.ansi %>]
-Color=<%= color.rgb.join(',') %>
+cs = ColorScheme.new
+colors = cs.terminal
+colors.take(8).each do |c| -%>
+[Color<%= c.ansi %>]
+Color=<%= c.rgb.join(',') %>
 
-[Color<%= color.ansi %>Faint]
-Color=<%= color.shade(33).rgb.join(',') %>
+[Color<%= c.ansi %>Faint]
+Color=<%= c.shade(33).rgb.join(',') %>
 
-[Color<%= color.ansi %>Intense]
-Color=<%= colors[color.ansi + 8].rgb.join(',') %>
+[Color<%= c.ansi %>Intense]
+Color=<%= colors[c.ansi + 8].rgb.join(',') %>
 
 <% end -%>
 [Background]
-Color=<%= c.background.rgb.join(',') %>
+Color=<%= cs.background.rgb.join(',') %>
 
 [BackgroundFaint]
-Color=<%= c.background.shade(33).rgb.join(',') %>
+Color=<%= cs.background.shade(33).rgb.join(',') %>
 
 [BackgroundIntense]
-Color=<%= c.background.rgb.join(',') %>
+Color=<%= cs.background.rgb.join(',') %>
 
 [Foreground]
-Color=<%= c.foreground.rgb.join(',') %>
+Color=<%= cs.foreground.rgb.join(',') %>
 
 [ForegroundFaint]
-Color=<%= c.foreground.shade(33).rgb.join(',') %>
+Color=<%= cs.foreground.shade(33).rgb.join(',') %>
 
 [ForegroundIntense]
-Color=<%= c.foreground.rgb.join(',') %>
+Color=<%= cs.foreground.rgb.join(',') %>
 
 [General]
 Description=Mine

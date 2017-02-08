@@ -1,12 +1,12 @@
 <% require 'colorscheme'
-c = ColorScheme.new
-c.terminal.each do |color| -%>
-*color<%= color.ansi %>: <%= color.x11 %>
+cs = ColorScheme.new
+cs.terminal.each do |c| -%>
+*color<%= c.ansi %>: <%= c.x11 %>
 <% end -%>
-*foreground: <%= c.foreground.x11 %>
-*background: <%= c.background.x11 %>
-*borderColor: <%= c.background.x11 %>
-*cursorColor: <%= c.cursor.x11 %>
+*foreground: <%= cs.foreground.x11 %>
+*background: <%= cs.background.x11 %>
+*borderColor: <%= cs.background.x11 %>
+*cursorColor: <%= cs.cursor.x11 %>
 
 URxvt.font: xft:Hack:size=9,xft:DejaVu Sans Mono
 URxvt.perl-ext-common: font-size,new-window
