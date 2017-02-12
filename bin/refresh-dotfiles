@@ -9,6 +9,18 @@
 # Process files relative to this script
 BASEDIR="$(readlink -f "$(dirname "$0")/..")"
 
+# Create place to store generated Puppet manifest
+TMPFILE="$(mktemp)"
+trap "rm -f '$TMPFILE'" EXIT INT TERM
+
+if [[ $OSTYPE == 'cygwin' ]]; then
+    BASEDIR="$(cygpath -am "$BASEDIR")"
+    TMPFILE="$(cygpath -am "$TMPFILE")"
+    PUPPET='puppet.bat'
+else
+    PUPPET='puppet'
+fi
+
 # A place to keep track of what this script manages
 DOT_TEMPLATES="${BASEDIR}/.templates"
 
@@ -73,8 +85,10 @@ END
     done
 
     # Remove dotfiles that we've managed in the past that are not in git
-    while read dotfile; do
-        if [[ ! -f "${dotfile}.erb" ]]; then
+    # (processed through 'tr' because file_line generates Windows line
+    # endings on Windows which 'read' doesn't strip off)
+    < "$DOT_TEMPLATES" tr -d '\r' | while read dotfile; do
+        if [[ ! -f "${BASEDIR}/${dotfile}.erb" ]]; then
             cat <<END
 file { '${BASEDIR}/${dotfile}':
   ensure => absent,
@@ -88,7 +102,7 @@ file_line { '${dotfile}':
 }
 END
         fi
-    done < "$DOT_TEMPLATES"
+    done
 }
 
 
@@ -106,5 +120,6 @@ if [[ -z $no_fetch ]]; then
 fi
 
 # Process templates with Puppet
-puppet module install puppetlabs-stdlib
-RUBYLIB="${BASEDIR}/lib/ruby" puppet apply <(generate_manifest)
+"$PUPPET" module install puppetlabs-stdlib
+generate_manifest > "$TMPFILE"
+RUBYLIB="${BASEDIR}/lib/ruby" "$PUPPET" apply --noop "$TMPFILE"
