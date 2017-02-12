@@ -122,4 +122,4 @@ fi
 # Process templates with Puppet
 "$PUPPET" module install puppetlabs-stdlib
 generate_manifest > "$TMPFILE"
-RUBYLIB="${BASEDIR}/lib/ruby" "$PUPPET" apply --noop "$TMPFILE"
+RUBYLIB="${BASEDIR}/lib/ruby" "$PUPPET" apply "$TMPFILE"
