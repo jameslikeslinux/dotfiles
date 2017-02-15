@@ -1,10 +1,6 @@
 " Behave less like vi
 set nocompatible
 
-" Except enable the vi backspace behavior to force myself out of insert mode
-" (run as autocmd to avoid conflict with vim-sensible plugin)
-autocmd VimEnter,BufNewFile,BufReadPost * silent set backspace=0
-
 " Allow unsaved buffers
 set hidden
 
