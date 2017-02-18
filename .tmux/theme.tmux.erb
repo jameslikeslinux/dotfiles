@@ -1,0 +1,75 @@
+#!/usr/bin/env zsh
+#
+# theme.tmux
+#
+# Try to determine the actual terminal in which the session is attached
+# and set colors and status bar appearance based on the available
+# capabilities.
+#
+
+# Add TERM to the default list of variables to update on session attachment.
+# This lets me make configuration decisions based on the terminal in which the
+# session is (most recently) attached.
+if [[ ! $(tmux show -g update-environment) =~ '(^|\s)TERM(\s|$)' ]]; then
+    tmux set -ag update-environment ' TERM'
+fi
+
+eval $(tmux show-environment -gs TERM)
+global_term="$TERM"
+
+eval $(tmux show-environment -s TERM)
+session_term="$TERM"
+
+function set setw {
+    if [[ $global_term == $session_term ]]; then
+        tmux "$0" -g "$@"
+        tmux "$0" -u "$1"
+    else
+        tmux "$0" "$@"
+    fi
+}
+
+<% require 'colorscheme'
+cs = ColorScheme.new -%>
+if (( terminfo[colors] >= 256 )); then
+    # Konsole doesn't support configuring the Base16 colors > 16
+    if [[ $TERM == 'konsole-256color' ]]; then
+<% cs.colors_by_base.each do |c| -%>
+        base<%= c.base %>='#<%= c.hex %>'
+<% end -%>
+    else
+<% cs.colors_by_base.each do |c| -%>
+        base<%= c.base %>='colour<%= c.ansi %>'
+<% end -%>
+    fi
+elif (( terminfo[colors] >= 16 )); then
+<% cs.colors_by_base(16).each do |c| -%>
+    base<%= c.base %>='colour<%= c.ansi %>'
+<% end -%>
+else
+<% cs.colors_by_base(8).each do |c| -%>
+    base<%= c.base %>='colour<%= c.ansi %>'
+<% end -%>
+fi
+
+if [[ $TERM == *256color ]]; then
+    # This is not strictly related to the theme, since I'm going through the
+    # trouble of figuring out the real terminal here anyway, might as well
+    # set this here too.
+    set default-terminal tmux-256color
+
+    set status-style "bg=${base01}"
+    set status-left-style "bg=${base0C},fg=${base01}"
+    set status-left ' #[bold]#S#[nobold] #[reverse] '
+    set status-right ''
+
+    setw window-status-separator ''
+    setw window-status-format ' #I: #W '
+    setw window-status-current-format ' #I: #W '
+    setw window-status-current-style "bg=${base0D},fg=${base01},bold"
+    setw window-status-last-style "bg=${base02}"
+    setw window-status-activity-style "bg=${base0B},fg=${base01}"
+    setw window-status-bell-style "bg=${base0A},fg=${base01}"
+else
+    set default-terminal tmux
+fi
