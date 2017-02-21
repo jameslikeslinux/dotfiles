@@ -37,24 +37,39 @@ if (( terminfo[colors] >= 256 )); then
 <% cs.colors_by_base.each do |c| -%>
         base<%= c.base %>='#<%= c.hex %>'
 <% end -%>
+<% cs.bright_colors_by_base.each do |c| -%>
+        base<%= c.base %>_bright='#<%= c.hex %>'
+<% end -%>
     else
 <% cs.colors_by_base.each do |c| -%>
         base<%= c.base %>='colour<%= c.ansi %>'
+<% end -%>
+<% cs.bright_colors_by_base.each do |c| -%>
+        base<%= c.base %>_bright='colour<%= c.ansi %>'
 <% end -%>
     fi
 elif (( terminfo[colors] >= 16 )); then
 <% cs.colors_by_base(16).each do |c| -%>
     base<%= c.base %>='colour<%= c.ansi %>'
 <% end -%>
+<% cs.bright_colors_by_base(16).each do |c| -%>
+    base<%= c.base %>_bright='colour<%= c.ansi %>'
+<% end -%>
 else
 <% cs.colors_by_base(8).each do |c| -%>
     base<%= c.base %>='colour<%= c.ansi %>'
+<% end -%>
+<% cs.bright_colors_by_base(8).each do |c| -%>
+    base<%= c.base %>_bright='colour<%= c.ansi %>'
 <% end -%>
 fi
 
 
 set status-style "bg=${base01}"
 set status-right ''
+    setw window-status-separator ''
+    setw window-status-format ' #I: #W '
+    setw window-status-current-format ' #I: #W '
 
 if [[ $TERM == *256color ]]; then
     # This is not strictly related to the theme, since I'm going through the
@@ -66,19 +81,16 @@ if [[ $TERM == *256color ]]; then
     # See: https://groups.google.com/forum/#!topic/tmux-users/f5YQieR9jhI
     tmux set -g default-terminal tmux-256color
 
-    set status-left-style "bg=${base0E},fg=${base01}"
-    set status-left ' #[bold]#S#[nobold] #[reverse] '
+    set status-left-style "bg=${base0E},fg=${base01_bright},bold"
+    set status-left ' #S #[reverse] '
 
-    setw window-status-separator ''
-    setw window-status-format ' #I: #W '
-    setw window-status-current-format ' #I: #W '
-    setw window-status-current-style "bg=${base0D},fg=${base01},bold"
+    setw window-status-current-style "bg=${base0D},fg=${base01_bright},bold"
     setw window-status-last-style "bg=${base02}"
     setw window-status-activity-style "bg=${base0B},fg=${base01}"
     setw window-status-bell-style "bg=${base0A},fg=${base01}"
 else
     tmux set -g default-terminal tmux
 
-    set status-left-style "fg=${base0E}"
-    set status-left ' #[bold]#S#[nobold] > '
+    set status-left-style "fg=${base0E_bright},bold"
+    set status-left ' #S >'
 fi
