@@ -14,20 +14,8 @@ if [[ ! $(tmux show -g update-environment) =~ '(^|\s)TERM(\s|$)' ]]; then
     tmux set -ag update-environment ' TERM'
 fi
 
-eval $(tmux show-environment -gs TERM)
-global_term="$TERM"
-
+# Grab the current session TERM setting
 eval $(tmux show-environment -s TERM)
-session_term="$TERM"
-
-function set setw {
-    if [[ $global_term == $session_term ]]; then
-        tmux "$0" -g "$@"
-        tmux "$0" -u "$1"
-    else
-        tmux "$0" "$@"
-    fi
-}
 
 <% require 'colorscheme'
 cs = ColorScheme.new -%>
@@ -37,43 +25,29 @@ if (( terminfo[colors] >= 256 )); then
 <% cs.colors_by_base.each do |c| -%>
         base<%= c.base %>='#<%= c.hex %>'
 <% end -%>
-<% cs.bright_colors_by_base.each do |c| -%>
-        base<%= c.base %>_bright='#<%= c.hex %>'
-<% end -%>
     else
 <% cs.colors_by_base.each do |c| -%>
         base<%= c.base %>='colour<%= c.ansi %>'
-<% end -%>
-<% cs.bright_colors_by_base.each do |c| -%>
-        base<%= c.base %>_bright='colour<%= c.ansi %>'
 <% end -%>
     fi
 elif (( terminfo[colors] >= 16 )); then
 <% cs.colors_by_base(16).each do |c| -%>
     base<%= c.base %>='colour<%= c.ansi %>'
 <% end -%>
-<% cs.bright_colors_by_base(16).each do |c| -%>
-    base<%= c.base %>_bright='colour<%= c.ansi %>'
-<% end -%>
 else
 <% cs.colors_by_base(8).each do |c| -%>
     base<%= c.base %>='colour<%= c.ansi %>'
 <% end -%>
-<% cs.bright_colors_by_base(8).each do |c| -%>
-    base<%= c.base %>_bright='colour<%= c.ansi %>'
-<% end -%>
 fi
 
 
-set status-style "bg=${base01}"
-set status-right ''
-setw window-status-separator ''
-setw window-status-format ' #I: #W '
-setw window-status-current-format ' #I: #W '
-setw window-status-current-style "bg=${base0D},fg=${base01_bright},bold"
-setw window-status-last-style "bg=${base02}"
-setw window-status-activity-style "bg=${base0B},fg=${base01}"
-setw window-status-bell-style "bg=${base0A},fg=${base01}"
+tmux set -g status-style "bg=${base01}"
+tmux set -g status-right ''
+tmux setw -g window-status-separator ''
+tmux setw -g window-status-format ' #I: #W '
+tmux setw -g window-status-current-format ' #I: #W '
+tmux setw -g window-status-activity-style "bg=green,fg=${base01}"
+tmux setw -g window-status-bell-style "bg=yellow,fg=${base01}"
 
 if [[ $TERM == *256color ]]; then
     # This is not strictly related to the theme, since I'm going through the
@@ -85,11 +59,15 @@ if [[ $TERM == *256color ]]; then
     # See: https://groups.google.com/forum/#!topic/tmux-users/f5YQieR9jhI
     tmux set -g default-terminal tmux-256color
 
-    set status-left-style "bg=${base0E},fg=${base01_bright},bold"
-    set status-left ' #S #[reverse] '
+    tmux set -g status-left-style "bg=magenta,fg=${base01}"
+    tmux set -g status-left ' #[bold]#S#[nobold] #[reverse] '
+    tmux setw -g window-status-current-style "bg=blue,fg=${base01},bold"
+    tmux setw -g window-status-last-style "bg=${base02}"
 else
     tmux set -g default-terminal tmux
 
-    set status-left-style "fg=${base0E_bright},bold"
-    set status-left ' #S >'
+    tmux set -g status-left-style "fg=brightmagenta,bold"
+    tmux set -g status-left ' #S > '
+    tmux setw -g window-status-current-style "bg=blue,fg=${base01}"
+    tmux setw -g window-status-last-style "bold"
 fi

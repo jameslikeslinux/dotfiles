@@ -129,16 +129,6 @@ class ColorScheme
     end.uniq { |color| color.base }
   end
 
-  def bright_colors_by_base(term_colors = 256)
-    colors(term_colors).sort do |c1, c2|
-      if c1.base == c2.base
-        c2.ansi <=> c1.ansi
-      else
-        c1.base <=> c2.base
-      end
-    end.uniq { |color| color.base }
-  end
-
   def terminal
     colors_by_ansi(256)
   end
