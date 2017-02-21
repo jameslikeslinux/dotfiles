@@ -52,20 +52,22 @@ else
 <% end -%>
 fi
 
+
+set status-style "bg=${base01}"
+set status-right ''
+
 if [[ $TERM == *256color ]]; then
     # This is not strictly related to the theme, since I'm going through the
     # trouble of figuring out the real terminal here anyway, might as well
     # set this here too.
     #
-    # Note: My set function above unsets session options when setting global
-    # options and that seems to undo the default-terminal setting, so set it
-    # with 'tmux' directly.
-    tmux set default-terminal tmux-256color
+    # Note: 'default-terminal' is a server level option which can't be set
+    # on a per-session basis.
+    # See: https://groups.google.com/forum/#!topic/tmux-users/f5YQieR9jhI
+    tmux set -g default-terminal tmux-256color
 
-    set status-style "bg=${base01}"
     set status-left-style "bg=${base0E},fg=${base01}"
     set status-left ' #[bold]#S#[nobold] #[reverse] '
-    set status-right ''
 
     setw window-status-separator ''
     setw window-status-format ' #I: #W '
@@ -75,5 +77,8 @@ if [[ $TERM == *256color ]]; then
     setw window-status-activity-style "bg=${base0B},fg=${base01}"
     setw window-status-bell-style "bg=${base0A},fg=${base01}"
 else
-    tmux set default-terminal tmux
+    tmux set -g default-terminal tmux
+
+    set status-left-style "fg=${base0E}"
+    set status-left ' #[bold]#S#[nobold] > '
 fi
