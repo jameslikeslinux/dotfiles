@@ -6,6 +6,8 @@
 # and set colors and status bar appearance based on the available
 # capabilities.
 #
+# This theme is loosely modeled off of my custom Vim Airline tabline theme.
+#
 
 # Add TERM to the default list of variables to update on session attachment.
 # This lets me make configuration decisions based on the terminal in which the
@@ -14,7 +16,7 @@ if [[ ! $(tmux show -g update-environment) =~ '(^|\s)TERM(\s|$)' ]]; then
     tmux set -ag update-environment ' TERM'
 fi
 
-# Grab the current session TERM setting
+# Grab and export the current session TERM setting
 eval $(tmux show-environment -s TERM)
 
 <% require 'colorscheme'
@@ -40,12 +42,13 @@ else
 <% end -%>
 fi
 
-
 tmux set -g status-style "bg=${base01}"
+tmux set -g status-left-style "bg=magenta,fg=${base01}"
 tmux set -g status-right ''
 tmux setw -g window-status-separator ''
-tmux setw -g window-status-format ' #I: #W '
-tmux setw -g window-status-current-format ' #I: #W '
+tmux setw -g window-status-format ' #I: #W#F '
+tmux setw -g window-status-current-format ' #I: #W#F '
+tmux setw -g window-status-current-style "bg=blue,fg=${base01},bold"
 tmux setw -g window-status-activity-style "bg=green,fg=${base01}"
 tmux setw -g window-status-bell-style "bg=yellow,fg=${base01}"
 
@@ -59,15 +62,11 @@ if [[ $TERM == *256color ]]; then
     # See: https://groups.google.com/forum/#!topic/tmux-users/f5YQieR9jhI
     tmux set -g default-terminal tmux-256color
 
-    tmux set -g status-left-style "bg=magenta,fg=${base01}"
     tmux set -g status-left ' #[bold]#S#[nobold] #[reverse] '
-    tmux setw -g window-status-current-style "bg=blue,fg=${base01},bold"
     tmux setw -g window-status-last-style "bg=${base02}"
 else
     tmux set -g default-terminal tmux
 
-    tmux set -g status-left-style "fg=brightmagenta,bold"
-    tmux set -g status-left ' #S > '
-    tmux setw -g window-status-current-style "bg=blue,fg=${base01}"
+    tmux set -g status-left " #S #[reverse]> "
     tmux setw -g window-status-last-style "bold"
 fi
