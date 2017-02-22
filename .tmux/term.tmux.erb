@@ -1,12 +1,12 @@
 #!/usr/bin/env zsh
 #
-# theme.tmux
+# term.tmux
 #
 # Try to determine the actual terminal in which the session is attached
 # and set colors and status bar appearance based on the available
 # capabilities.
 #
-# This theme is loosely modeled off of my custom Vim Airline tabline theme.
+# The theme is loosely modeled off of my custom Vim Airline tabline theme.
 #
 
 # Add TERM to the default list of variables to update on session attachment.
@@ -16,7 +16,7 @@ if [[ ! $(tmux show -g update-environment) =~ '(^|\s)TERM(\s|$)' ]]; then
     tmux set -ag update-environment ' TERM'
 fi
 
-# Grab and export the current session TERM setting
+# Grab and export the current session TERM variable
 eval $(tmux show-environment -s TERM)
 
 <% require 'colorscheme'
@@ -42,8 +42,8 @@ else
 <% end -%>
 fi
 
+# Appearance settings that apply to all terminal types
 tmux set -g status-style "bg=${base01}"
-tmux set -g status-left-style "bg=magenta,fg=${base01}"
 tmux set -g status-right ''
 tmux setw -g window-status-separator ''
 tmux setw -g window-status-format ' #I: #W#F '
@@ -52,21 +52,26 @@ tmux setw -g window-status-current-style "bg=blue,fg=${base01},bold"
 tmux setw -g window-status-activity-style "bg=green,fg=${base01}"
 tmux setw -g window-status-bell-style "bg=yellow,fg=${base01}"
 
+# Per-terminal settings
 if [[ $TERM == *256color ]]; then
-    # This is not strictly related to the theme, since I'm going through the
-    # trouble of figuring out the real terminal here anyway, might as well
-    # set this here too.
-    #
-    # Note: 'default-terminal' is a server level option which can't be set
-    # on a per-session basis.
-    # See: https://groups.google.com/forum/#!topic/tmux-users/f5YQieR9jhI
     tmux set -g default-terminal tmux-256color
-
-    tmux set -g status-left ' #[bold]#S#[nobold] #[reverse] '
     tmux setw -g window-status-last-style "bg=${base02}"
+    separator=''
 else
     tmux set -g default-terminal tmux
-
-    tmux set -g status-left " #S #[reverse]> "
     tmux setw -g window-status-last-style "bold"
+    separator='>'
 fi
+
+# Detect if we're running in another tmux session and set prefix and
+# appearance accordingly
+if [[ $TERM == tmux* ]]; then
+    tmux unbind C-a; tmux set -g prefix C-b; tmux bind C-b send-prefix
+    session_color='magenta'
+else
+    tmux unbind C-b; tmux set -g prefix C-a; tmux bind C-a send-prefix
+    session_color='cyan'
+fi
+
+tmux set -g status-left-style "bg=${session_color},fg=${base01}"
+tmux set -g status-left " #[bold]#S#[nobold] #[reverse]${separator} "
