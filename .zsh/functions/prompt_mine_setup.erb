@@ -52,7 +52,9 @@ prompt_mine_username() {
 prompt_mine_hostinfo() {
     local content='%m'
 
-    if [[ $flat != true ]]; then
+    # If the desired segment background color (base02) is different from the
+    # terminal background, pad the segment with spaces:
+    if [[ ${mycolors_bg[base02]} != ${mycolors_bg[base00]} ]]; then
         content=" ${content} "
     fi
 
