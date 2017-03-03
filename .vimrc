@@ -13,10 +13,10 @@ set cursorline
 " Enable mouse (primarily so mouse selections use visual mode)
 set mouse=a
 
-" Vim defaults to ttymouse=xterm under tmux which doesn't work through SSH
-if $TERM =~# '^tmux'
-    set ttymouse=xterm2
-endif
+" SGR mouse mode is supported by virtually every modern terminal, including my
+" patched version of rxvt-unicode.  It is needed to support events beyond column
+" 223.  Vim's SGR mode is backwards compatible with the older xterm2 protocol.
+set ttymouse=sgr
 
 " Automatically copy visual selection to selection clipboard
 set clipboard=autoselect
