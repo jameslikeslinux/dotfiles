@@ -85,7 +85,7 @@ if &term =~# 'truecolor'
     set termguicolors
 endif
 
-" Tell Vim how to use true colors in tmux
+" Tell vim how to use true colors in tmux
 " See: help xterm-true-color
 if &term =~# 'tmux'
     let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
