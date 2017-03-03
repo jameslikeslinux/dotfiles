@@ -24,27 +24,32 @@ fi
 # global context due to the 'update-environment' setting above.
 eval $(tmux show-environment -s TERM)
 
+tmux_term='tmux'
+
 <% require 'colorscheme'
 cs = ColorScheme.new -%>
-if (( terminfo[colors] >= 256 )); then
-    # Konsole doesn't support configuring the Base16 colors > 16
-    if [[ $TERM == 'konsole-256color' ]]; then
+if [[ $TERM == *truecolor* ]]; then
+    tmux_term+='-truecolor'
 <% cs.colors_by_base.each do |c| -%>
-        base<%= c.base %>='#<%= c.hex %>'
+    base<%= c.base %>='#<%= c.hex %>'
 <% end -%>
-    else
+    tmux setw -g window-status-last-style "bg=${base02}"
+elif (( terminfo[colors] >= 256 )); then
+    tmux_term+='-256color'
 <% cs.colors_by_base.each do |c| -%>
-        base<%= c.base %>='colour<%= c.ansi %>'
+    base<%= c.base %>='colour<%= c.ansi %>'
 <% end -%>
-    fi
+    tmux setw -g window-status-last-style "bg=${base02}"
 elif (( terminfo[colors] >= 16 )); then
 <% cs.colors_by_base(16).each do |c| -%>
     base<%= c.base %>='colour<%= c.ansi %>'
 <% end -%>
+    tmux setw -g window-status-last-style "bold"
 else
 <% cs.colors_by_base(8).each do |c| -%>
     base<%= c.base %>='colour<%= c.ansi %>'
 <% end -%>
+    tmux setw -g window-status-last-style "bold"
 fi
 
 # Appearance settings that apply to all terminal types
@@ -60,14 +65,23 @@ tmux setw -g window-status-activity-style "bg=green,fg=${base01}"
 tmux setw -g window-status-bell-style "bg=yellow,fg=${base01}"
 
 # Per-terminal settings
-if [[ $TERM == *256color ]]; then
-    tmux set -g default-terminal tmux-256color
-    tmux setw -g window-status-last-style "bg=${base02}"
+if [[ $TERM == *powerline* ]]; then
+    tmux_term+='-powerline'
     separator=''
 else
-    tmux set -g default-terminal tmux
-    tmux setw -g window-status-last-style "bold"
     separator='>'
 fi
 
 tmux set -g status-left " #[bold]#S#[nobold] #[reverse]${separator} "
+
+# 'tmux_term' is built up based on the outside terminal capabilities and is
+# one of:
+#
+# * tmux
+# * tmux-powerline
+# * tmux-256color
+# * tmux-256color-powerline
+# * tmux-truecolor
+# * tmux-truecolor-powerline
+#
+tmux set -g default-terminal "$tmux_term"

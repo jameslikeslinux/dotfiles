@@ -173,33 +173,25 @@ prompt_mine_setup() {
     mycolors_bg=(${(kv)bg})
     mycolors_fg=(${(kv)fg})
 
-    if [[ $terminfo[colors] -ge 256 ]]; then
-        # While Konsole doesn't support setting all the Base16 colors
-        # (https://bugs.kde.org/show_bug.cgi?id=344181), manually define
-        # the ones we want to use from the base16-bright theme.
-        # See: https://gist.github.com/XVilka/8346728
-        # See: https://github.com/chriskempson/base16-builder/blob/master/schemes/bright.yml
-        if [[ $TERM == 'konsole-256color' ]]; then
+    if [[ $TERM == *truecolor* ]]; then
 <% cs.colors_by_base.each do |c| -%>
-            mycolors_bg[base<%= c.base %>]="\e[48;2;<%= c.rgb.join(';') %>m"
-            mycolors_fg[base<%= c.base %>]="\e[38;2;<%= c.rgb.join(';') %>m"
+        mycolors_bg[base<%= c.base %>]="\e[48;2;<%= c.rgb.join(';') %>m"
+        mycolors_fg[base<%= c.base %>]="\e[38;2;<%= c.rgb.join(';') %>m"
 <% end -%>
-        else
-            # Set the Base16 colors
+    elif [[ $terminfo[colors] -ge 256 ]]; then
 <% cs.colors_by_base.each do |c| -%>
-            mycolors_bg[base<%= c.base %>]="\e[48;5;<%= c.ansi %>m"
-            mycolors_fg[base<%= c.base %>]="\e[38;5;<%= c.ansi %>m"
+        mycolors_bg[base<%= c.base %>]="\e[48;5;<%= c.ansi %>m"
+        mycolors_fg[base<%= c.base %>]="\e[38;5;<%= c.ansi %>m"
 <% end -%>
-        fi
     elif [[ $terminfo[colors] -ge 16 ]]; then
 <% cs.colors_by_base(16).each do |c| -%>
-            mycolors_bg[base<%= c.base %>]="\e[48;5;<%= c.ansi %>m"
-            mycolors_fg[base<%= c.base %>]="\e[38;5;<%= c.ansi %>m"
+        mycolors_bg[base<%= c.base %>]="\e[48;5;<%= c.ansi %>m"
+        mycolors_fg[base<%= c.base %>]="\e[38;5;<%= c.ansi %>m"
 <% end -%>
     else
 <% cs.colors_by_base(8).each do |c| -%>
-            mycolors_bg[base<%= c.base %>]="\e[48;5;<%= c.ansi %>m"
-            mycolors_fg[base<%= c.base %>]="\e[38;5;<%= c.ansi %>m"
+        mycolors_bg[base<%= c.base %>]="\e[48;5;<%= c.ansi %>m"
+        mycolors_fg[base<%= c.base %>]="\e[38;5;<%= c.ansi %>m"
 <% end -%>
     fi
 

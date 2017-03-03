@@ -75,16 +75,13 @@ let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = ''
 
-" On modern terminals or GUI, enable Powerline characters
-if &t_Co >= 256 || has("gui_running")
+" Enable powerline characters on supported terminals
+if &term =~# 'powerline'
     let g:airline_powerline_fonts = 1
 endif
 
-" Konsole doesn't support special Base16 colors despite advertising itself
-" as xterm-265color by default.  I configure it to say it's konsole-256color
-" so I can detect it here and enable true color support.
-if $TERM ==# 'konsole-256color'
-    set term=xterm-256color
+" Enable true-color on supported terminals
+if &term =~# 'truecolor'
     set termguicolors
 endif
 

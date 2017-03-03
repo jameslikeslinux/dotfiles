@@ -3,7 +3,7 @@ ColorScheme=mine
 Font=Monospace,9,-1,0,50,0,0,0,0,0
 
 [General]
-Environment=TERM=konsole-256color
+Environment=TERM=xterm-truecolor-powerline
 LocalTabTitleFormat=%w
 Name=Shell
 Parent=FALLBACK/
