@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 #
 # Intelligent tmux helper
 #
@@ -67,7 +67,7 @@ tmux_new_session() {
 }
 
 if (( ARGC == 0 )); then
-    tmux_new_session "$HOST"
+    tmux_new_session "${HOST%%.*}"
 elif (( tmux_commands[(I)${1}*] )) || [[ $1 == -* ]]; then
     run_tmux "$@"
 else
