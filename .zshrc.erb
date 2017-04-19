@@ -10,6 +10,41 @@ fi
 # This is kind of a hack, but not that big of a deal
 [[ -e /etc/zsh/zprofile ]] && source $HOME/.zshenv
 
+<% require 'colorscheme'
+cs = ColorScheme.new
+xterm_escapes = cs.terminal.map do |c|
+  "\\e]4;#{c.ansi};#{c.x11}\\a"
+end.join
+xterm_escapes += "\\e]10;#{cs.foreground.x11}\\a"
+xterm_escapes += "\\e]11;#{cs.background.x11}\\a"
+xterm_escapes += "\\e]12;#{cs.cursor.x11}\\a"
+linux_escapes = cs.console.map do |c|
+  '\e]P%x%s' % [c.ansi, c.hex]
+end.join -%>
+if [[ $TERM == *256color* ]]; then
+    # Configure color palette on modern terminals
+    print -Pn '<%= xterm_escapes %>'
+elif [[ $TERM == 'linux' && -o login && ! $SSH_CLIENT ]]; then
+    # Set Linux console color palette.  See console(4).
+    print -Pn '<%= linux_escapes %>'
+    clear
+elif [[ $TERM == 'vt220' && -o login ]]; then
+    # Make serial consoles more bearable.
+    # Yes, this is ugly, but I'm almost always using an xterm-compatible
+    # terminal so there's no point in fighting with the limitations of an
+    # ancient terminal type that I'm not actually even using.
+    print 'Setting TERM=xterm'
+    export TERM='xterm'
+fi
+
+# Run tmux if it's not running.  I don't exec 't' because if tmux is
+# unavailable, then it will return a non-zero exit code and zsh will
+# continue as a fallback; and when tmux does run and exits cleanly, I
+# still want ~/.zlogout evaluated.
+if [[ ! $TMUX ]]; then
+    t 2>/dev/null && exit
+fi
+
 # XXX: Rename histfile
 if [[ -f ~/.histfile.$HOST && ! -f ~/.history.$HOST ]]; then
     mv -f ~/.histfile.$HOST ~/.history.$HOST
@@ -95,6 +130,7 @@ unalias suafs 2>/dev/null
 unalias a 2>/dev/null
 compdef a=sudo
 compdef s=sudo
+compdef t=tmux
 
 # Easy way to switch to project
 p() {
@@ -104,19 +140,6 @@ compdef "_files -W ${HOME}/projects" p
 
 # Set standard umask
 umask 022
-
-# Configure color palette on modern terminals
-<% require 'colorscheme'
-cs = ColorScheme.new
-xterm_escapes = cs.terminal.map do |c|
-  "\\e]4;#{c.ansi};#{c.x11}\\a"
-end.join
-xterm_escapes += "\\e]10;#{cs.foreground.x11}\\a"
-xterm_escapes += "\\e]11;#{cs.background.x11}\\a"
-xterm_escapes += "\\e]12;#{cs.cursor.x11}\\a" -%>
-if [[ $TERM == *256color* ]]; then
-    print -Pn '<%= xterm_escapes %>'
-fi
 
 # Glue polutes my shell
 # (for some reason these have to go here, not .zshenv)

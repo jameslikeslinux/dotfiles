@@ -1,0 +1,75 @@
+#!/bin/zsh
+#
+# Intelligent tmux helper
+#
+# This is sort of like a t=tmux alias in that it can be used in almost
+# the same way as tmux to run tmux commands; but it also falls back to
+# session creation/attachment if the command doesn't exist.  And if no
+# arguments are passed, then a session is created/attached based on the
+# hostname.  So:
+#
+#   t ls
+#
+# lists sessions;
+#
+#   t foo
+#
+# creates and/or attaches a session called 'foo'; and
+#
+#   t
+#
+# creates and/or attaches to a session called $HOST.
+#
+# This also has additional functionality to automatically update an
+# existing server's AFS tokens, run the server in a separate scope when
+# systemd is available so it doesn't get killed on logout, and run
+# safely and intuitively inside a tmux session.
+#
+
+if [[ ! -x $(whence tmux) ]]; then
+    print "tmux is not installed" >&2
+    exit 1
+fi
+
+tmux_commands=($(TMUX='' tmux list-commands | awk '{ gsub("[()]", "", $2); print $1; print $2 }'))
+
+run_tmux() {
+    if tmux server-info > /dev/null 2>&1; then
+        if [[ ! $TMUX ]]; then
+            local tmux_krb5ccname="${"$(tmux show-env -g KRB5CCNAME 2>/dev/null)"#*=}"
+
+            if [[ $tmux_krb5ccname != $KRB5CCNAME ]]; then
+                tmux set-environment -g KRB5CCNAME "$KRB5CCNAME"
+
+                if [[ -x $(whence aklog) ]]; then
+                    tmux run-shell aklog
+                fi
+            fi
+        fi
+    elif systemctl --user > /dev/null 2>&1; then
+        \systemctl --user stop tmux.scope 2>/dev/null
+        exec systemd-run --user --scope --unit tmux tmux "$@"
+    fi
+
+    exec tmux "$@"
+}
+
+tmux_new_session() {
+    local name="$1"
+    shift
+
+    if [[ $TMUX ]]; then
+        \tmux new-session -d -s "$name" "$@" 2>/dev/null
+        tmux switch-client -t "$name"
+    else
+        run_tmux new-session -s "$name" -A "$@"
+    fi
+}
+
+if (( ARGC == 0 )); then
+    tmux_new_session "$HOST"
+elif (( tmux_commands[(I)${1}*] )) || [[ $1 == -* ]]; then
+    run_tmux "$@"
+else
+    tmux_new_session "$@"
+fi
