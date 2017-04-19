@@ -33,7 +33,7 @@ fi
 
 tmux_commands=($(TMUX='' tmux list-commands | awk '{ gsub("[()]", "", $2); print $1; print $2 }'))
 
-run_tmux() {
+exec_tmux() {
     if tmux server-info > /dev/null 2>&1; then
         if [[ ! $TMUX ]]; then
             local tmux_krb5ccname="${"$(tmux show-env -g KRB5CCNAME 2>/dev/null)"#*=}"
@@ -47,7 +47,7 @@ run_tmux() {
             fi
         fi
     elif systemctl --user > /dev/null 2>&1; then
-        \systemctl --user stop tmux.scope 2>/dev/null
+        systemctl --user stop tmux.scope 2>/dev/null
         exec systemd-run --user --scope --unit tmux tmux "$@"
     fi
 
@@ -59,17 +59,17 @@ tmux_new_session() {
     shift
 
     if [[ $TMUX ]]; then
-        \tmux new-session -d -s "$name" "$@" 2>/dev/null
+        tmux new-session -d -s "$name" "$@" 2>/dev/null
         tmux switch-client -t "$name"
     else
-        run_tmux new-session -s "$name" -A "$@"
+        exec_tmux new-session -A -s "$name" "$@"
     fi
 }
 
 if (( ARGC == 0 )); then
     tmux_new_session "${HOST%%.*}"
 elif (( tmux_commands[(I)${1}*] )) || [[ $1 == -* ]]; then
-    run_tmux "$@"
+    exec_tmux "$@"
 else
     tmux_new_session "$@"
 fi
