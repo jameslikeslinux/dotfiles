@@ -60,6 +60,21 @@ tmux_new_session() {
 
     if [[ $TMUX ]]; then
         tmux new-session -d -s "$name" "$@" 2>/dev/null
+
+        # When running outside of tmux, new-session has the ability to detach
+        # all clients currently attached to the session if it already exists.
+        # When running inside of tmux, that flag doesn't work, so the following
+        # detects when '-D' is passed, removes '-D' from the list of arguments,
+        # and detaches the other clients explicitly.
+        local -a detach
+        zparseopts -D -E D=detach
+        if [[ $detach ]]; then
+            local self="$(tmux display-message -p '#{client_tty}')"
+            for client in $(tmux list-clients -F '#{client_tty}' -t "$name" | grep -F -v "$self"); do
+                tmux detach-client -t "$client"
+            done
+        fi
+
         tmux switch-client -t "$name"
     else
         exec_tmux new-session -A -s "$name" "$@"
