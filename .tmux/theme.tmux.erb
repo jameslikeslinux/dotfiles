@@ -33,22 +33,26 @@ if [[ $TERM == *truecolor* ]]; then
 <% cs.colors_by_base.each do |c| -%>
     base<%= c.base %>='#<%= c.hex %>'
 <% end -%>
+    tmux set -g status-right-style "fg=${base00}"
     tmux setw -g window-status-last-style "bg=${base02}"
 elif (( terminfo[colors] >= 256 )); then
     tmux_term+='-256color'
 <% cs.colors_by_base.each do |c| -%>
     base<%= c.base %>='colour<%= c.ansi %>'
 <% end -%>
+    tmux set -g status-right-style "fg=${base00}"
     tmux setw -g window-status-last-style "bg=${base02}"
 elif (( terminfo[colors] >= 16 )); then
 <% cs.colors_by_base(16).each do |c| -%>
     base<%= c.base %>='colour<%= c.ansi %>'
 <% end -%>
+    tmux set -g status-right-style "fg=colour8"
     tmux setw -g window-status-last-style "bold"
 else
 <% cs.colors_by_base(8).each do |c| -%>
     base<%= c.base %>='colour<%= c.ansi %>'
 <% end -%>
+    tmux set -g status-right-style "fg=colour8"
     tmux setw -g window-status-last-style "bold"
 fi
 
@@ -56,7 +60,7 @@ fi
 tmux set -g status-style "bg=${base01}"
 tmux set -g status-left-length 100
 tmux set -g status-left-style "bg=cyan,fg=${base01}"
-tmux set -g status-right ''
+tmux set -g status-right "v$(< ~/.version) "
 tmux setw -g window-status-separator ''
 tmux setw -g window-status-format ' #I: #W#F '
 tmux setw -g window-status-current-format ' #I: #W#F '
