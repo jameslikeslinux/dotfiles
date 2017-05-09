@@ -21,10 +21,10 @@ xterm_escapes += "\\e]12;#{cs.cursor.x11}\\a"
 linux_escapes = cs.console.map do |c|
   '\e]P%x%s' % [c.ansi, c.hex]
 end.join -%>
-if [[ $TERM == *256color* ]]; then
+if [[ $TERM == *256color* && $TERM != tmux* ]]; then
     # Configure color palette on modern terminals
     print -Pn '<%= xterm_escapes %>'
-elif [[ $TERM == 'linux' && -o login && ! $SSH_CLIENT ]]; then
+elif [[ $TERM == 'linux' && -o login && ! $SSH_CONNECTION ]]; then
     # Set Linux console color palette.  See console(4).
     print -Pn '<%= linux_escapes %>'
     clear

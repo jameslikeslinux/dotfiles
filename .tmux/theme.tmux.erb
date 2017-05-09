@@ -16,12 +16,9 @@ if [[ ! $(tmux show -g update-environment) =~ '(^|\s)TERM(\s|$)' ]]; then
     tmux set -ag update-environment ' TERM'
 fi
 
-# Grab and export the current session TERM variable.
-# When starting the server, a session won't exist yet, so this will evaluate to
-# nothing.  That's ok because TERM is already defined from the global context.
-# This comes into play when re-sourcing the tmux configuration on a newly
-# created or attached session, where TERM may be set differently from the
-# global context due to the 'update-environment' setting above.
+# Grab and export the current session TERM variable.  Prefer the session
+# variable over the global variable.
+eval $(tmux show-environment -gs TERM)
 eval $(tmux show-environment -s TERM)
 
 tmux_term='tmux'

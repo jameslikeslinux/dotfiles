@@ -58,7 +58,7 @@ prompt_mine_hostinfo() {
         content=" ${content} "
     fi
 
-    if [[ -n $SSH_CLIENT ]]; then
+    if [[ -n $SSH_CONNECTION ]]; then
         prompt_mine_segment $content base02 default bold
     fi
 }
