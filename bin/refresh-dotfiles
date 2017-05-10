@@ -112,14 +112,17 @@ END
 cd "$BASEDIR"
 touch "$DOT_TEMPLATES"
 
+branch="$(git rev-parse --abbrev-ref HEAD)"
+
 # Grab latest updates from git
 if [[ -z $no_fetch ]]; then
-    branch="$(git rev-parse --abbrev-ref HEAD)"
     git fetch origin "$branch"
     git reset --hard "origin/${branch}"
 fi
 
-# Process templates with Puppet
-"$PUPPET" module install puppetlabs-stdlib
-generate_manifest > "$TMPFILE"
-RUBYLIB="${BASEDIR}/lib/ruby" "$PUPPET" apply "$TMPFILE"
+# Process templates with Puppet unless we're on a non-master branch
+if [[ $branch == 'master' || $BASEDIR != $(readlink -f "$HOME") ]]; then
+    "$PUPPET" module install puppetlabs-stdlib
+    generate_manifest > "$TMPFILE"
+    RUBYLIB="${BASEDIR}/lib/ruby" "$PUPPET" apply "$TMPFILE"
+fi
