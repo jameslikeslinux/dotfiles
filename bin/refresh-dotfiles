@@ -116,7 +116,7 @@ branch="$(git rev-parse --abbrev-ref HEAD)"
 
 # Grab latest updates from git
 if [[ -z $no_fetch ]]; then
-    git fetch origin "$branch"
+    git fetch
     git reset --hard "origin/${branch}"
 fi
 
