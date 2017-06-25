@@ -119,13 +119,14 @@ if [[ -x $(whence dircolors) ]]; then
 fi
 
 # Aliases
-ls --help 2>&1 | grep -- '--color' > /dev/null && alias ls="ls --color"
+ls --help 2>&1 | grep -- '--color' > /dev/null && alias ls='ls --color'
 alias vi="$EDITOR"
 unalias cp 2>/dev/null
-alias mv="mv -f"
-alias rm="rm -f"
-alias glue="ssh -qt stowe.umd.edu"
-alias bigsnaps="zfs list -t snapshot -s used"
+alias mv='mv -f'
+alias rm='rm -f'
+alias r='eval "$(t show-environment -s)"'
+alias glue='ssh -qt stowe.umd.edu'
+alias bigsnaps='zfs list -t snapshot -s used'
 unalias suafs 2>/dev/null
 unalias a 2>/dev/null
 compdef a=sudo

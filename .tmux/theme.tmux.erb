@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 #
-# term.tmux
+# theme.tmux
 #
 # Try to determine the actual terminal in which the session is attached
 # and set colors and status bar appearance based on the available
@@ -9,17 +9,8 @@
 # The theme is loosely modeled off of my custom Vim Airline tabline theme.
 #
 
-# Add TERM to the default list of variables to update on session attachment.
-# This lets me make configuration decisions based on the terminal in which the
-# session is (most recently) attached.
-if [[ ! $(tmux show -g update-environment) =~ '(^|\s)TERM(\s|$)' ]]; then
-    tmux set -ag update-environment ' TERM'
-fi
-
-# Grab and export the current session TERM variable.  Prefer the session
-# variable over the global variable.
+# Grab and export the current outside TERM variable.
 eval $(tmux show-environment -gs TERM)
-eval $(tmux show-environment -s TERM)
 
 tmux_term='tmux'
 

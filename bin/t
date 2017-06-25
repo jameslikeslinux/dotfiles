@@ -36,11 +36,11 @@ tmux_commands=($(TMUX='' tmux list-commands | gawk '{ gsub("[()]", "", $2); prin
 exec_tmux() {
     if tmux list-sessions > /dev/null 2>&1; then
         if [[ ! $TMUX ]]; then
-            local tmux_krb5ccname="${"$(tmux show-env -g KRB5CCNAME 2>/dev/null)"#*=}"
+            tmux set-environment -g TERM "$TERM"
 
+            local tmux_krb5ccname="${"$(tmux show-env -g KRB5CCNAME 2>/dev/null)"#*=}"
             if [[ $tmux_krb5ccname != $KRB5CCNAME ]]; then
                 tmux set-environment -g KRB5CCNAME "$KRB5CCNAME"
-
                 if [[ -x $(whence aklog) ]]; then
                     tmux run-shell aklog
                 fi
