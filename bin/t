@@ -38,12 +38,26 @@ exec_tmux() {
         if [[ ! $TMUX ]]; then
             tmux set-environment -g TERM "$TERM"
 
-            local tmux_krb5ccname="${"$(tmux show-env -g KRB5CCNAME 2>/dev/null)"#*=}"
-            if [[ $tmux_krb5ccname != $KRB5CCNAME ]]; then
-                tmux set-environment -g KRB5CCNAME "$KRB5CCNAME"
-                if [[ -x $(whence aklog) ]]; then
-                    tmux run-shell aklog
+            # All of this is just to say: if we have a Kerberos ticket, and
+            # it's different from the running tmux environment, then update the
+            # tmux environment and run aklog if available.  Otherwise, we don't
+            # have a Kerberos ticket, so remove it from the tmux environment.
+            # The session environment is updated rather than the global
+            # environment because 1) it is easier to refresh the shell
+            # environment from the tmux session environment, and 2) session
+            # variables take precedence over global variables for commands run
+            # with 'tmux run-shell'.
+            if [[ $KRB5CCNAME ]]; then
+                local real_krb5ccname="$KRB5CCNAME"
+                eval "$(tmux show-environment -s KRB5CCNAME)"
+                if [[ $real_krb5ccname != $KRB5CCNAME ]]; then
+                    tmux set-environment KRB5CCNAME "$KRB5CCNAME"
+                    if [[ -x $(whence aklog) ]]; then
+                        tmux run-shell aklog
+                    fi
                 fi
+            else
+                tmux set-environment -r KRB5CCNAME
             fi
         fi
     elif systemctl --user > /dev/null 2>&1; then
