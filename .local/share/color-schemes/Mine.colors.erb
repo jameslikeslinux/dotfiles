@@ -1,0 +1,122 @@
+<% require 'colorscheme'
+dark  = ColorScheme.dark.colors_by_base
+light = ColorScheme.light.colors_by_base -%>
+[ColorEffects:Disabled]
+Color=<%= light[0x05].rgb.join(',') %>
+ColorAmount=0
+ColorEffect=0
+ContrastAmount=0.65
+ContrastEffect=1
+IntensityAmount=0.1
+IntensityEffect=2
+
+[ColorEffects:Inactive]
+ChangeSelectionColor=true
+Color=112,111,110
+ColorAmount=0.025
+ColorEffect=2
+ContrastAmount=0.1
+ContrastEffect=2
+Enable=false
+IntensityAmount=0
+IntensityEffect=0
+
+[Colors:Button]
+BackgroundAlternate=<%= light[0x02].rgb.join(',') %>
+BackgroundNormal=<%= light[0x01].rgb.join(',') %>
+DecorationFocus=<%= light[0x0D].rgb.join(',') %>
+DecorationHover=<%= light[0x0D].shade.rgb.join(',') %>
+ForegroundActive=<%= light[0x0C].rgb.join(',') %>
+ForegroundInactive=<%= light[0x03].rgb.join(',') %>
+ForegroundLink=<%= light[0x0D].rgb.join(',') %>
+ForegroundNegative=<%= light[0x08].rgb.join(',') %>
+ForegroundNeutral=<%= light[0x09].rgb.join(',') %>
+ForegroundNormal=<%= light[0x06].rgb.join(',') %>
+ForegroundPositive=<%= light[0x0B].rgb.join(',') %>
+ForegroundVisited=<%= light[0x0E].rgb.join(',') %>
+
+[Colors:Complementary]
+BackgroundAlternate=<%= dark[0x02].rgb.join(',') %>
+BackgroundNormal=<%= dark[0x01].rgb.join(',') %>
+DecorationFocus=<%= dark[0x0D].rgb.join(',') %>
+DecorationHover=<%= dark[0x0D].tint.rgb.join(',') %>
+ForegroundActive=<%= dark[0x09].rgb.join(',') %>
+ForegroundInactive=<%= dark[0x03].rgb.join(',') %>
+ForegroundLink=<%= dark[0x0D].rgb.join(',') %>
+ForegroundNegative=<%= dark[0x08].rgb.join(',') %>
+ForegroundNeutral=<%= dark[0x0A].rgb.join(',') %>
+ForegroundNormal=<%= dark[0x06].rgb.join(',') %>
+ForegroundPositive=<%= dark[0x0B].rgb.join(',') %>
+ForegroundVisited=<%= dark[0x0E].rgb.join(',') %>
+
+[Colors:Selection]
+BackgroundAlternate=105,149,165
+BackgroundNormal=<%= light[0x0D].rgb.join(',') %>
+DecorationFocus=<%= light[0x0D].rgb.join(',') %>
+DecorationHover=<%= light[0x0D].shade.rgb.join(',') %>
+ForegroundActive=<%= light[0x00].rgb.join(',') %>
+ForegroundInactive=<%= light[0x01].rgb.join(',') %>
+ForegroundLink=<%= light[0x0A].rgb.join(',') %>
+ForegroundNegative=<%= light[0x08].rgb.join(',') %>
+ForegroundNeutral=<%= light[0x09].rgb.join(',') %>
+ForegroundNormal=<%= light[0x01].rgb.join(',') %>
+ForegroundPositive=<%= light[0x0B].rgb.join(',') %>
+ForegroundVisited=<%= light[0x0E].rgb.join(',') %>
+
+[Colors:Tooltip]
+BackgroundAlternate=<%= light[0x05].rgb.join(',') %>
+BackgroundNormal=<%= light[0x06].rgb.join(',') %>
+DecorationFocus=<%= light[0x0D].rgb.join(',') %>
+DecorationHover=<%= light[0x0D].shade.rgb.join(',') %>
+ForegroundActive=<%= light[0x0C].rgb.join(',') %>
+ForegroundInactive=<%= light[0x03].rgb.join(',') %>
+ForegroundLink=<%= light[0x0D].rgb.join(',') %>
+ForegroundNegative=<%= light[0x08].rgb.join(',') %>
+ForegroundNeutral=<%= light[0x09].rgb.join(',') %>
+ForegroundNormal=<%= light[0x01].rgb.join(',') %>
+ForegroundPositive=<%= light[0x0B].rgb.join(',') %>
+ForegroundVisited=<%= light[0x0E].rgb.join(',') %>
+
+[Colors:View]
+BackgroundAlternate=<%= light[0x01].rgb.join(',') %>
+BackgroundNormal=<%= light[0x00].rgb.join(',') %>
+DecorationFocus=<%= light[0x0D].rgb.join(',') %>
+DecorationHover=<%= light[0x0D].shade.rgb.join(',') %>
+ForegroundActive=<%= light[0x0C].rgb.join(',') %>
+ForegroundInactive=<%= light[0x03].rgb.join(',') %>
+ForegroundLink=<%= light[0x0D].rgb.join(',') %>
+ForegroundNegative=<%= light[0x08].rgb.join(',') %>
+ForegroundNeutral=<%= light[0x09].rgb.join(',') %>
+ForegroundNormal=<%= light[0x06].rgb.join(',') %>
+ForegroundPositive=<%= light[0x0B].rgb.join(',') %>
+ForegroundVisited=<%= light[0x0E].rgb.join(',') %>
+
+[Colors:Window]
+BackgroundAlternate=<%= light[0x02].rgb.join(',') %>
+BackgroundNormal=<%= light[0x01].rgb.join(',') %>
+DecorationFocus=<%= light[0x0D].rgb.join(',') %>
+DecorationHover=<%= light[0x0D].shade.rgb.join(',') %>
+ForegroundActive=<%= light[0x0C].rgb.join(',') %>
+ForegroundInactive=<%= light[0x03].rgb.join(',') %>
+ForegroundLink=<%= light[0x0D].rgb.join(',') %>
+ForegroundNegative=<%= light[0x08].rgb.join(',') %>
+ForegroundNeutral=<%= light[0x09].rgb.join(',') %>
+ForegroundNormal=<%= light[0x06].rgb.join(',') %>
+ForegroundPositive=<%= light[0x0B].rgb.join(',') %>
+ForegroundVisited=<%= light[0x0E].rgb.join(',') %>
+
+[General]
+ColorScheme=Mine
+Name=Mine
+shadeSortColumn=true
+
+[KDE]
+contrast=4
+
+[WM]
+activeBackground=<%= light[0x05].rgb.join(',') %>
+activeBlend=<%= light[0x00].rgb.join(',') %>
+activeForeground=<%= light[0x01].rgb.join(',') %>
+inactiveBackground=<%= light[0x01].rgb.join(',') %>
+inactiveBlend=<%= light[0x06].rgb.join(',') %>
+inactiveForeground=<%= light[0x03].rgb.join(',') %>
