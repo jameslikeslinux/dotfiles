@@ -15,7 +15,7 @@ eval $(tmux show-environment -gs TERM)
 tmux_term='tmux'
 
 <% require 'colorscheme'
-cs = ColorScheme.new -%>
+cs = ColorScheme.dark -%>
 if [[ $TERM == *truecolor* ]]; then
     tmux_term+='-truecolor'
 <% cs.colors_by_base.each do |c| -%>

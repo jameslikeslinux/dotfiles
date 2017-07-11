@@ -1,5 +1,5 @@
 <% require 'colorscheme'
-cs = ColorScheme.new
+cs = ColorScheme.dark
 cs.terminal.each do |c| -%>
 *color<%= c.ansi %>: <%= c.x11 %>
 <% end -%>

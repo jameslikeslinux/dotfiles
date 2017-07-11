@@ -6,7 +6,7 @@ CursorType=block
 Scrollbar=none
 CursorBlinks=no
 <% require 'colorscheme'
-cs = ColorScheme.new
+cs = ColorScheme.dark
 colors = cs.terminal -%>
 ForegroundColour=<%= cs.foreground.rgb.join(',') %>
 BackgroundColour=<%= cs.background.rgb.join(',') %>

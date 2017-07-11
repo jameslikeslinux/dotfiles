@@ -5,7 +5,7 @@
 
 " GUI color definitions
 <% require 'colorscheme'
-cs = ColorScheme.new -%>
+cs = ColorScheme.dark -%>
 let s:gui = <%= cs.colors_by_base.map { |c| c.hex } %>
 
 " Terminal color definitions

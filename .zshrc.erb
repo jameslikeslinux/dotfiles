@@ -11,7 +11,7 @@ fi
 [[ -e /etc/zsh/zprofile ]] && source $HOME/.zshenv
 
 <% require 'colorscheme'
-cs = ColorScheme.new
+cs = ColorScheme.dark
 xterm_escapes = cs.terminal.map do |c|
   "\\e]4;#{c.ansi};#{c.x11}\\a"
 end.join

@@ -85,8 +85,16 @@ class ColorScheme
     8   => [0,  0,  0, 8,  7, 7, 15, 15,    1,  3,     3,     2,     6,     4,     5,  8],
   }
 
-  def initialize
-    @scheme_data = YAML.load_file(File.join(File.dirname(__FILE__), '..', '..', '.colorscheme.yaml'))
+  def self.dark
+    ColorScheme.new('.colorscheme-dark.yaml')
+  end
+
+  def self.light
+    ColorScheme.new('.colorscheme-light.yaml')
+  end
+
+  def initialize(filename)
+    @scheme_data = YAML.load_file(File.join(File.dirname(__FILE__), '..', '..', filename))
     @colors = BASE_TO_ANSI.keys.each_with_object(Hash.new) do |term_colors, colors_acc|
       colors_acc[term_colors] = BASE_TO_ANSI[term_colors].each_with_index.map do |ansis, base|
         basestr = '%02X' % base
