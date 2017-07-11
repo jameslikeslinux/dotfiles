@@ -77,7 +77,7 @@ these are pretty self explicative */
   -GtkTreeView-horizontal-separator: 4;
   -GtkMenu-horizontal-padding: 0;
   -GtkMenu-vertical-padding: 0;
-  -GtkWidget-link-color: #4271ae;
+  -GtkWidget-link-color: #213857;
   -GtkWidget-visited-link-color: #8959a8;
   -GtkWidget-focus-padding: 2;
   -GtkWidget-focus-line-width: 1;
@@ -1367,17 +1367,17 @@ GtkInfoBar {
  * Links *
  *********/
 *:link, .button:link, .button:visited {
-  color: #4271ae; }
+  color: #213857; }
   *:link:visited, .button:visited {
     color: #8959a8; }
     *:selected *:link:visited, *:selected .button:visited {
       color: #a1b4cc; }
   *:link:hover, .button:hover:link, .button:hover:visited {
-    color: #608bc3; }
+    color: #2f507c; }
     *:selected *:link:hover, *:selected .button:hover:link, *:selected .button:hover:visited {
       color: #d0d5db; }
   *:link:active, .button:active:link, .button:active:visited {
-    color: #4271ae; }
+    color: #213857; }
     *:selected *:link:active, *:selected .button:active:link, *:selected .button:active:visited {
       color: #c0cad6; }
   *:link:backdrop, .button:backdrop:link, .button:backdrop:visited, *:link:backdrop:hover, .button:backdrop:hover:link, .button:backdrop:hover:visited, *:link:backdrop:hover:selected, .titlebar.selection-mode .subtitle:backdrop:hover:link,

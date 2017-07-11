@@ -2103,7 +2103,7 @@ button:visited > label,
 *:link,
 button:link,
 button:visited {
-  color: #4271ae; }
+  color: #213857; }
   button:link > label:visited,
   button:visited > label:visited,
   *:link:visited,
@@ -2120,7 +2120,7 @@ button:visited {
   *:link:hover,
   button:hover:link,
   button:hover:visited {
-    color: #608bc3; }
+    color: #2f507c; }
     *:selected button:link > label:hover,
     *:selected button:visited > label:hover, *:selected
     *:link:hover, *:selected
@@ -2132,7 +2132,7 @@ button:visited {
   *:link:active,
   button:active:link,
   button:active:visited {
-    color: #4271ae; }
+    color: #213857; }
     *:selected button:link > label:active,
     *:selected button:visited > label:active, *:selected
     *:link:active, *:selected
