@@ -1846,17 +1846,17 @@ headerbar {
     border-color: transparent;
     background-image: none;
     background-color: #e0e0e0;
-    color: #8e908c;
+    color: #969896;
     box-shadow: none; }
   headerbar label {
     font-weight: normal; }
     headerbar label:backdrop {
-      color: #8e908c; }
+      color: #969896; }
   headerbar .path-bar button {
     color: #e0e0e0;
     font-weight: normal; }
     headerbar .path-bar button:backdrop {
-      color: #8e908c; }
+      color: #969896; }
   headerbar button {
     transition: none;
     border-color: rgba(255, 255, 255, 0);
@@ -1894,18 +1894,18 @@ headerbar {
         background-image: none;
         background-color: #e0e0e0;
         border-color: #e0e0e0;
-        color: #8e908c; }
+        color: #969896; }
     headerbar button:backdrop {
       border-color: transparent;
       background-image: none;
       background-color: #e0e0e0;
-      color: #8e908c; }
+      color: #969896; }
     headerbar button.flat:backdrop,
     headerbar button.flat:backdrop:disabled,
     headerbar button:disabled:backdrop {
       background-image: none;
       background-color: #e0e0e0;
-      color: #8e908c;
+      color: #969896;
       border-color: transparent; }
     headerbar button.flat:disabled {
       color: rgba(204, 204, 204, 0.35); }
@@ -1926,12 +1926,12 @@ headerbar {
     font-weight: normal;
     padding: 0px 12px; }
     headerbar .title:backdrop {
-      color: #8e908c; }
+      color: #969896; }
   headerbar .subtitle {
     font-size: smaller;
     padding: 0 12px; }
     headerbar .subtitle:backdrop {
-      color: #8e908c; }
+      color: #969896; }
   headerbar separator {
     border-width: 0px;
     background-color: transparent;
@@ -1985,10 +1985,10 @@ headerbar.selection-mode.suggested-action {
   headerbar.selection-mode.suggested-action:backdrop {
     background-color: #e0e0e0;
     border-color: transparent;
-    color: #8e908c; }
+    color: #969896; }
     headerbar button.suggested-action:backdrop:disabled,
     headerbar.selection-mode.suggested-action:backdrop:disabled {
-      color: rgba(129, 131, 127, 0.35); }
+      color: rgba(136, 138, 136, 0.35); }
 
 /**************
  * GtkInfoBar *

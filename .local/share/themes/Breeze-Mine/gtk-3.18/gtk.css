@@ -1092,7 +1092,7 @@ GtkFileChooserDialog .dialog-action-box {
     border-color: transparent;
     background-image: none;
     background-color: #e0e0e0;
-    color: #8e908c;
+    color: #969896;
     box-shadow: none; }
   .titlebar .path-bar .button,
   .header-bar .path-bar .button {
@@ -1141,18 +1141,18 @@ GtkFileChooserDialog .dialog-action-box {
         background-image: none;
         background-color: #e0e0e0;
         border-color: #e0e0e0;
-        color: #8e908c; }
+        color: #969896; }
     .titlebar .button:backdrop,
     .header-bar .button:backdrop {
       background-color: #e0e0e0;
-      color: #8e908c; }
+      color: #969896; }
     .titlebar .button.flat:backdrop, .titlebar .button.flat:backdrop:insensitive, .titlebar .button:insensitive:backdrop,
     .header-bar .button.flat:backdrop,
     .header-bar .button.flat:backdrop:insensitive,
     .header-bar .button:insensitive:backdrop {
       background-image: none;
       background-color: #e0e0e0;
-      color: #8e908c;
+      color: #969896;
       border-color: transparent; }
     .titlebar .button.flat:insensitive,
     .header-bar .button.flat:insensitive {
@@ -1252,11 +1252,11 @@ GtkFileChooserDialog .dialog-action-box {
   .header-bar.selection-mode.suggested-action:backdrop {
     background-color: #e0e0e0;
     border-color: transparent;
-    color: #8e908c; }
+    color: #969896; }
     .titlebar .button.suggested-action:backdrop:insensitive,
     .header-bar .button.suggested-action:backdrop:insensitive, .titlebar.selection-mode.suggested-action:backdrop:insensitive,
     .header-bar.selection-mode.suggested-action:backdrop:insensitive {
-      color: rgba(129, 131, 127, 0.35); }
+      color: rgba(136, 138, 136, 0.35); }
 
 /**************
  * GtkInfoBar *
@@ -2621,7 +2621,7 @@ GtkSwitch {
   .header-bar GtkSwitch.trough:backdrop {
     background-color: transparent; }
   .header-bar GtkSwitch.slider:backdrop {
-    background-color: #8e908c; }
+    background-color: #969896; }
 
 /************
  * Toolbars *
