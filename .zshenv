@@ -37,6 +37,6 @@ export XAUTHORITY="${XAUTHORITY-$HOME/.Xauthority}"
 # Enable access to ssh-agent that may be running under systemd
 # (I'd prefer to set this at the system level, where systemd is running, but
 # haven't found a satisfactory way to do it.)
-if [[ ! $SSH_AUTH_SOCK && -S "${XDG_RUNTIME_DIR}/ssh-agent.socket" ]]; then
+if [[ $SSH_AUTH_SOCK == '' && -S "${XDG_RUNTIME_DIR}/ssh-agent.socket" ]]; then
     export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 fi
