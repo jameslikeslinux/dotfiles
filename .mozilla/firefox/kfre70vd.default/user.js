@@ -8,6 +8,7 @@ user_pref("browser.tabs.insertRelatedAfterCurrent", false);
 user_pref("browser.tabs.warnOnClose", false);
 user_pref("browser.urlbar.autoFill", false);
 user_pref("browser.urlbar.formatting.enabled", false);
+user_pref("browser.urlbar.oneOffSearches", false);
 user_pref("browser.urlbar.trimURLs", false);
 user_pref("browser.urlbar.unifiedcomplete", false);
 user_pref("datareporting.healthreport.uploadEnabled", false);
