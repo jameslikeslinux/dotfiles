@@ -1,13 +1,20 @@
 <% require 'colorscheme'
-cs = ColorScheme.dark
-cs.terminal.each do |c| -%>
+dark  = ColorScheme.dark
+light = ColorScheme.light
+light.terminal.each do |c| -%>
 *color<%= c.ansi %>: <%= c.x11 %>
 <% end -%>
-*foreground: <%= cs.foreground.x11 %>
-*background: <%= cs.background.x11 %>
-*borderColor: <%= cs.background.x11 %>
-*cursorColor: <%= cs.cursor.x11 %>
+*foreground: <%= light.colors_by_base[0x06].x11 %>
+*background: <%= light.colors_by_base[0x01].x11 %>
+*borderColor: <%= light.colors_by_base[0x03].x11 %>
 
+<% dark.terminal.each do |c| -%>
+URxvt.color<%= c.ansi %>: <%= c.x11 %>
+<% end -%>
+URxvt.foreground: <%= dark.foreground.x11 %>
+URxvt.background: <%= dark.background.x11 %>
+URxvt.borderColor: <%= dark.background.x11 %>
+URxvt.cursorColor: <%= dark.cursor.x11 %>
 URxvt.font: xft:Hack:size=9,xft:DejaVu Sans Mono
 URxvt.perl-ext-common: font-size,new-window
 URxvt.keysym.C-M-equal: perl:font-size:increase
@@ -25,6 +32,13 @@ URxvt.secondaryWheel: true
 URxvt.termName: rxvt-unicode-256color-powerline
 URxvt.urgentOnBell: true
 
+<% dark.terminal.each do |c| -%>
+xterm*color<%= c.ansi %>: <%= c.x11 %>
+<% end -%>
+xterm*foreground: <%= dark.foreground.x11 %>
+xterm*background: <%= dark.background.x11 %>
+xterm*borderColor: <%= dark.background.x11 %>
+xterm*cursorColor: <%= dark.cursor.x11 %>
 xterm*termName: xterm-256color-powerline
 xterm*faceName: monospace
 xterm*faceSize: 9
