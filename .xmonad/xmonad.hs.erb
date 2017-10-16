@@ -1,3 +1,6 @@
+<%
+  gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
+-%>
 import XMonad
 import XMonad.Core
 import qualified XMonad.StackSet as W
@@ -41,8 +44,8 @@ layoutHook' = id
     . avoidStruts
     . mkToggle (single REFLECTX)
     . mkToggle (single MIRROR)
-    . renamed [CutWordsLeft 2] . spacingWithEdge 8
-    . renamed [CutWordsLeft 1] . maximizeWithPadding 16
+    . renamed [CutWordsLeft 2] . spacingWithEdge <%= (gui_scaling_factor * 8).round %>
+    . renamed [CutWordsLeft 1] . maximizeWithPadding <%= (gui_scaling_factor * 16).round %>
     $ layoutGoldenTall ||| layoutHalfTall ||| centeredMaster
   where
     layoutGoldenTall =
@@ -132,7 +135,7 @@ main = xmonad
     , layoutHook         = layoutHook'
     , manageHook         = manageHook'
     , workspaces         = workspaces'
-    , borderWidth        = 3
+    , borderWidth        = <%= (gui_scaling_factor * 3).round %>
     , focusedBorderColor = "#ab4642"
     }
     `additionalKeysP`
@@ -180,3 +183,5 @@ main = xmonad
     , "M-S-<Tab>"   -- focus previous window
     , "M-S-/"       -- show help
     ]
+
+-- vim: filetype=haskell
