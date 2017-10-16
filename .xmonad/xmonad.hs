@@ -1,0 +1,182 @@
+import XMonad
+import XMonad.Core
+import qualified XMonad.StackSet as W
+
+import XMonad.Actions.CycleWS
+import XMonad.Actions.GroupNavigation
+import XMonad.Actions.Navigation2D
+import XMonad.Actions.PhysicalScreens
+import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.WorkspaceHistory
+import XMonad.Layout.Maximize
+import XMonad.Layout.MultiToggle
+import XMonad.Layout.MultiToggle.Instances
+import XMonad.Layout.Reflect
+import XMonad.Layout.Renamed
+import XMonad.Layout.ResizableTile
+import XMonad.Layout.Spacing
+import XMonad.Layout.ThreeColumns
+import XMonad.Util.EZConfig
+import XMonad.Util.Run
+import XMonad.Util.SpawnOnce
+import XMonad.Util.WorkspaceCompare
+
+import System.Taffybar.Hooks.PagerHints
+
+import Control.Monad
+import Data.List
+
+startupHook' = do
+    spawnOnce "compton"
+    spawnOnce "dunst"
+    spawnOnce "while :; do taffybar; done"
+
+logHook' = historyHook >> workspaceHistoryHook
+
+layoutHook' = id
+    . mkToggle (single NBFULL)
+    . avoidStruts
+    . mkToggle (single REFLECTX)
+    . mkToggle (single MIRROR)
+    . renamed [CutWordsLeft 2] . spacingWithEdge 8
+    . renamed [CutWordsLeft 1] . maximizeWithPadding 16
+    $ layoutGoldenTall ||| layoutHalfTall ||| centeredMaster
+  where
+    layoutGoldenTall =
+        renamed [Replace "GoldenTall"] $ ResizableTall 1 (3/100) (0.618) []
+    layoutHalfTall =
+        renamed [Replace "HalfTall"] $ ResizableTall 1 (3/100) (1/2) []
+    centeredMaster = ThreeColMid 1 (3/100) (1/2)
+
+
+isDesktop = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DESKTOP"
+isDock    = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DOCK"
+
+sendToBottom :: Display -> Window -> X ()
+sendToBottom display window = io $ lowerWindow display window
+
+sendToJustAboveDesktop :: Display -> Window -> X ()
+sendToJustAboveDesktop display window = do
+    desktops <- allDesktops
+    sendToBottom display window
+    mapM_ (sendToBottom display) desktops
+  where
+    allDesktops :: X [Window]
+    allDesktops = do
+        rootw <- asks theRoot
+        (_, _, windows) <- io $ queryTree display rootw
+        filterM (runQuery isDesktop) windows
+
+doWindowAction :: (Display -> Window -> X ()) -> ManageHook
+doWindowAction action = do
+    win <- ask
+    liftX $ withDisplay $ \display -> action display win
+    idHook
+
+manageHook' = composeAll
+    [ className =? "ksmserver"   --> doIgnore
+    , className =? "plasmashell" --> doIgnore
+    , className =? "XLogo"       --> doFloat
+    , isDesktop                  --> doWindowAction sendToBottom
+    , isDock                     --> doWindowAction sendToJustAboveDesktop
+    ]
+
+workspaces' = ["web", "ops", "dev", "music", "mail", "chat", "seven", "eight", "nine"]
+
+-- If this function seems weird, it's because it's intended to be dual to
+--   getScreen :: PhysicalScreen -> X (Maybe ScreenId)
+-- from XMonad.Actions.PhysicalScreens.
+-- See: https://hackage.haskell.org/package/xmonad-contrib-0.13/docs/XMonad-Actions-PhysicalScreens.html
+getPhysicalScreen :: ScreenId -> X (Maybe PhysicalScreen)
+getPhysicalScreen sid = do
+    pscreens <- physicalScreens
+    return $ (Just sid) `elemIndex` pscreens >>= \s -> Just (P s)
+  where
+    physicalScreens :: X [Maybe ScreenId]
+    physicalScreens = withWindowSet $ \windowSet -> do
+        let numScreens = length $ W.screens windowSet
+        mapM (\s -> getScreen (P s)) [0..numScreens]
+
+rofi :: X String
+rofi = withWindowSet $ \windowSet -> do
+    let sid = W.screen (W.current windowSet)
+    pscreen <- getPhysicalScreen sid
+    return $ case pscreen of
+                Just (P s) -> "rofi -m " ++ (show s)
+                otherwise  -> "rofi"
+
+spawnRofi :: String -> X ()
+spawnRofi args = do
+    cmd <- rofi
+    spawn $ cmd ++ " " ++ args
+
+reflectWith :: X () -> X ()
+reflectWith swapFn = do
+    sendMessage $ Toggle REFLECTX
+    swapFn
+    sendMessage $ Toggle REFLECTX
+
+main = xmonad
+    . docks
+    . ewmh
+    . pagerHints
+    . withNavigation2DConfig def { defaultTiledNavigation = centerNavigation }
+    $ def
+    { modMask            = mod4Mask
+    , terminal           = "urxvt"
+    , startupHook        = startupHook'
+    , logHook            = logHook'
+    , layoutHook         = layoutHook'
+    , manageHook         = manageHook'
+    , workspaces         = workspaces'
+    , borderWidth        = 3
+    , focusedBorderColor = "#ab4642"
+    }
+    `additionalKeysP`
+    [ ("M-="           , sendMessage $ IncMasterN 1)
+    , ("M-S-="         , sendMessage $ IncMasterN 1)
+    , ("M--"           , sendMessage $ IncMasterN (-1))
+    , ("M-'"           , viewScreen 0)
+    , ("M-,"           , viewScreen 1)
+    , ("M-."           , viewScreen 1)
+    , ("M-S-'"         , sendToScreen 0)
+    , ("M-S-,"         , sendToScreen 1)
+    , ("M-S-."         , sendToScreen 1)
+    , ("M-f"           , sendMessage $ Toggle NBFULL)
+    , ("M-r"           , sendMessage $ Toggle REFLECTX)
+    , ("M-S-r"         , sendMessage $ Toggle MIRROR)
+    , ("M-z"           , withFocused $ sendMessage . maximizeRestore)
+    , ("M-h"           , windowGo L False)
+    , ("M-l"           , windowGo R False)
+    , ("M-j"           , windowGo D False)
+    , ("M-k"           , windowGo U False)
+    , ("M-S-h"         , sendMessage Shrink)
+    , ("M-S-l"         , sendMessage Expand)
+    , ("M-S-j"         , sendMessage MirrorShrink)
+    , ("M-S-k"         , sendMessage MirrorExpand)
+    , ("M-u"           , windows W.swapUp)
+    , ("M-d"           , windows W.swapDown)
+    , ("M-x"           , kill)
+    , ("M-;"           , nextMatch History (return True))
+    , ("M-a"           , toggleWS)
+    , ("M-o"           , reflectWith swapPrevScreen)
+    , ("M-e"           , reflectWith swapNextScreen)
+    , ("M-S-q"         , spawn "qdbus org.kde.ksmserver /KSMServer logout 1 0 1")
+  --, ("M-<Escape>"    , spawn "sleep 1; loginctl lock-session")
+    , ("M-<Space>"     , spawn "qdbus org.mpris.MediaPlayer2.google-play-music-desktop-player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
+    , ("M-<Tab>"       , sendMessage NextLayout)
+    , ("M-<Backspace>" , setLayout $ Layout layoutHook')
+    , ("M1-<Tab>"      , windows W.focusDown)
+    , ("M1-S-<Tab>"    , windows W.focusUp)
+    , ("M-p"           , spawnRofi "-show drun")
+    , ("M-w"           , spawnRofi "-show window")
+    ]
+    `removeKeysP`
+    [ "M-S-c"       -- close window
+    , "M-S-<Space>" -- reset workspace to default layout
+    , "M-S-<Tab>"   -- focus previous window
+    , "M-S-/"       -- show help
+    ]
