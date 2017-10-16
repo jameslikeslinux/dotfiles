@@ -61,10 +61,10 @@ workspaceHUDLabelSetter workspace = do
     let endMarker           = if wsIdx == lastWsIdx then "\x00a0" else ""
     let name                = escape $ (show $ wsNum + 1) ++ ": " ++ workspaceName workspace ++ endMarker
     return $ case workspaceState workspace of
-        Active  -> workspaceDecorator "#282828" "#7cafc2" True $ name
-        Visible -> workspaceDecorator "#d8d8d8" "#383838" False $ name
-        Hidden  -> workspaceDecorator "#d8d8d8" "#282828" False $ name
-        Urgent  -> workspaceDecorator "#282828" "#f7ca88" False $ name
+        Active  -> workspaceDecorator "#282828" "#7cafc2" True name
+        Visible -> workspaceDecorator "#d8d8d8" "#383838" False name
+        Hidden  -> workspaceDecorator "#d8d8d8" "#282828" False name
+        Urgent  -> workspaceDecorator "#282828" "#f7ca88" False name
         Empty   -> name
 
 layoutRename :: String -> String
