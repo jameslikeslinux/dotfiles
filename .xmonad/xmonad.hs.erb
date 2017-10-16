@@ -91,6 +91,11 @@ manageHook' = composeAll
 
 workspaces' = ["web", "ops", "dev", "music", "mail", "chat", "seven", "eight", "nine"]
 
+physicalScreens :: X [Maybe ScreenId]
+physicalScreens = withWindowSet $ \windowSet -> do
+    let numScreens = length $ W.screens windowSet
+    mapM (\s -> getScreen (P s)) [0..numScreens]
+
 -- If this function seems weird, it's because it's intended to be dual to
 --   getScreen :: PhysicalScreen -> X (Maybe ScreenId)
 -- from XMonad.Actions.PhysicalScreens.
@@ -99,11 +104,6 @@ getPhysicalScreen :: ScreenId -> X (Maybe PhysicalScreen)
 getPhysicalScreen sid = do
     pscreens <- physicalScreens
     return $ (Just sid) `elemIndex` pscreens >>= \s -> Just (P s)
-  where
-    physicalScreens :: X [Maybe ScreenId]
-    physicalScreens = withWindowSet $ \windowSet -> do
-        let numScreens = length $ W.screens windowSet
-        mapM (\s -> getScreen (P s)) [0..numScreens]
 
 rofi :: X String
 rofi = withWindowSet $ \windowSet -> do
