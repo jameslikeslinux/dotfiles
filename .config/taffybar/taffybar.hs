@@ -1,0 +1,115 @@
+import Control.Concurrent.MVar
+import Control.Monad
+import Control.Monad.IO.Class
+import Control.Monad.Reader.Class
+import Control.Monad.Trans.Class
+import Data.Int
+import Data.List
+import Data.List.Utils (replace)
+import qualified Data.Map as M
+import System.Taffybar
+import System.Taffybar.CommandRunner
+import System.Taffybar.LayoutSwitcher
+import System.Taffybar.Pager
+import System.Taffybar.SimpleClock
+import System.Taffybar.WindowSwitcher
+import System.Taffybar.WorkspaceHUD
+import System.Information.EWMHDesktopInfo
+
+fontAwesomeMarkup :: String -> String
+fontAwesomeMarkup = wrap "<span font='FontAwesome'>" "</span>"
+
+replaceAll :: String -> [(String, String)] -> String
+replaceAll s transformations =
+    foldr ($) s $ map (\(from, to) -> replace from to) transformations
+
+workspaceRename :: String -> String
+workspaceRename s = replaceAll s $
+    [ ("\x00a0" , "")
+    , ("web"    , fontAwesomeMarkup "\xf269") -- fa-firefax
+    , ("dev"    , fontAwesomeMarkup "\xf121") -- fa-code
+    , ("ops"    , fontAwesomeMarkup "\xf120") -- fa-terminal
+    , ("music"  , fontAwesomeMarkup "\xf001") -- fa-music
+    , ("mail"   , fontAwesomeMarkup "\xf0e0") -- fa-envelope
+    , ("chat"   , fontAwesomeMarkup "\xf075") -- fa-comment
+    ] ++ (map (\s -> (s, fontAwesomeMarkup "\xf069")) unnamed)  -- fa-asterisk
+  where
+    unnamed = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
+
+workspaceDecorator :: String -> String -> Bool -> String -> String
+workspaceDecorator fg bg bold s =
+    (colorize fg bg . fontWeight . wrap " " " " . workspaceRename $ s) ++ endSep
+  where
+    fontWeight
+      | bold      = wrap "<b>" "</b>"
+      | otherwise = id
+    endSep
+      | '\x00a0' `notElem` s = ""
+      | bg == "#383838"      = colorize "#000000" "#383838" "\xe0b1"
+      | otherwise            = colorize bg "#383838" "\xe0b0"
+
+workspaceHUDLabelSetter :: Workspace -> HUDIO String
+workspaceHUDLabelSetter workspace = do
+    workspacesRef <- asks workspacesVar
+    workspaces    <- lift $ readMVar workspacesRef
+    let nonEmptyWorkspaces  = filter (\(_, w) -> workspaceState w /= Empty) $ M.toList workspaces
+    let (lastWsIdx, _)      = last nonEmptyWorkspaces
+    let wsIdx@(WSIdx wsNum) = workspaceIdx workspace
+    let endMarker           = if wsIdx == lastWsIdx then "\x00a0" else ""
+    let name                = escape $ (show $ wsNum + 1) ++ ": " ++ workspaceName workspace ++ endMarker
+    return $ case workspaceState workspace of
+        Active  -> workspaceDecorator "#282828" "#7cafc2" True $ name
+        Visible -> workspaceDecorator "#d8d8d8" "#383838" False $ name
+        Hidden  -> workspaceDecorator "#d8d8d8" "#282828" False $ name
+        Urgent  -> workspaceDecorator "#282828" "#f7ca88" False $ name
+        Empty   -> name
+
+layoutRename :: String -> String
+layoutRename = id
+{-
+layoutRename s = replaceAll s $
+    [ ("3/5 Tall"                 , "[  ]=")
+    , ("1/2 Tall"                 , "[ ]==")
+    , ("ReflectX 3/5 Tall"        , "=[  ]")
+    , ("ReflectX 1/2 Tall"        , "==[ ]")
+    , ("Mirror 3/5 Tall"          , "[↻↻]=")
+    , ("Mirror 1/2 Tall"          , "[↻]==")
+    , ("ReflectX Mirror 3/5 Tall" , "=[↺↺]")
+    , ("ReflectX Mirror 1/2 Tall" , "==[↺]")
+    , ("Full"                     , "[ful]")
+    ]
+-}
+
+pagerConfig :: PagerConfig
+pagerConfig = defaultPagerConfig
+    { activeLayout = colorize "#d8d8d8" "#383838" . wrap " " (" " ++ (colorize "#383838" "#000000" "\xe0b0")) . layoutRename
+    , activeWindow = colorize "#d8d8d8" "#000000" . wrap " " " " . escape . shorten 100
+    }
+
+workspaceHUDConfig :: WorkspaceHUDConfig
+workspaceHUDConfig = defaultWorkspaceHUDConfig
+    { widgetBuilder        = buildButtonController buildLabelController
+    , minWSWidgetSize      = Nothing
+    , labelSetter          = workspaceHUDLabelSetter
+    , showWorkspaceFn      = hideEmpty
+    , urgentWorkspaceState = True
+    }
+
+taffybarConfig :: Pager -> TaffybarConfig
+taffybarConfig pager = defaultTaffybarConfig
+    { getMonitorConfig = usePrimaryMonitor
+    , startWidgets     = [workspaceHUD, layoutSwitcher, windowSwitcher]
+    , endWidgets       = [clock]
+    , barHeight        = 20
+    , widgetSpacing    = 0
+    }
+  where
+    workspaceHUD   = buildWorkspaceHUD workspaceHUDConfig pager
+    layoutSwitcher = layoutSwitcherNew pager
+    windowSwitcher = windowSwitcherNew pager
+    clock          = textClockNew Nothing "%a %b %_d %r " 1
+
+main :: IO ()
+main = do
+    pager <- pagerNew pagerConfig
+    defaultTaffybar $ taffybarConfig pager
