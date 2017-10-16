@@ -59,25 +59,26 @@ isDesktop = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DESKTOP"
 isDock    = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DOCK"
 isOSD     = isInProperty "_NET_WM_WINDOW_TYPE" "_KDE_NET_WM_WINDOW_TYPE_ON_SCREEN_DISPLAY"
 
-sendToBottom :: Display -> Window -> X ()
-sendToBottom display window = io $ lowerWindow display window
+sendToBottom :: Window -> X ()
+sendToBottom window = withDisplay $ \display ->
+    io $ lowerWindow display window
 
-sendToJustAboveDesktop :: Display -> Window -> X ()
-sendToJustAboveDesktop display window = do
+allDesktops :: X [Window]
+allDesktops = withDisplay $ \display -> do
+    rootw <- asks theRoot
+    (_, _, windows) <- io $ queryTree display rootw
+    filterM (runQuery isDesktop) windows
+
+sendToJustAboveDesktop :: Window -> X ()
+sendToJustAboveDesktop window = do
     desktops <- allDesktops
-    sendToBottom display window
-    mapM_ (sendToBottom display) desktops
-  where
-    allDesktops :: X [Window]
-    allDesktops = do
-        rootw <- asks theRoot
-        (_, _, windows) <- io $ queryTree display rootw
-        filterM (runQuery isDesktop) windows
+    sendToBottom window
+    mapM_ sendToBottom desktops
 
-doWindowAction :: (Display -> Window -> X ()) -> ManageHook
+doWindowAction :: (Window -> X ()) -> ManageHook
 doWindowAction action = do
     win <- ask
-    liftX $ withDisplay $ \display -> action display win
+    liftX $ action win
     idHook
 
 manageHook' = composeAll
