@@ -57,6 +57,7 @@ layoutHook' = id
 
 isDesktop = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DESKTOP"
 isDock    = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DOCK"
+isOSD     = isInProperty "_NET_WM_WINDOW_TYPE" "_KDE_NET_WM_WINDOW_TYPE_ON_SCREEN_DISPLAY"
 
 sendToBottom :: Display -> Window -> X ()
 sendToBottom display window = io $ lowerWindow display window
@@ -80,11 +81,11 @@ doWindowAction action = do
     idHook
 
 manageHook' = composeAll
-    [ className =? "ksmserver"   --> doIgnore
-    , className =? "plasmashell" --> doIgnore
-    , className =? "XLogo"       --> doFloat
-    , isDesktop                  --> doWindowAction sendToBottom
-    , isDock                     --> doWindowAction sendToJustAboveDesktop
+    [ className =? "ksmserver" --> doIgnore
+    , className =? "XLogo"     --> doFloat
+    , isDesktop                --> doWindowAction sendToBottom
+    , isDock                   --> doWindowAction sendToJustAboveDesktop
+    , isOSD                    --> doCenterFloat
     ]
 
 workspaces' = ["web", "ops", "dev", "music", "mail", "chat", "seven", "eight", "nine"]
