@@ -33,9 +33,9 @@ import Control.Monad
 import Data.List
 
 startupHook' = do
+    spawn "feh --bg-scale --no-fehbg ~/.wallpaper.png"
     spawnOnce "compton"
     spawnOnce "dunst"
-    spawnOnce "plasmashell"
     spawnOnce "taffybar"
 
 logHook' = historyHook >> workspaceHistoryHook
