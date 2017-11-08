@@ -1,6 +1,4 @@
-<%
-  gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
--%>
+<% gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1 -%>
 import Control.Concurrent.MVar
 import Control.Monad
 import Control.Monad.IO.Class
@@ -103,7 +101,7 @@ taffybarConfig pager = defaultTaffybarConfig
     { getMonitorConfig = usePrimaryMonitor
     , startWidgets     = [workspaceHUD, layoutSwitcher, windowSwitcher]
     , endWidgets       = [clock]
-    , barHeight        = <%= (gui_scaling_factor * 20).round %>
+    , barHeight        = <%= (20 * gui_scaling_factor).round %>
     , widgetSpacing    = 0
     }
   where

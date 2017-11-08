@@ -1,6 +1,4 @@
-<%
-  gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
--%>
+<% gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1 -%>
 import XMonad
 import XMonad.Core
 import qualified XMonad.StackSet as W
@@ -45,8 +43,8 @@ layoutHook' = id
     . avoidStruts
     . mkToggle (single REFLECTX)
     . mkToggle (single MIRROR)
-    . renamed [CutWordsLeft 2] . spacingWithEdge <%= (gui_scaling_factor * 8).round %>
-    . renamed [CutWordsLeft 1] . maximizeWithPadding <%= (gui_scaling_factor * 16).round %>
+    . renamed [CutWordsLeft 2] . spacingWithEdge <%= (8 * gui_scaling_factor).round %>
+    . renamed [CutWordsLeft 1] . maximizeWithPadding <%= (16 * gui_scaling_factor).round %>
     $ layoutGoldenTall ||| layoutHalfTall ||| centeredMaster
   where
     layoutGoldenTall =
@@ -138,7 +136,7 @@ main = xmonad
     , layoutHook         = layoutHook'
     , manageHook         = manageHook'
     , workspaces         = workspaces'
-    , borderWidth        = <%= (gui_scaling_factor * 3).round %>
+    , borderWidth        = <%= (3 * gui_scaling_factor).round %>
     , focusedBorderColor = "#ab4642"
     }
     `additionalKeysP`
