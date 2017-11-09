@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+#
+# SSH wrapper to handle EC2 internal hostnames
+#
+# Detect attempts to ssh to hosts with EC2 internal hostnames and let them
+# resolve to the correct IP address with a temporary "hosts" file and
+# nss_wrapper (https://cwrap.org/nss_wrapper.html).  This takes care to
+# preserve functionality like SSH ProxyJump and GSSAPI authentication.
+#
+
+# Removes an entry from a colon separated path string and prints the result.
+path_remove() {
+    local path="$1"
+    local remove="$2"
+
+    path=":${path}:"
+    path="${path//:${remove}:}"
+    path="${path%:}"
+    path="${path#:}"
+
+    echo "$path"
+}
+
+# Ensure that PATH does not contain the directory of this script so subsequent
+# calls to `ssh` will use the real ssh binary.
+script_dir="$(cd "$(dirname "$0")" && pwd)"
+PATH="$(path_remove "$PATH" "$script_dir")"
+
+# Don't try to parse the target hostname from the command line--there are too
+# many ways it could be specified, including in the SSH config file, and too
+# many ways it could be tripped up.  Instead, use the '-G' option to grab the
+# exact hostname SSH will use from the machine-readable output after parsing
+# the SSH config.
+#
+# Older versions of OpenSSH don't have the '-G' option in which case this
+# variable will be empty and fall through to the default case in the next
+# conditional.
+hostname="$(ssh -G "$@" 2>/dev/null | awk '/^hostname\s/ { print $2 }')"
+
+if [[ $hostname == *.internal ]]; then
+    ip="$(sed 's/ip-\([[:digit:]]\+\)-\([[:digit:]]\+\)-\([[:digit:]]\+\)-\([[:digit:]]\+\).*/\1.\2.\3.\4/' <<< "$hostname")"
+
+    temp_hosts="$(mktemp)"
+    trap "rm -f '${temp_hosts}'" EXIT
+    echo "${ip} ${hostname}" > "$temp_hosts"
+
+    # Run SSH with a temporary hosts file, but do not "exec" it to ensure that
+    # control will return to bash to cleanup the temp_hosts file.  The extra
+    # 'HostName' option is needed so the proxy knows what host to connect to
+    # when using the ProxyJump option.
+    LD_PRELOAD='libnss_wrapper.so' NSS_WRAPPER_HOSTS="$temp_hosts" ssh -o "HostName=${ip}" "$@"
+else
+    exec ssh "$@"
+fi
