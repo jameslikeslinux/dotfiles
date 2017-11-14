@@ -4,6 +4,6 @@ user_pref("browser.tabs.warnOnClose", false);
 user_pref("browser.urlbar.autoFill", false);
 user_pref("browser.urlbar.formatting.enabled", false);
 user_pref("browser.urlbar.trimURLs", false);
-user_pref("dom.ipc.processCount", <%= @facts['memory']['system']['total_bytes'] / 1e9.to_i %>);
+user_pref("dom.ipc.processCount", <%= [@facts['memory']['system']['total_bytes'] >> 31, 4].max %>);
 user_pref("general.smoothScroll", false);
 user_pref("mousewheel.default.delta_multiplier_x", 300);
