@@ -75,6 +75,12 @@ let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = ''
 
+" Use more common, single-width glyph for line count indicator
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+let g:airline_symbols.maxlinenr = '≡'
+
 " Enable powerline characters on supported terminals
 if &term =~# 'powerline'
     let g:airline_powerline_fonts = 1
