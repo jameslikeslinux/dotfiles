@@ -27,6 +27,9 @@ shell_mode_option="@shell_mode"
 custom_copy_command_default=""
 custom_copy_command_option="@custom_copy_command"
 
+override_copy_command_default=""
+override_copy_command_option="@override_copy_command"
+
 # helper functions
 get_tmux_option() {
     local option="$1"
@@ -75,6 +78,10 @@ shell_mode() {
 custom_copy_command() {
     get_tmux_option "$custom_copy_command_option" "$custom_copy_command_default"
 }
+
+override_copy_command() {
+    get_tmux_option "$override_copy_command_option" "$override_copy_command_default"
+}
 # Ensures a message is displayed for 5 seconds in tmux prompt.
 # Does not override the 'display-time' tmux option.
 display_message() {
@@ -108,7 +115,9 @@ command_exists() {
 
 clipboard_copy_command() {
     # installing reattach-to-user-namespace is recommended on OS X
-    if command_exists "pbcopy"; then
+    if [ -n "$(override_copy_command)" ]; then
+        override_copy_command
+    elif command_exists "pbcopy"; then
         if command_exists "reattach-to-user-namespace"; then
             echo "reattach-to-user-namespace pbcopy"
         else
@@ -131,30 +140,32 @@ clipboard_copy_command() {
     fi
 }
 
+# Cache the TMUX version for speed.
 tmux_version="$(tmux -V | cut -d ' ' -f 2)"
+
 tmux_is_at_least() {
-if [[ $tmux_version == "$1" ]]
-then
-    return 0
-fi
-
-local IFS=.
-local i tver=($tmux_version) wver=($1)
-
-# fill empty fields in tver with zeros
-for ((i=${#tver[@]}; i<${#wver[@]}; i++)); do
-    tver[i]=0
-done
-
-# fill empty fields in wver with zeros
-for ((i=${#wver[@]}; i<${#tver[@]}; i++)); do
-    wver[i]=0
-done
-
-for ((i=0; i<${#tver[@]}; i++)); do
-    if ((10#${tver[i]} < 10#${wver[i]})); then
-        return 1
+    if [[ $tmux_version == "$1" || $tmux_version == "master" ]]
+    then
+        return 0
     fi
-done
-return 0
+
+    local IFS=.
+    local i tver=($tmux_version) wver=($1)
+
+    # fill empty fields in tver with zeros
+    for ((i=${#tver[@]}; i<${#wver[@]}; i++)); do
+        tver[i]=0
+    done
+
+    # fill empty fields in wver with zeros
+    for ((i=${#wver[@]}; i<${#tver[@]}; i++)); do
+        wver[i]=0
+    done
+
+    for ((i=0; i<${#tver[@]}; i++)); do
+        if ((10#${tver[i]} < 10#${wver[i]})); then
+            return 1
+        fi
+    done
+    return 0
 }
