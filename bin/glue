@@ -1,0 +1,17 @@
+#!/usr/bin/env zsh
+#
+# Glue Terminal Helper
+#
+# This simple wrapper for ssh logs on to my Glue workstation or runs a command
+# on it.  If it is launched from a named tmux window, launch a remote tmux
+# session by the same name.
+#
+
+if (( ARGC == 0 )); then
+    if [[ $(t showw automatic-rename 2>/dev/null) == *off ]]; then
+        window_name="$(t display-message -p '#W')"
+        set -- env TSESSION="$window_name" '$SHELL' -l
+    fi
+fi
+
+exec ssh -qt stowe.umd.edu "$@"

@@ -125,13 +125,13 @@ unalias cp 2>/dev/null
 alias mv='mv -f'
 alias rm='rm -f'
 alias r='eval "$(t show-environment -s; t show-environment -gs KRB5CCNAME)"'
-alias glue='ssh -qt stowe.umd.edu'
 alias bigsnaps='zfs list -t snapshot -s used'
 unalias suafs 2>/dev/null
 unalias a 2>/dev/null
 compdef a=sudo
 compdef s=sudo
 compdef t=tmux
+compdef glue=ssh
 
 # Easy way to switch to project
 p() {
@@ -145,3 +145,5 @@ umask 022
 # Glue polutes my shell
 # (for some reason these have to go here, not .zshenv)
 unset LESS LESSOPEN
+
+# vim:ft=zsh
