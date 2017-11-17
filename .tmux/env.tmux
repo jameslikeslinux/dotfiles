@@ -8,7 +8,7 @@
 #
 
 for var in DBUS_SESSION_BUS_ADDRESS SESSION_MANAGER; do
-    if [[ ! $(tmux show -g update-environment) =~ "(^|\s)${var}(\s|\$)" ]]; then
+    if [[ ! $(tmux show -g update-environment) =~ "(^|\s|\")${var}(\"|\s|\$)" ]]; then
         tmux set -ag update-environment " ${var}"
     fi
 done
