@@ -75,15 +75,18 @@ let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = ''
 
-" Use more common, single-width glyph for line count indicator
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-let g:airline_symbols.maxlinenr = '≡'
-
 " Enable powerline characters on supported terminals
 if &term =~# 'powerline'
     let g:airline_powerline_fonts = 1
+
+    " Use more common, single-width glyphs for line count and whitespace
+    " problem indicator (utf8proc incorrectly reports the airline defaults as
+    " two spaces wide)
+    if !exists('g:airline_symbols')
+        let g:airline_symbols = {}
+    endif
+    let g:airline_symbols.maxlinenr = '≡'
+    let g:airline_symbols.whitespace = '!'
 endif
 
 " Enable true-color on supported terminals
