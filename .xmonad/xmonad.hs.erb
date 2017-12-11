@@ -41,6 +41,7 @@ logHook' = historyHook >> workspaceHistoryHook
 layoutHook' = id
     . mkToggle (single NBFULL)
     . avoidStruts
+    . mkToggle (single FULL)
     . mkToggle (single REFLECTX)
     . mkToggle (single MIRROR)
     . renamed [CutWordsLeft 2] . spacingWithEdge <%= (8 * gui_scaling_factor).round %>
@@ -149,7 +150,8 @@ main = xmonad
     , ("M-S-'"         , sendToScreen 0)
     , ("M-S-,"         , sendToScreen 1)
     , ("M-S-."         , sendToScreen 1)
-    , ("M-f"           , sendMessage $ Toggle NBFULL)
+    , ("M-f"           , sendMessage $ Toggle FULL)
+    , ("M-S-f"         , sendMessage $ Toggle NBFULL)
     , ("M-r"           , sendMessage $ Toggle REFLECTX)
     , ("M-S-r"         , sendMessage $ Toggle MIRROR)
     , ("M-z"           , withFocused $ sendMessage . maximizeRestore)
