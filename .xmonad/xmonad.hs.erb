@@ -9,6 +9,7 @@ import XMonad.Actions.Navigation2D
 import XMonad.Actions.PhysicalScreens
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.WorkspaceHistory
@@ -135,7 +136,7 @@ main = xmonad
     , startupHook        = startupHook'
     , logHook            = logHook'
     , layoutHook         = layoutHook'
-    , manageHook         = manageHook'
+    , manageHook         = insertPosition Below Newer <+> manageHook'
     , workspaces         = workspaces'
     , borderWidth        = <%= (3 * gui_scaling_factor).round %>
     , focusedBorderColor = "#ab4642"
