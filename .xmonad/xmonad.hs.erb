@@ -89,7 +89,7 @@ manageHook' = composeOne
     , isDock                   -?> doWindowAction sendToJustAboveDesktop
     , isOSD                    -?> doCenterFloat
     , isDialog                 -?> doFloat
-    , transience
+    , transience               --- move to parent window
     , pure True                -?> insertPosition Below Newer
     ]
 
