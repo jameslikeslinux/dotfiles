@@ -82,12 +82,15 @@ doWindowAction action = do
     liftX $ action win
     idHook
 
-manageHook' = composeAll
-    [ className =? "ksmserver" --> doIgnore
-    , className =? "XLogo"     --> doFloat
-    , isDesktop                --> doWindowAction sendToBottom
-    , isDock                   --> doWindowAction sendToJustAboveDesktop
-    , isOSD                    --> doCenterFloat
+manageHook' = composeOne
+    [ className =? "ksmserver" -?> doIgnore
+    , className =? "XLogo"     -?> doFloat
+    , isDesktop                -?> doWindowAction sendToBottom
+    , isDock                   -?> doWindowAction sendToJustAboveDesktop
+    , isOSD                    -?> doCenterFloat
+    , isDialog                 -?> doFloat
+    , transience
+    , pure True                -?> insertPosition Below Newer
     ]
 
 workspaces' = ["web", "ops", "dev", "music", "mail", "chat", "seven", "eight", "nine"]
@@ -136,7 +139,7 @@ main = xmonad
     , startupHook        = startupHook'
     , logHook            = logHook'
     , layoutHook         = layoutHook'
-    , manageHook         = insertPosition Below Newer <+> manageHook'
+    , manageHook         = manageHook'
     , workspaces         = workspaces'
     , borderWidth        = <%= (3 * gui_scaling_factor).round %>
     , focusedBorderColor = "#ab4642"
