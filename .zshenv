@@ -27,6 +27,11 @@ fi
 export VISUAL=$EDITOR
 export PAGER="less"
 
+# Degrade shell on FreeBSD
+if [[ $OSTYPE = freebsd* && $TERM = *powerline ]]; then
+    export TERM=${TERM%-powerline}
+fi
+
 # Extra environmental variables
 export DISTCC_DIR='/var/tmp/portage/.distcc/'
 export TERMINFO="${HOME}/.terminfo"
