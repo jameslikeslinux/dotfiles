@@ -69,7 +69,7 @@ done
 generate_manifest() {
     # Create/update dotfiles from templates in git
     git ls-files '*.erb' | while read template; do
-        mode="$(stat -c '%a' "$template")"
+    mode="$(perl -e 'printf "%04o\n", (stat)[2] & 07777, $_ for @ARGV' "$template")"
         cat <<END
 file { '${BASEDIR}/${template%.erb}':
   mode    => '${mode}',
