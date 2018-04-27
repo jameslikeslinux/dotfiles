@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 export HOME=~
 BASEDIR="$(readlink -f "$(dirname "$0")")"
 exec "${BASEDIR}/bin/refresh-dotfiles" --no-fetch
