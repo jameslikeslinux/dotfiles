@@ -124,5 +124,5 @@ fi
 if [[ $branch == 'master' || $BASEDIR != $(readlink -f "$HOME") ]]; then
     "$PUPPET" module install puppetlabs-stdlib
     generate_manifest > "$TMPFILE"
-    RUBYLIB="${BASEDIR}/lib/ruby" "$PUPPET" apply --ssldir='${confdir}/ssl' "$TMPFILE"
+    RUBYLIB="${BASEDIR}/lib/ruby" "$PUPPET" apply "$TMPFILE"
 fi
