@@ -99,7 +99,7 @@ workspaces' = ["web", "ops", "dev", "music", "mail", "chat", "seven", "eight", "
 physicalScreens :: X [Maybe ScreenId]
 physicalScreens = withWindowSet $ \windowSet -> do
     let numScreens = length $ W.screens windowSet
-    mapM (\s -> getScreen (P s)) [0..numScreens]
+    mapM (\s -> getScreen def (P s)) [0..numScreens]
 
 -- If this function seems weird, it's because it's intended to be dual to
 --   getScreen :: PhysicalScreen -> X (Maybe ScreenId)
@@ -149,12 +149,12 @@ main = xmonad
     [ ("M-="           , sendMessage $ IncMasterN 1)
     , ("M-S-="         , sendMessage $ IncMasterN 1)
     , ("M--"           , sendMessage $ IncMasterN (-1))
-    , ("M-'"           , viewScreen 0)
-    , ("M-,"           , viewScreen 1)
-    , ("M-."           , viewScreen 1)
-    , ("M-S-'"         , sendToScreen 0)
-    , ("M-S-,"         , sendToScreen 1)
-    , ("M-S-."         , sendToScreen 1)
+    , ("M-'"           , viewScreen def 0)
+    , ("M-,"           , viewScreen def 1)
+    , ("M-."           , viewScreen def 1)
+    , ("M-S-'"         , sendToScreen def 0)
+    , ("M-S-,"         , sendToScreen def 1)
+    , ("M-S-."         , sendToScreen def 1)
     , ("M-f"           , sendMessage $ Toggle NBFULL)
     , ("M-S-f"         , sendMessage $ Toggle FULL)
     , ("M-r"           , sendMessage $ Toggle REFLECTX)
