@@ -3,8 +3,8 @@
 # Bitwarden CLI helper for X shortcuts
 #
 # Pass the name and ID of a password stored in Bitwarden and the script will
-# log in if necessary, then copy the password to the X clipboard, and provide
-# notifications along the way with libnotify.
+# log in if necessary, then type the password, and provide notifications along
+# the way with libnotify.
 #
 
 if [[ $# != 2 ]]; then
@@ -36,8 +36,8 @@ unlock_vault() {
 
 while true; do
     if bws_password_output="$(bws get password "$ID")"; then
-        print -n "$bws_password_output" | xsel --input --clipboard
-        notify "Password copied to clipboard."
+        xdotool - <<< "type --clearmodifiers ${bws_password_output}"
+        notify "Typed password."
         exit 0
     elif [[ $bws_password_output =~ 'Vault is locked.' ]]; then
         unlock_vault

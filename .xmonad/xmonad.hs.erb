@@ -25,6 +25,7 @@ import XMonad.Layout.ThreeColumns
 import XMonad.Util.EZConfig
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
+import XMonad.Util.Ungrab
 import XMonad.Util.WorkspaceCompare
 
 import System.Taffybar.Hooks.PagerHints
@@ -124,10 +125,10 @@ spawnRofi args = do
     cmd <- rofi
     spawn $ cmd ++ " " ++ args
 
-spawnBitwardenCopy :: String -> X ()
-spawnBitwardenCopy args = do
+spawnBitwardenType :: String -> X ()
+spawnBitwardenType args = do
     home <- liftIO getHomeDirectory
-    spawn $ home ++ "/bin/bw-copy " ++ args
+    spawn $ home ++ "/bin/bw-type " ++ args
 
 reflectWith :: X () -> X ()
 reflectWith swapFn = do
@@ -182,7 +183,7 @@ main = xmonad
     , ("M-o"           , reflectWith swapPrevScreen)
     , ("M-e"           , reflectWith swapNextScreen)
     , ("M-S-q"         , spawn "qdbus org.kde.ksmserver /KSMServer logout 1 0 1")
-  --, ("M-<Escape>"    , spawn "sleep 1; loginctl lock-session")
+    , ("M-<Escape>"    , unGrab >> spawn "loginctl lock-session")
     , ("M-<Space>"     , spawn "qdbus org.mpris.MediaPlayer2.google-play-music-desktop-player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
     , ("M-<Tab>"       , sendMessage NextLayout)
     , ("M-<Backspace>" , setLayout $ Layout layoutHook')
@@ -190,9 +191,9 @@ main = xmonad
     , ("M1-S-<Tab>"    , windows W.focusUp)
     , ("M-p"           , spawnRofi "-show drun")
     , ("M-w"           , spawnRofi "-show window")
-    , ("M1-S-a"        , spawnBitwardenCopy "jtl/admin 3523ac3d-3fa3-4fa3-9638-a91a00f9a9a8")
-    , ("M1-S-s"        , spawnBitwardenCopy "jtl/root 25d44246-0ed1-41e3-a0cc-a91a00f9a9a8")
-    , ("M1-S-u"        , spawnBitwardenCopy "UMD e2ddb2b1-6f1a-4ca6-b388-a91a00f9a9a8")
+    , ("M1-S-a"        , unGrab >> spawnBitwardenType "jtl/admin 3523ac3d-3fa3-4fa3-9638-a91a00f9a9a8" >> spawn "xdotool key alt+shift")
+    , ("M1-S-s"        , unGrab >> spawnBitwardenType "jtl/root 25d44246-0ed1-41e3-a0cc-a91a00f9a9a8" >> spawn "xdotool key alt+shift")
+    , ("M1-S-u"        , unGrab >> spawnBitwardenType "UMD e2ddb2b1-6f1a-4ca6-b388-a91a00f9a9a8" >> spawn "xdotool key alt+shift")
     ]
     `removeKeysP`
     [ "M-S-c"       -- close window
