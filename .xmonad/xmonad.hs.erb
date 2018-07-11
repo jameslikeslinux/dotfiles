@@ -184,6 +184,9 @@ main = xmonad
     , ("M1-S-<Tab>"    , windows W.focusUp)
     , ("M-p"           , spawnRofi "-show drun")
     , ("M-w"           , spawnRofi "-show window")
+    , ("M1-S-a"        , spawn "bw-copy jtl/admin 3523ac3d-3fa3-4fa3-9638-a91a00f9a9a8")
+    , ("M1-S-s"        , spawn "bw-copy jtl/root 25d44246-0ed1-41e3-a0cc-a91a00f9a9a8")
+    , ("M1-S-u"        , spawn "bw-copy UMD e2ddb2b1-6f1a-4ca6-b388-a91a00f9a9a8")
     ]
     `removeKeysP`
     [ "M-S-c"       -- close window

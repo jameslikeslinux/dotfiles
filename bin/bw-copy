@@ -1,0 +1,48 @@
+#!/bin/zsh
+#
+# Bitwarden CLI helper for X shortcuts
+#
+# Pass the name and ID of a password stored in Bitwarden and the script will
+# log in if necessary, then copy the password to the X clipboard, and provide
+# notifications along the way with libnotify.
+#
+
+if [[ $# != 2 ]]; then
+    echo "Usage: ${0} NAME ID" >&2
+    exit 1
+fi
+
+NAME="$1"
+ID="$2"
+
+notify() {
+    notify-send --icon=password-copy "$NAME" "$@"
+}
+
+unlock_vault() {
+    if password="$(ksshaskpass -- Bitwarden)"; then
+        if bw_unlock_output="$(bw unlock --raw <<< "$password" | sed '1d')"; then
+            systemctl --user set-environment BW_SESSION="$bw_unlock_output"
+            bws sync
+        else
+            notify "$bw_unlock_output"
+            [[ $bw_unlock_output == 'You are not logged in.' ]] && exit 1
+        fi
+    else
+        # Clicked the dialog cancel button
+        exit 0
+    fi
+}
+
+while true; do
+    if bws_password_output="$(bws get password "$ID")"; then
+        print -n "$bws_password_output" | xsel --input --clipboard
+        notify "Password copied to clipboard."
+        exit 0
+    elif [[ $bws_password_output =~ 'Vault is locked.' ]]; then
+        unlock_vault
+    else
+        notify "$bws_password_output"
+        exit 1
+    fi
+done
