@@ -36,10 +36,8 @@ unlock_vault() {
 
 while true; do
     if bws_password_output="$(bws get password "$ID")"; then
-        xdotool - <<XDOTOOL
-type --clearmodifiers ${bws_password_output}
-key Return
-XDOTOOL
+        xdotool - <<< "type --clearmodifiers ${bws_password_output}"
+        notify "Typed password."
         exit 0
     elif [[ $bws_password_output =~ 'Vault is locked.' ]]; then
         unlock_vault
