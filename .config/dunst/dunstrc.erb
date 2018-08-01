@@ -1,6 +1,7 @@
 <% require 'colorscheme'
 dark = ColorScheme.dark.colors_by_base
 gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
+text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1
 -%>
 [global]
 geometry = "<%= (300 * gui_scaling_factor).round %>x4+<%= (8 * gui_scaling_factor).round %>+<%= (28 * gui_scaling_factor).round %>"
@@ -11,7 +12,7 @@ separator_height = <%= (1 * gui_scaling_factor).round %>
 separator_color = foreground
 transparency = 10
 
-font = sans <%= (10 * gui_scaling_factor).round %>
+font = sans <%= (9 * text_scaling_factor).round %>
 markup = full
 format = "<b>%s</b>\n%b"
 word_wrap = true
