@@ -1,0 +1,27 @@
+<% require 'colorscheme'
+dark = ColorScheme.dark.colors_by_base -%>
+[global]
+geometry = "300x4+8+28"
+transparency = 10
+separator_height = 1
+padding = 4
+horizontal_padding = 8
+font = sans 10
+markup = full
+format = "<b>%s</b>\n%b"
+word_wrap = true
+icon_position = left
+max_icon_size = 48
+icon_path = /usr/share/icons/breeze-dark/actions/22:/usr/share/icons/breeze-dark/devices/22:/usr/share/icons/breeze-dark/status/22
+
+[urgency_low]
+background = "<%= dark[0x0D].shade.web %>"
+foreground = "<%= dark[0x06].web %>"
+
+[urgency_normal]
+background = "<%= dark[0x0B].shade.web %>"
+foreground = "<%= dark[0x06].web %>"
+
+[urgency_critical]
+background = "<%= dark[0x08].shade.web %>"
+foreground = "<%= dark[0x06].web %>"

@@ -65,6 +65,10 @@ class ColorScheme
     def rgb
       [r, g, b]
     end
+
+    def web
+      "##{hexr}#{hexg}#{hexb}"
+    end
   end
 
   # Map the base16 code to ansi number based on the number of available
