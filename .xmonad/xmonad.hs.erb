@@ -194,13 +194,14 @@ main = xmonad
     , ("M1-S-a"        , unGrab >> spawn "xdotool keyup alt+shift" >> spawnBitwardenType "jtl/admin 3523ac3d-3fa3-4fa3-9638-a91a00f9a9a8")
     , ("M1-S-s"        , unGrab >> spawn "xdotool keyup alt+shift" >> spawnBitwardenType "jtl/root 25d44246-0ed1-41e3-a0cc-a91a00f9a9a8")
     , ("M1-S-u"        , unGrab >> spawn "xdotool keyup alt+shift" >> spawnBitwardenType "UMD e2ddb2b1-6f1a-4ca6-b388-a91a00f9a9a8")
-    , ("M-S-d"         , spawn "pkill dunst && dunst")
+    , ("M-S-d"         , spawn "pkill dunst; exec dunst")
     ]
     `removeKeysP`
     [ "M-S-c"       -- close window
     , "M-S-<Space>" -- reset workspace to default layout
     , "M-S-<Tab>"   -- focus previous window
     , "M-S-/"       -- show help
+    , "M-S-p"       -- launch gmrun
     ]
 
 -- vim: filetype=haskell
