@@ -1,5 +1,5 @@
 <% require 'colorscheme'
-dark = ColorScheme.dark.colors_by_base -%>
+light = ColorScheme.light.colors_by_base -%>
 [global]
 geometry = "300x4+8+28"
 transparency = 10
@@ -15,13 +15,13 @@ max_icon_size = 48
 icon_path = /usr/share/icons/breeze-dark/actions/22:/usr/share/icons/breeze-dark/devices/22:/usr/share/icons/breeze-dark/status/22
 
 [urgency_low]
-background = "<%= dark[0x0D].web %>"
-foreground = "<%= dark[0x06].web %>"
+background = "<%= light[0x0D].tint.web %>"
+foreground = "<%= light[0x01].web %>"
 
 [urgency_normal]
-background = "<%= dark[0x0B].web %>"
-foreground = "<%= dark[0x06].web %>"
+background = "<%= light[0x0B].tint.web %>"
+foreground = "<%= light[0x01].web %>"
 
 [urgency_critical]
-background = "<%= dark[0x08].web %>"
-foreground = "<%= dark[0x06].web %>"
+background = "<%= light[0x08].tint.web %>"
+foreground = "<%= light[0x01].web %>"
