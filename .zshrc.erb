@@ -133,6 +133,9 @@ compdef s=sudo
 compdef t=tmux
 compdef glue=ssh
 
+alias sshj='ssh -J niagara.umd.edu'
+compdef sshj=ssh
+
 # Easy way to switch to project
 p() {
     cd "${HOME}/projects/${1}" && ls
