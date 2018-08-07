@@ -14,4 +14,4 @@ if (( ARGC == 0 )); then
     fi
 fi
 
-exec ssh -qt niagara.umd.edu "$@"
+exec ssh -qt stowe.umd.edu "$@"
