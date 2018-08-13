@@ -43,6 +43,17 @@ prompt_mine_segment() {
     [[ -n $bold ]] && print -n '%b'
 }
 
+prompt_mine_x() {
+    local old_display="$DISPLAY"
+
+    if [[ $TMUX ]]; then
+        eval "$(t show-environment -s DISPLAY 2>/dev/null)"
+        if [[ $old_display != $DISPLAY ]]; then
+            prompt_mine_segment ' X ' red base01 bold
+        fi
+    fi
+}
+
 prompt_mine_username() {
     if [[ ! $(print -P '%n') =~ $hide_users ]]; then
         prompt_mine_segment ' %n ' blue base01 bold
@@ -130,6 +141,7 @@ prompt_mine_end() {
 }
 
 prompt_mine_build_prompt() {
+    prompt_mine_x
     prompt_mine_username
     prompt_mine_hostinfo
     prompt_mine_cwd $uniq_cwd
