@@ -47,7 +47,7 @@ prompt_mine_x() {
     local old_display="$DISPLAY"
 
     if [[ $TMUX ]]; then
-        eval "$(t show-environment -s DISPLAY 2>/dev/null)"
+        eval "$(tmux show-environment -s DISPLAY 2>/dev/null)"
         if [[ $old_display != $DISPLAY ]]; then
             prompt_mine_segment ' X ' red base01 bold
         fi
