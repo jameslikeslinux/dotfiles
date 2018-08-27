@@ -38,11 +38,15 @@ set wildmode=longest,list
 set shiftwidth=4
 set expandtab
 
-" New-style source code uses two spaces for tabs
-autocmd FileType javascript,json,puppet,ruby,yaml setlocal shiftwidth=2
+augroup indentation
+    autocmd!
 
-" Makefiles must use hard tabs, but let them appear as four spaces
-autocmd FileType make setlocal tabstop=4 noexpandtab
+    " New-style source code uses two spaces for tabs
+    autocmd FileType javascript,json,puppet,ruby,yaml setlocal shiftwidth=2
+
+    " Makefiles must use hard tabs, but let them appear as four spaces
+    autocmd FileType make setlocal tabstop=4 noexpandtab
+augroup end
 
 " Create shortcuts to switch between indenting styles:
 " default 4-space indent
@@ -129,5 +133,12 @@ let g:ctrlp_map = '<C-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_show_hidden = 1
 
-" http://vim.wikia.com/wiki/Always_start_on_first_line_of_git_commit_message
-autocmd FileType gitcommit call setpos('.', [0, 1, 1, 0])
+augroup special_filetypes
+    autocmd!
+
+    " http://vim.wikia.com/wiki/Always_start_on_first_line_of_git_commit_message
+    autocmd FileType gitcommit call setpos('.', [0, 1, 1, 0])
+
+    " Make ruby syntax highlighting fast again
+    autocmd FileType ruby set regexpengine=1
+augroup end
