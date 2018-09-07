@@ -71,25 +71,31 @@ isDock         = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DOCK"
 isOSD          = isInProperty "_NET_WM_WINDOW_TYPE" "_KDE_NET_WM_WINDOW_TYPE_ON_SCREEN_DISPLAY"
 isNotification = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_NOTIFICATION"
 
-sendToBottom :: Window -> X ()
-sendToBottom window = withDisplay $ \display ->
-    io $ lowerWindow display window
+sendWindowToBottom :: Window -> X ()
+sendWindowToBottom window = withDisplay $ \display->
+    sendWindowsToBottom display [window]
 
-raiseWindow' :: Window -> X ()
-raiseWindow' window = withDisplay $ \display ->
-    io $ raiseWindow display window
+sendWindowsToBottom :: Display -> [Window] -> X ()
+sendWindowsToBottom display windows = mapM_ (io . lowerWindow display) windows
 
-allWindowsByType :: Query Bool -> X [Window]
-allWindowsByType query = withDisplay $ \display -> do
+raiseWindows :: Display -> [Window] -> X ()
+raiseWindows display windows = mapM_ (io . raiseWindow display) windows
+
+doActionWithWindowsByType :: Query Bool -> (Display -> [Window] -> X ()) -> X ()
+doActionWithWindowsByType query action = withDisplay $ \display -> do
     rootw <- asks theRoot
     (_, _, windows) <- io $ queryTree display rootw
-    filterM (runQuery query) windows
+    targetWindows <- filterM (runQuery query) windows
+    action display targetWindows
 
 sendToJustAboveDesktop :: Window -> X ()
-sendToJustAboveDesktop window = do
-    desktops <- allWindowsByType isDesktop
-    sendToBottom window
-    mapM_ sendToBottom desktops
+sendToJustAboveDesktop window = doActionWithWindowsByType isDesktop sendWindowsToBottom
+
+raiseAllNotifications :: X ()
+raiseAllNotifications = doActionWithWindowsByType isNotification raiseWindows
+
+raiseAllNotificationsHook :: ManageHook
+raiseAllNotificationsHook = liftX raiseAllNotifications >> idHook
 
 doWindowAction :: (Window -> X ()) -> ManageHook
 doWindowAction action = do
@@ -97,18 +103,10 @@ doWindowAction action = do
     liftX $ action win
     idHook
 
-raiseAllNotifications :: X ()
-raiseAllNotifications = do
-    notifications <- allWindowsByType isNotification
-    mapM_ raiseWindow' notifications
-
-raiseAllNotificationsHook :: ManageHook
-raiseAllNotificationsHook = liftX raiseAllNotifications >> idHook
-
 manageHook' = composeOne
     [ className =? "ksmserver" -?> doIgnore
     , className =? "XLogo"     -?> doFloat
-    , isDesktop                -?> doWindowAction sendToBottom
+    , isDesktop                -?> doWindowAction sendWindowToBottom
     , isDock                   -?> doWindowAction sendToJustAboveDesktop
     , isOSD                    -?> doCenterFloat
     , isDialog                 -?> doFloat
