@@ -41,7 +41,11 @@ startupHook' = do
     spawnOnce "compton"
     spawnOnce "dunst"
     spawnOnce "taffybar"
+<% if @facts['hostname'] == 'eagle' -%>
+    spawnOnce "qdbus org.kde.kded5 /modules/networkmanagement init && nmcli connection up umd-oitmr"
+<% else -%>
     spawnOnce "qdbus org.kde.kded5 /modules/networkmanagement init"
+<% end -%>
 
 logHook' = switchTopicHook >> historyHook >> workspaceHistoryHook
 
