@@ -7,6 +7,7 @@ import XMonad.Actions.CycleWS
 import XMonad.Actions.GroupNavigation
 import XMonad.Actions.Navigation2D
 import XMonad.Actions.PhysicalScreens
+import XMonad.Actions.TopicSpace
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.InsertPosition
@@ -32,6 +33,7 @@ import System.Taffybar.Hooks.PagerHints
 
 import Control.Monad
 import Data.List
+import Data.Map
 import System.Directory
 
 startupHook' = do
@@ -40,7 +42,7 @@ startupHook' = do
     spawnOnce "dunst"
     spawnOnce "taffybar"
 
-logHook' = historyHook >> workspaceHistoryHook
+logHook' = switchTopicHook >> historyHook >> workspaceHistoryHook
 
 layoutHook' = id
     . mkToggle (single NBFULL)
@@ -97,6 +99,34 @@ manageHook' = composeOne
     ]
 
 workspaces' = ["web", "ops", "dev", "music", "mail", "chat", "seven", "eight", "nine"]
+
+topicConfig :: TopicConfig
+topicConfig = def
+    { defaultTopicAction = \topic -> return ()
+    , topicActions = fromList $
+        [ ("web"   , spawn "firefox --new-window about:home"
+                  >> spawn "sleep 0.1; firefox twitter.com washingtonpost.com")
+        , ("ops"   , (ask >>= spawn . terminal . config))
+        , ("dev"   , (ask >>= spawn . terminal . config))
+        , ("music" , spawn "google-play-music-desktop-player")
+        , ("mail"  , spawn "firefox --new-window https://mail.google.com/mail/u/0/#inbox"
+                  >> spawn "sleep 0.1; firefox --new-window https://mail.google.com/mail/u/1/#inbox")
+        , ("chat"  , spawn "firefox --new-window teams.webex.com")
+        ]
+    }
+
+switchTopicHook :: X ()
+switchTopicHook = do
+    currentWorkspace <- gets (W.tag . W.workspace . W.current . windowset)
+    history <- workspaceHistory
+    case history of
+        (lastWorkspace:_) -> when (currentWorkspace /= lastWorkspace) $ switchTopic' currentWorkspace
+        otherwise         -> switchTopic' currentWorkspace
+
+switchTopic' :: Topic -> X ()
+switchTopic' topic = do
+    wins <- gets (W.integrate' . W.stack . W.workspace . W.current . windowset)
+    when (Data.List.null wins) $ topicAction topicConfig topic
 
 physicalScreens :: X [Maybe ScreenId]
 physicalScreens = withWindowSet $ \windowSet -> do
