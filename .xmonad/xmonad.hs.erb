@@ -41,6 +41,7 @@ startupHook' = do
     spawnOnce "compton"
     spawnOnce "dunst"
     spawnOnce "taffybar"
+    spawnOnce "qdbus org.kde.kded5 /modules/networkmanagement init"
 
 logHook' = switchTopicHook >> historyHook >> workspaceHistoryHook
 
