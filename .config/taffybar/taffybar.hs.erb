@@ -8,14 +8,18 @@ import Data.Int
 import Data.List
 import Data.List.Utils (replace)
 import qualified Data.Map as M
+import qualified Data.Text as T
 import System.Taffybar
-import System.Taffybar.CommandRunner
-import System.Taffybar.LayoutSwitcher
-import System.Taffybar.Pager
-import System.Taffybar.SimpleClock
-import System.Taffybar.WindowSwitcher
-import System.Taffybar.WorkspaceHUD
-import System.Information.EWMHDesktopInfo
+import System.Taffybar.SimpleConfig
+import System.Taffybar.Widget.Layout
+import System.Taffybar.Widget.SimpleClock
+import System.Taffybar.Widget.Util
+import System.Taffybar.Widget.Windows
+import System.Taffybar.Widget.Workspaces
+import System.Taffybar.Information.EWMHDesktopInfo
+
+wrap :: String -> String -> String -> String
+wrap start end text = start ++ text ++ end
 
 fontAwesomeMarkup :: String -> String
 fontAwesomeMarkup = wrap "<span font='FontAwesome'>" "</span>"
@@ -49,15 +53,15 @@ workspaceDecorator fg bg bold s =
       | bg == "#383838"      = colorize "#000000" "#383838" "\xe0b1"
       | otherwise            = colorize bg "#383838" "\xe0b0"
 
-workspaceHUDLabelSetter :: Workspace -> HUDIO String
-workspaceHUDLabelSetter workspace = do
+workspacesLabelSetter :: Workspace -> WorkspacesIO String
+workspacesLabelSetter workspace = do
     workspacesRef <- asks workspacesVar
     workspaces    <- lift $ readMVar workspacesRef
     let nonEmptyWorkspaces  = filter (\(_, w) -> workspaceState w /= Empty) $ M.toList workspaces
     let (lastWsIdx, _)      = last nonEmptyWorkspaces
     let wsIdx@(WSIdx wsNum) = workspaceIdx workspace
     let endMarker           = if wsIdx == lastWsIdx then "\x00a0" else ""
-    let name                = escape $ (show $ wsNum + 1) ++ ": " ++ workspaceName workspace ++ endMarker
+    let name                = (show $ wsNum + 1) ++ ": " ++ workspaceName workspace ++ endMarker
     return $ case workspaceState workspace of
         Active  -> workspaceDecorator "#282828" "#7cafc2" True name
         Visible -> workspaceDecorator "#d8d8d8" "#383838" False name
@@ -65,54 +69,45 @@ workspaceHUDLabelSetter workspace = do
         Urgent  -> workspaceDecorator "#282828" "#f7ca88" False name
         Empty   -> name
 
-layoutRename :: String -> String
-layoutRename = id
-{-
-layoutRename s = replaceAll s $
-    [ ("3/5 Tall"                 , "[  ]=")
-    , ("1/2 Tall"                 , "[ ]==")
-    , ("ReflectX 3/5 Tall"        , "=[  ]")
-    , ("ReflectX 1/2 Tall"        , "==[ ]")
-    , ("Mirror 3/5 Tall"          , "[↻↻]=")
-    , ("Mirror 1/2 Tall"          , "[↻]==")
-    , ("ReflectX Mirror 3/5 Tall" , "=[↺↺]")
-    , ("ReflectX Mirror 1/2 Tall" , "==[↺]")
-    , ("Full"                     , "[ful]")
-    ]
--}
-
-pagerConfig :: PagerConfig
-pagerConfig = defaultPagerConfig
-    { activeLayout = colorize "#d8d8d8" "#383838" . wrap " " (" " ++ (colorize "#383838" "#000000" "\xe0b0")) . layoutRename
-    , activeWindow = colorize "#d8d8d8" "#000000" . wrap " " " " . escape . shorten 100
-    }
-
-workspaceHUDConfig :: WorkspaceHUDConfig
-workspaceHUDConfig = defaultWorkspaceHUDConfig
+workspacesConfig :: WorkspacesConfig
+workspacesConfig = defaultWorkspacesConfig
     { widgetBuilder        = buildButtonController buildLabelController
-    , minWSWidgetSize      = Nothing
-    , labelSetter          = workspaceHUDLabelSetter
+    , labelSetter          = workspacesLabelSetter
     , showWorkspaceFn      = hideEmpty
     , urgentWorkspaceState = True
     }
 
-taffybarConfig :: Pager -> TaffybarConfig
-taffybarConfig pager = defaultTaffybarConfig
-    { getMonitorConfig = usePrimaryMonitor
-    , startWidgets     = [workspaceHUD, layoutSwitcher, windowSwitcher]
-    , endWidgets       = [clock]
-    , barHeight        = <%= (20 * gui_scaling_factor).round %>
-    , widgetSpacing    = 0
+layoutConfig :: LayoutConfig
+layoutConfig = defaultLayoutConfig
+    { formatLayout = layoutLabeler }
+  where
+    layoutLabeler label = do
+      return $ T.pack . colorize "#d8d8d8" "#383838" . wrap " " (" " ++ (colorize "#383838" "#000000" "\xe0b0")) $ T.unpack label
+
+windowsConfig :: WindowsConfig
+windowsConfig = defaultWindowsConfig
+    { getActiveLabel = activeWindowLabeler }
+  where
+    activeWindowLabeler = do
+      label <- truncatedGetActiveLabel 100
+      return $ T.pack . colorize "#d8d8d8" "#000000" . wrap " " " " $ T.unpack label
+
+taffybarConfig :: SimpleTaffyConfig
+taffybarConfig = defaultSimpleTaffyConfig
+    { monitorsAction = return [0]
+    , startWidgets   = [workspaces, layout, windows]
+    , endWidgets     = [clock]
+    , barHeight      = <%= (20 * gui_scaling_factor).round %>
+    , widgetSpacing  = 0
     }
   where
-    workspaceHUD   = buildWorkspaceHUD workspaceHUDConfig pager
-    layoutSwitcher = layoutSwitcherNew pager
-    windowSwitcher = windowSwitcherNew pager
-    clock          = textClockNew Nothing "%a %b %_d %r " 1
+    workspaces = workspacesNew Main.workspacesConfig
+    layout     = layoutNew layoutConfig
+    windows    = windowsNew windowsConfig
+    clock      = textClockNew Nothing "%a %b %_d %r " 1
 
 main :: IO ()
 main = do
-    pager <- pagerNew pagerConfig
-    defaultTaffybar $ taffybarConfig pager
+    simpleTaffybar $ taffybarConfig
 
 -- vim: filetype=haskell

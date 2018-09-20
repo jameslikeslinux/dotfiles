@@ -1,0 +1,14 @@
+.taffy-window * {
+    all: unset;
+    font-family: monospace;
+    font-size: 9pt;
+    color: #d8d8d8;
+}
+
+.taffy-box {
+    background-color: black;
+}
+
+.taffy-window menuitem:hover {
+    background-color: #282828;
+}
