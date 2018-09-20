@@ -55,7 +55,7 @@ layoutHook' = id
     . mkToggle (single FULL)
     . mkToggle (single REFLECTX)
     . mkToggle (single MIRROR)
-    . renamed [CutWordsLeft 2] . spacingWithEdge <%= (8 * gui_scaling_factor).round %>
+    . renamed [CutWordsLeft 1] . spacingWithEdge <%= (8 * gui_scaling_factor).round %>
     . renamed [CutWordsLeft 1] . maximizeWithPadding <%= (16 * gui_scaling_factor).round %>
     . onWorkspace "mail" layoutHalfTall
     $ layoutGoldenTall ||| layoutHalfTall
