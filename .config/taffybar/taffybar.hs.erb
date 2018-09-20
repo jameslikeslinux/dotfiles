@@ -82,7 +82,7 @@ layoutConfig = defaultLayoutConfig
     { formatLayout = layoutLabeler }
   where
     layoutLabeler label = do
-      return $ T.pack . colorize "#d8d8d8" "#383838" . wrap " " (" " ++ (colorize "#383838" "#000000" "\xe0b0")) $ T.unpack label
+      return . T.pack . colorize "#d8d8d8" "#383838" . wrap " " (" " ++ (colorize "#383838" "#000000" "\xe0b0")) . T.unpack $ label
 
 windowsConfig :: WindowsConfig
 windowsConfig = defaultWindowsConfig
@@ -90,7 +90,7 @@ windowsConfig = defaultWindowsConfig
   where
     activeWindowLabeler = do
       label <- truncatedGetActiveLabel 100
-      return $ T.pack . colorize "#d8d8d8" "#000000" . wrap " " " " $ T.unpack label
+      return . T.pack . colorize "#d8d8d8" "#000000" . wrap " " " " . T.unpack $ label
 
 taffybarConfig :: SimpleTaffyConfig
 taffybarConfig = defaultSimpleTaffyConfig
@@ -107,7 +107,6 @@ taffybarConfig = defaultSimpleTaffyConfig
     clock      = textClockNew Nothing "%a %b %_d %r " 1
 
 main :: IO ()
-main = do
-    simpleTaffybar $ taffybarConfig
+main = simpleTaffybar taffybarConfig
 
 -- vim: filetype=haskell
