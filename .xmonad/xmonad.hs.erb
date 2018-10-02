@@ -171,11 +171,6 @@ spawnRofi args = do
     cmd <- rofi
     spawn $ cmd ++ " " ++ args
 
-bitwardenType :: String -> X String
-bitwardenType args = do
-    home <- liftIO getHomeDirectory
-    return $ home ++ "/bin/bw-type " ++ args
-
 reflectWith :: X () -> X ()
 reflectWith swapFn = do
     sendMessage $ Toggle REFLECTX
@@ -239,9 +234,9 @@ main = xmonad
     , ("M1-S-<Tab>"      , windows W.focusUp)
     , ("M-p"             , spawnRofi "-show drun")
     , ("M-w"             , spawnRofi "-show window")
-    , ("M1-S-a"          , unGrab >> bitwardenType "jtl/admin 3523ac3d-3fa3-4fa3-9638-a91a00f9a9a8" >>= \cmd -> spawn $ "xdotool keyup alt+shift && " ++ cmd)
-    , ("M1-S-s"          , unGrab >> bitwardenType "jtl/root 25d44246-0ed1-41e3-a0cc-a91a00f9a9a8" >>= \cmd -> spawn $ "xdotool keyup alt+shift && " ++ cmd)
-    , ("M1-S-u"          , unGrab >> bitwardenType "UMD e2ddb2b1-6f1a-4ca6-b388-a91a00f9a9a8" >>= \cmd -> spawn $ "xdotool keyup alt+shift && " ++ cmd)
+    , ("M1-S-a"          , unGrab >> spawn "xdotool keyup alt+shift && ~/bin/bw-type jtl/admin 3523ac3d-3fa3-4fa3-9638-a91a00f9a9a8")
+    , ("M1-S-s"          , unGrab >> spawn "xdotool keyup alt+shift && ~/bin/bw-type jtl/root 25d44246-0ed1-41e3-a0cc-a91a00f9a9a8")
+    , ("M1-S-u"          , unGrab >> spawn "xdotool keyup alt+shift && ~/bin/bw-type UMD e2ddb2b1-6f1a-4ca6-b388-a91a00f9a9a8")
     , ("M-S-d"           , spawn "pkill dunst; exec dunst")
     , ("M-S-<Backspace>" , spawn "xset dpms force off && xset dpms force on")
     ]
