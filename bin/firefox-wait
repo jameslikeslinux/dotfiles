@@ -1,0 +1,23 @@
+#!/usr/bin/env zsh
+#
+# firefox-wait
+#
+# A wrapper around the 'firefox' command to wait until the state of Firefox
+# windows changes after executing an action.
+#
+
+firefox_windows() {
+    xwininfo -root -children | grep '("Navigator" "Firefox")'
+}
+
+windows_old="$(firefox_windows)"
+
+firefox "$@"
+
+while
+    windows_new="$(firefox_windows)"
+    [[ $windows_new == $windows_old ]]
+do
+    windows_old="$windows_new"
+    sleep 0.1
+done

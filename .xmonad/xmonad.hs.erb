@@ -122,14 +122,12 @@ topicConfig :: TopicConfig
 topicConfig = def
     { defaultTopicAction = \topic -> return ()
     , topicActions = fromList $
-        [ ("web"   , spawn "firefox --new-window about:home"
-                  >> spawn "sleep 0.1; firefox twitter.com washingtonpost.com")
+        [ ("web"   , spawn "firefox-wait --new-window about:home && firefox-wait twitter.com washingtonpost.com")
         , ("ops"   , (ask >>= spawn . terminal . config))
         , ("dev"   , (ask >>= spawn . terminal . config))
         , ("music" , spawn "google-play-music-desktop-player")
-        , ("mail"  , spawn "firefox --new-window https://mail.google.com/mail/u/0/#inbox"
-                  >> spawn "sleep 0.1; firefox --new-window https://mail.google.com/mail/u/1/#inbox")
-        , ("chat"  , spawn "firefox --new-window teams.webex.com")
+        , ("mail"  , spawn "firefox-wait --new-window https://mail.google.com/mail/u/0/#inbox && firefox-wait --new-window https://mail.google.com/mail/u/1/#inbox")
+        , ("chat"  , spawn "firefox-wait --new-window teams.webex.com")
         ]
     }
 
