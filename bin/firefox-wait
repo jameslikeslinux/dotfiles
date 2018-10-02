@@ -12,11 +12,11 @@ firefox_windows() {
 
 windows_old="$(firefox_windows)"
 
-firefox "$@"
+firefox "$@" &
 
 while
     windows_new="$(firefox_windows)"
-    [[ $windows_new == $windows_old && $((i++)) < 20 ]]
+    [[ $windows_new == $windows_old ]]
 do
     windows_old="$windows_new"
     sleep 0.1
