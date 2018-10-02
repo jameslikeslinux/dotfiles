@@ -16,7 +16,7 @@ firefox "$@"
 
 while
     windows_new="$(firefox_windows)"
-    [[ $windows_new == $windows_old ]]
+    [[ $windows_new == $windows_old && $((i++)) < 20 ]]
 do
     windows_old="$windows_new"
     sleep 0.1
