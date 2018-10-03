@@ -21,7 +21,7 @@ notify() {
 
 unlock_vault() {
     if password="$(ksshaskpass -- Bitwarden)"; then
-        if bw_unlock_output="$(bw unlock --raw <<< "$password" | sed '1d')"; then
+        if bw_unlock_output="$(bw unlock --raw <<< "$password")"; then
             systemctl --user set-environment BW_SESSION="$bw_unlock_output"
             bws sync
         else
