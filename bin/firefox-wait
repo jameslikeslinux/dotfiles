@@ -12,7 +12,11 @@ firefox_windows() {
 
 windows_old="$(firefox_windows)"
 
-firefox "$@" &
+if [[ $windows_old ]]; then
+    firefox "$@"
+else
+    firefox --new-instance "$@" &
+fi
 
 while
     windows_new="$(firefox_windows)"
