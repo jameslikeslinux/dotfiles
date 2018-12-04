@@ -7,7 +7,7 @@ if [[ -e /etc/glue/restrict ]]; then
     source ~/.bashrc
 else
     typeset -U path
-    for dir in /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin $HOME/bin $HOME/local/bin; do
+    for dir in /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin /usr/glue/bin /usr/glue/sbin $HOME/bin $HOME/local/bin; do
         [[ -e $dir ]] && path=($dir $path)
     done
 fi
