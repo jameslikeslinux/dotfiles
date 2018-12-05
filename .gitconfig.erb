@@ -1,9 +1,9 @@
 [user]
 	name = James T. Lee
-<% if @fqdn =~ /\.umd\.edu$/ -%>
-	email = jtl@umd.edu
-<% else -%>
+<% if @facts['nest'] -%>
 	email = james@james.tl
+<% else -%>
+	email = jtl@umd.edu
 <% end -%>
 [color]
 	ui = auto
