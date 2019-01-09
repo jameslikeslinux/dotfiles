@@ -50,8 +50,7 @@ workspaceDecorator fg bg bold s =
       | otherwise = id
     endSep
       | '\x00a0' `notElem` s = ""
-      | bg == "#383838"      = colorize "#000000" "#383838" "\xe0b1"
-      | otherwise            = colorize bg "#383838" "\xe0b0"
+      | otherwise            = colorize bg "#000000" "\xe0b0"
 
 workspacesLabelSetter :: Workspace -> WorkspacesIO String
 workspacesLabelSetter workspace = do
@@ -95,7 +94,7 @@ windowsConfig = defaultWindowsConfig
 taffybarConfig :: SimpleTaffyConfig
 taffybarConfig = defaultSimpleTaffyConfig
     { monitorsAction = return [0]
-    , startWidgets   = [workspaces, layout, windows]
+    , startWidgets   = [workspaces, windows]
     , endWidgets     = [clock]
     , barHeight      = <%= (20 * gui_scaling_factor).round %>
     , widgetSpacing  = 0
