@@ -1,6 +1,7 @@
 <% require 'colorscheme'
 dark  = ColorScheme.dark
 light = ColorScheme.light
+gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
 light.terminal.each do |c| -%>
 *color<%= c.ansi %>: <%= c.x11 %>
 <% end -%>
@@ -16,6 +17,7 @@ URxvt.background: <%= dark.background.x11 %>
 URxvt.borderColor: <%= dark.background.x11 %>
 URxvt.cursorColor: <%= dark.cursor.x11 %>
 URxvt.font: xft:Hack:size=9,xft:DejaVu Sans Mono
+URxvt.internalBorder: <%= (2 * gui_scaling_factor).round %>
 URxvt.perl-ext-common: font-size,new-window,osc-xterm-clipboard
 URxvt.keysym.C-M-equal: perl:font-size:increase
 URxvt.keysym.C-M-plus: perl:font-size:increase
