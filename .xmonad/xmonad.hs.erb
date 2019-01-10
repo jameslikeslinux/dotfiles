@@ -1,4 +1,7 @@
-<% gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1 -%>
+<% require 'colorscheme'
+dark = ColorScheme.dark.colors_by_base
+gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
+-%>
 import XMonad
 import XMonad.Core
 import qualified XMonad.StackSet as W
@@ -191,8 +194,8 @@ main = xmonad
     , manageHook         = manageHook'
     , workspaces         = workspaces'
     , borderWidth        = <%= (3 * gui_scaling_factor).round %>
-    , focusedBorderColor = "#ab4642"
-    , normalBorderColor  = "#b8b8b8"
+    , focusedBorderColor = "<%= dark[0x08].web %>"
+    , normalBorderColor  = "<%= dark[0x04].web %>"
     }
     `additionalKeysP`
     [ ("M-="             , sendMessage $ IncMasterN 1)
