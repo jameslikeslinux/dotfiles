@@ -1,0 +1,65 @@
+<% require 'colorscheme'
+dark = ColorScheme.dark.colors_by_base
+gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
+-%>
+* {
+    font: "monospace 9";
+    text-color: <%= dark[0x05].web %>;
+    background-color: rgba(0, 0, 0, 0);
+    spacing: 0;
+}
+
+#window {
+    background-color: rgba(<%= dark[0x00].rgb.join(', ') %>, 85%);
+    border: <%= (3 * gui_scaling_factor).round %>px;
+    border-color: <%= dark[0x04].web %>;
+    padding: <%= (2 * gui_scaling_factor).round %>px;
+}
+
+#listview {
+    scrollbar: true;
+}
+
+#scrollbar {
+    handle-color: <%= dark[0x04].web %>;
+    handle-width: 1ch;
+}
+
+#element selected {
+    background-color: <%= dark[0x02].web %>;
+}
+
+#element active {
+    text-color: <%= dark[0x0D].web %>;
+}
+
+#element selected.active {
+    text-color: <%= dark[0x0D].web %>;
+}
+
+#element urgent {
+    text-color: <%= dark[0x0A].web %>;
+}
+
+#element selected.urgent {
+    text-color: <%= dark[0x0A].web %>;
+}
+
+#inputbar {
+    children: [prompt, textbox-prompt-colon, entry, case-indicator];
+}
+
+#prompt {
+    font: "monospace bold 9";
+    text-color: <%= dark[0x01].web %>;
+    background-color: <%= dark[0x0B].web %>;
+    padding: 0 1ch 0 1ch;
+}
+
+#textbox-prompt-colon {
+    text-color: <%= dark[0x0B].web %>;
+    expand: false;
+    str: " ";
+}
+
+/* vim: filetype=css
