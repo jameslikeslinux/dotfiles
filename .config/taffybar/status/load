@@ -2,12 +2,7 @@
 
 source "$(dirname "$0")/lib.zsh"
 
-if get_state > /dev/null; then
-    sleep 1
-fi
-
+get_state > /dev/null && sleep 1
 read one five fifteen rest < /proc/loadavg
-
 first_segment "$(fontawesome '') $(format_number "$one") $(format_number "$five") $(format_number "$fifteen")"
-
 set_state 'running'
