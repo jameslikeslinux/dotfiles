@@ -2,12 +2,25 @@
 
 source "$(dirname "$0")/lib.zsh"
 
-if get_state > /dev/null; then
-    sleep 1
-fi
-
+ifstat_start="$(< /proc/net/dev)"
+get_state > /dev/null && sleep 1
+ifstat_end="$(< /proc/net/dev)"
 nm_status="$(nmcli -terse device status)"
 head -1 <<< "$nm_status" | IFS=: read device type state connection rest
+
+rx_tx_bytes() {
+    local ifstat="$1"
+    awk '/'"$device"':/ { print $2, $10 }' <<< "$ifstat"
+}
+
+rate() {
+    local rx_bytes_start tx_bytes_start tx_bytes_end rx_bytes_end rx_bytes tx_bytes
+    rx_tx_bytes "$ifstat_start" | read rx_bytes_start tx_bytes_start
+    rx_tx_bytes "$ifstat_end" | read rx_bytes_end tx_bytes_end
+    rx_bytes=$((rx_bytes_end - rx_bytes_start))
+    tx_bytes=$((tx_bytes_end - tx_bytes_start))
+    print "$(format_number $((rx_bytes / 1024.0 / 1024.0 * 8)))↓ $(format_number $((tx_bytes / 1024.0 / 1024.0 * 8)))↑"
+}
 
 case "$type" in
     'wifi')
@@ -26,11 +39,11 @@ esac
 case "$type $state" in
     'wifi connected')
         signal="$(iw dev "$device" link | awk '/signal:/ { print $2, $3 }')"
-        output="${icon} ${signal} rate"
+        output="${icon} ${signal} $(rate)"
         ;;
 
     *' connected')
-        output="${icon} rate"
+        output="${icon} $(rate)"
         ;;
 
     *' connecting'*)
