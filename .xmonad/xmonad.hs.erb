@@ -1,6 +1,7 @@
 <% require 'colorscheme'
 dark = ColorScheme.dark.colors_by_base
 gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
+text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1
 -%>
 import XMonad
 import XMonad.Core
@@ -58,8 +59,9 @@ layoutHook' = id
     . mkToggle (single FULL)
     . mkToggle (single REFLECTX)
     . mkToggle (single MIRROR)
-    . renamed [CutWordsLeft 1] . spacingWithEdge <%= (8 * gui_scaling_factor).round %>
-    . renamed [CutWordsLeft 1] . maximizeWithPadding <%= (16 * gui_scaling_factor).round %>
+    -- Window padding is roughly based on the *text* height of taffybar
+    . renamed [CutWordsLeft 1] . spacingWithEdge <%= (7 * text_scaling_factor).round %>
+    . renamed [CutWordsLeft 1] . maximizeWithPadding <%= (14 * text_scaling_factor).round %>
     . onWorkspace "mail" layoutHalfTall
     $ layoutGoldenTall ||| layoutHalfTall
   where
