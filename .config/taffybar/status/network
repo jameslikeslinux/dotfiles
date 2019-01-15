@@ -29,12 +29,16 @@ case "$type $state" in
         output="${icon} ${signal} rate"
         ;;
 
-    *'connected')
+    *' connected')
         output="${icon} rate"
         ;;
 
-    *'connecting'*)
+    *' connecting'*)
         output="${icon} ..."
+        ;;
+
+    *' disconnected')
+        output="${icon}"
         ;;
 
     *)
