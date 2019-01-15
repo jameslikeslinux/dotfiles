@@ -23,7 +23,7 @@ colorize() {
 
 fontawesome() {
     local glyph="$1"
-    echo -n "<span font='FontAwesome 5 Free Solid 8'>${glyph}</span>"
+    echo -n "<span font='FontAwesome 5 Free Solid'>${glyph}</span>"
 }
 
 first_segment() {
