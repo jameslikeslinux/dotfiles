@@ -9,20 +9,26 @@ import Data.List
 import Data.List.Utils (replace)
 import qualified Data.Map as M
 import qualified Data.Text as T
+import qualified GI.Gtk as Gtk
+import qualified GI.Gdk as Gdk
+import System.Directory
 import System.Taffybar
+import System.Taffybar.Context (TaffyIO)
 import System.Taffybar.SimpleConfig
+import System.Taffybar.Widget.CommandRunner
 import System.Taffybar.Widget.Layout
 import System.Taffybar.Widget.SimpleClock
 import System.Taffybar.Widget.Util
 import System.Taffybar.Widget.Windows
 import System.Taffybar.Widget.Workspaces
 import System.Taffybar.Information.EWMHDesktopInfo
+import System.Process
 
 wrap :: String -> String -> String -> String
 wrap start end text = start ++ text ++ end
 
 fontAwesomeMarkup :: String -> String
-fontAwesomeMarkup = wrap "<span font='FontAwesome'>" "</span>"
+fontAwesomeMarkup = wrap "<span font='FontAwesome 5 Free Solid'>" "</span>"
 
 replaceAll :: String -> [(String, String)] -> String
 replaceAll s transformations =
@@ -31,7 +37,7 @@ replaceAll s transformations =
 workspaceRename :: String -> String
 workspaceRename s = replaceAll s $
     [ ("\x00a0" , "")
-    , ("web"    , fontAwesomeMarkup "\xf269") -- fa-firefax
+    , ("web"    , fontAwesomeMarkup "\xf269") -- fa-firefox
     , ("dev"    , fontAwesomeMarkup "\xf121") -- fa-code
     , ("ops"    , fontAwesomeMarkup "\xf120") -- fa-terminal
     , ("music"  , fontAwesomeMarkup "\xf001") -- fa-music
@@ -91,11 +97,22 @@ windowsConfig = defaultWindowsConfig
       label <- truncatedGetActiveLabel 100
       return . T.pack . colorize "#d8d8d8" "#000000" . wrap " " " " . T.unpack $ label
 
+statusWidget :: String -> TaffyIO Gtk.Widget
+statusWidget cmd = do
+    dataDir <- liftIO $ getXdgDirectory XdgConfig "taffybar"
+    widget <- commandRunnerNew 0 (dataDir ++ "/status/" ++ cmd) [] $ T.pack ""
+    ebox <- Gtk.eventBoxNew
+    Gtk.containerAdd ebox widget
+    Gtk.eventBoxSetVisibleWindow ebox False
+    Gtk.onWidgetButtonPressEvent ebox $ onClick [Gdk.EventTypeButtonPress] (spawnCommand "xlogo")
+    Gtk.widgetShowAll ebox
+    Gtk.toWidget ebox
+
 taffybarConfig :: SimpleTaffyConfig
 taffybarConfig = defaultSimpleTaffyConfig
     { monitorsAction = return [0]
     , startWidgets   = [workspaces, windows]
-    , endWidgets     = [clock]
+    , endWidgets     = [clock, diskStatus, loadStatus]
     , barHeight      = <%= (20 * gui_scaling_factor).round %>
     , widgetSpacing  = 0
     }
@@ -103,7 +120,9 @@ taffybarConfig = defaultSimpleTaffyConfig
     workspaces = workspacesNew Main.workspacesConfig
     layout     = layoutNew layoutConfig
     windows    = windowsNew windowsConfig
-    clock      = textClockNew Nothing "%a %b %_d %r " 1
+    clock      = textClockNew Nothing ((colorize "#383838" "#282828" "\xe0b2") ++ (colorize "#d8d8d8" "#383838" " %a %b %_d %r ")) 1
+    diskStatus = statusWidget "disk"
+    loadStatus = statusWidget "load"
 
 main :: IO ()
 main = simpleTaffybar taffybarConfig

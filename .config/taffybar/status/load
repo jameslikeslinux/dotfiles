@@ -1,0 +1,13 @@
+#!/usr/bin/env zsh
+
+source "$(dirname "$0")/lib.zsh"
+
+if state="$(get_state)"; then
+    sleep 1
+fi
+
+read one five fifteen rest < /proc/loadavg
+
+first_segment "$(fontawesome '') $(format_number "$one") $(format_number "$five") $(format_number "$fifteen")"
+
+set_state 'running'
