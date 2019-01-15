@@ -1,12 +1,18 @@
 #!/usr/bin/env zsh
 
-source "$(dirname "$0")/lib.zsh"
+source "$(dirname "$0")/lib.zsh" "$0"
 
 ifstat_start="$(< /proc/net/dev)"
-get_state > /dev/null && sleep 1
+
+if get_state | read count signal; then
+    sleep 1
+else
+    count=1
+fi
+
 ifstat_end="$(< /proc/net/dev)"
 nm_status="$(nmcli -terse device status)"
-head -1 <<< "$nm_status" | IFS=: read device type state connection rest
+head -1 <<< "$nm_status" | IFS=: read device type devstate connection rest
 
 rx_tx_bytes() {
     local ifstat="$1"
@@ -36,25 +42,33 @@ case "$type" in
         ;;
 esac
 
-case "$type $state" in
+case "$type $devstate" in
     'wifi connected')
-        signal="$(iw dev "$device" link | awk '/signal:/ { print $2 $3 }')"
+        if (( --count == 0 )); then
+            signal="$(iw dev "$device" link | awk '/signal:/ { print $2 $3 }')"
+            count=5
+        fi
+
         output="${icon} ${signal} $(rate)"
         ;;
 
     *' connected')
+        count=1
         output="${icon} $(rate)"
         ;;
 
     *' connecting'*)
+        count=1
         output="${icon} ..."
         ;;
 
     *' disconnected')
+        count=1
         output="${icon}"
         ;;
 
     *)
+        count=1
         ;;
 esac
 
@@ -62,4 +76,4 @@ if [[ $output != '' ]]; then
     segment "$output"
 fi
 
-set_state 'running'
+set_state "${count} ${signal}"

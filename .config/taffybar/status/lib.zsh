@@ -1,4 +1,4 @@
-STATUS_NAME="$(basename "$0" | tr 'a-z' 'A-Z')"
+STATUS_NAME="$(basename "$1" | tr 'a-z' 'A-Z')"
 TAFFYBAR_NAME='taffybar-linux-x86_64.real'
 STATE_NAME="_STATUS_${STATUS_NAME}_STATE"
 
