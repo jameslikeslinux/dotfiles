@@ -112,7 +112,7 @@ taffybarConfig :: SimpleTaffyConfig
 taffybarConfig = defaultSimpleTaffyConfig
     { monitorsAction = return [0]
     , startWidgets   = [workspaces, windows]
-    , endWidgets     = [clock, networkStatus, diskStatus, loadStatus]
+    , endWidgets     = [clock, networkStatus, loadStatus]
     , barHeight      = <%= (18 * text_scaling_factor).round %>
     , widgetSpacing  = 0
     }
