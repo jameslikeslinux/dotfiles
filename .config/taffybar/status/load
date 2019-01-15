@@ -3,7 +3,6 @@
 source "$(dirname "$0")/lib.zsh" "$0"
 
 get_state > /dev/null && sleep 5
-read one five fifteen rest < /proc/loadavg
-#first_segment "$(fontawesome '') $(format_number "$one") $(format_number "$five") $(format_number "$fifteen")"
-first_segment "$(fontawesome '') $(format_number "$one")"
-set_state 'running'
+read load rest < /proc/loadavg
+first_segment "$(fontawesome '') ${load}"
+set_state 1

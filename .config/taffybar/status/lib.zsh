@@ -33,14 +33,3 @@ first_segment() {
 segment() {
     print "$(colorize '#000000' '#282828' '')$(colorize '#d8d8d8' '#282828' " $@ ")"
 }
-
-format_number() {
-    local number="$1"
-    if (( number >= 100 )); then
-        printf '%4d' "$number"
-    elif (( number >= 10 )); then
-        printf '%.1f' "$number"
-    else
-        printf '%.2f' "$number"
-    fi
-}

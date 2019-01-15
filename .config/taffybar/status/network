@@ -2,78 +2,35 @@
 
 source "$(dirname "$0")/lib.zsh" "$0"
 
-ifstat_start="$(< /proc/net/dev)"
-
-if get_state | read count signal; then
-    sleep 1
-else
-    count=1
+if get_state > /dev/null; then
+    ( timeout 5 nmcli device monitor & print -n "$! " ) | while read pid rest; do
+        kill "$pid"
+    done
 fi
 
-ifstat_end="$(< /proc/net/dev)"
 nm_status="$(nmcli -terse device status)"
 head -1 <<< "$nm_status" | IFS=: read device type devstate connection rest
 
-rx_tx_bytes() {
-    local ifstat="$1"
-    awk '/'"$device"':/ { print $2, $10 }' <<< "$ifstat"
-}
+if [[ $type == 'wifi' ]]; then
+    icon="$(fontawesome '')"
 
-rate() {
-    local rx_bytes_start tx_bytes_start tx_bytes_end rx_bytes_end rx_bytes tx_bytes
-    rx_tx_bytes "$ifstat_start" | read rx_bytes_start tx_bytes_start
-    rx_tx_bytes "$ifstat_end" | read rx_bytes_end tx_bytes_end
-    rx_bytes=$((rx_bytes_end - rx_bytes_start))
-    tx_bytes=$((tx_bytes_end - tx_bytes_start))
-    print "$(format_number $((rx_bytes / 1024.0 / 1024.0 * 8)))↓ $(format_number $((tx_bytes / 1024.0 / 1024.0 * 8)))↑"
-}
-
-case "$type" in
-    'wifi')
-        icon="$(fontawesome '')"
-        ;;
-
-    'ethernet')
-        icon="$(fontawesome '')"
-        ;;
-
-    *)
-        icon="$(fontawesome '')"
-        ;;
-esac
-
-case "$type $devstate" in
-    'wifi connected')
-        if (( --count == 0 )); then
+    case "$devstate" in
+        'connected')
             signal="$(iw dev "$device" link | awk '/signal:/ { print $2 $3 }')"
-            count=5
-        fi
+            segment "${icon} ${signal}"
+            ;;
 
-        output="${icon} ${signal} $(rate)"
-        ;;
+        'connecting'*)
+            segment "${icon} $(sed 's/.*(\(.*\)).*/\1/' <<< "$devstate")"
+            ;;
 
-    *' connected')
-        count=1
-        output="${icon} $(rate)"
-        ;;
+        'disconnected')
+            segment "${icon} disconnected"
+            ;;
 
-    *' connecting'*)
-        count=1
-        output="${icon} ..."
-        ;;
-
-    *' disconnected')
-        count=1
-        output="${icon}"
-        ;;
-
-    *)
-        count=1
-        ;;
-esac
-
-if [[ $output != '' ]]; then
-    segment "$output"
+        *)
+            ;;
+    esac
 fi
 
-set_state "${count} ${signal}"
+set_state 1
