@@ -25,8 +25,8 @@ esac
 
 case "$type $state" in
     'wifi connected')
-        bars="$(nmcli -terse device wifi list | awk -F: '/^*/ { print $7 }')"
-        output="${icon} ${bars} rate"
+        signal="$(iw dev "$device" link | awk '/signal:/ { print $2, $3 }')"
+        output="${icon} ${signal} rate"
         ;;
 
     *'connected')
