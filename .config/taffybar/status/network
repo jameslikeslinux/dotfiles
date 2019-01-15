@@ -1,0 +1,48 @@
+#!/usr/bin/env zsh
+
+source "$(dirname "$0")/lib.zsh"
+
+if get_state > /dev/null; then
+    sleep 1
+fi
+
+nm_status="$(nmcli -terse device status)"
+head -1 <<< "$nm_status" | IFS=: read device type state connection rest
+
+case "$type" in
+    'wifi')
+        icon="$(fontawesome '')"
+        ;;
+
+    'ethernet')
+        icon="$(fontawesome '')"
+        ;;
+
+    *)
+        icon="$(fontawesome '')"
+        ;;
+esac
+
+case "$type $state" in
+    'wifi connected')
+        bars="$(nmcli -terse device wifi list | awk -F: '/^*/ { print $7 }')"
+        output="${icon} ${bars} rate"
+        ;;
+
+    *'connected')
+        output="${icon} rate"
+        ;;
+
+    *'connecting'*)
+        output="${icon} ..."
+        ;;
+
+    *)
+        ;;
+esac
+
+if [[ $output != '' ]]; then
+    segment "$output"
+fi
+
+set_state 'running'

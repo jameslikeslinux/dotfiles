@@ -112,17 +112,18 @@ taffybarConfig :: SimpleTaffyConfig
 taffybarConfig = defaultSimpleTaffyConfig
     { monitorsAction = return [0]
     , startWidgets   = [workspaces, windows]
-    , endWidgets     = [clock, diskStatus, loadStatus]
+    , endWidgets     = [clock, networkStatus, diskStatus, loadStatus]
     , barHeight      = <%= (18 * text_scaling_factor).round %>
     , widgetSpacing  = 0
     }
   where
-    workspaces = workspacesNew Main.workspacesConfig
-    layout     = layoutNew layoutConfig
-    windows    = windowsNew windowsConfig
-    clock      = textClockNew Nothing ((colorize "#383838" "#282828" "\xe0b2") ++ (colorize "#383838" "#383838" "\x2588") ++ (colorize "#d8d8d8" "#383838" "%a %b %_d %r ")) 1
-    diskStatus = statusWidget "disk"
-    loadStatus = statusWidget "load"
+    workspaces    = workspacesNew Main.workspacesConfig
+    layout        = layoutNew layoutConfig
+    windows       = windowsNew windowsConfig
+    clock         = textClockNew Nothing ((colorize "#383838" "#282828" "\xe0b2") ++ (colorize "#383838" "#383838" "\x2588") ++ (colorize "#d8d8d8" "#383838" "%a %b %_d %r ")) 1
+    networkStatus = statusWidget "network"
+    diskStatus    = statusWidget "disk"
+    loadStatus    = statusWidget "load"
 
 main :: IO ()
 main = simpleTaffybar taffybarConfig
