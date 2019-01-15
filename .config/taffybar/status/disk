@@ -2,7 +2,7 @@
 
 source "$(dirname "$0")/lib.zsh"
 
-if state="$(get_state)"; then
+if get_state > /dev/null; then
     iostat="$(zpool iostat -Hpy 1 1)"
 else
     iostat="$(zpool iostat -Hp 1 1)"

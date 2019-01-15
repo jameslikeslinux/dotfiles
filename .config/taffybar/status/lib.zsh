@@ -3,7 +3,7 @@ TAFFYBAR_NAME='taffybar-linux-x86_64.real'
 STATE_NAME="_STATUS_${STATUS_NAME}_STATE"
 
 get_state() {
-    state="$(xprop -name "$TAFFYBAR_NAME" "$STATE_NAME" | awk -F '"' '/=/ { print $2 }')"
+    local state="$(xprop -name "$TAFFYBAR_NAME" "$STATE_NAME" | awk -F '"' '/=/ { print $2 }')"
     [[ $state == '' ]] && return 1
     echo "$state"
 }
