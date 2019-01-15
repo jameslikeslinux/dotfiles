@@ -21,11 +21,7 @@ if [[ $type == 'wifi' ]]; then
             ;;
 
         'connecting'*)
-            segment "${icon} $(sed 's/.*(\(.*\)).*/\1/' <<< "$devstate")"
-            ;;
-
-        'disconnected')
-            segment "${icon} disconnected"
+            segment "${icon} ..."
             ;;
 
         *)
