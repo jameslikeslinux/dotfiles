@@ -1,4 +1,4 @@
-<% gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1 -%>
+<% text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1 -%>
 import Control.Concurrent.MVar
 import Control.Monad
 import Control.Monad.IO.Class
@@ -113,7 +113,7 @@ taffybarConfig = defaultSimpleTaffyConfig
     { monitorsAction = return [0]
     , startWidgets   = [workspaces, windows]
     , endWidgets     = [clock, diskStatus, loadStatus]
-    , barHeight      = <%= (20 * gui_scaling_factor).round %>
+    , barHeight      = <%= (20 * text_scaling_factor).round - (2 * text_scaling_factor).round %>
     , widgetSpacing  = 0
     }
   where
