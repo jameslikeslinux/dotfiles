@@ -3,7 +3,7 @@
 source "$(dirname "$0")/lib.zsh" "$0"
 
 if get_state > /dev/null; then
-    ( timeout 5 nmcli monitor & print -n "$! " ) | while read pid rest; do
+    (timeout 5 nmcli monitor & print -n "$! ") | while read pid rest; do
         kill "$pid"
     done
 fi
