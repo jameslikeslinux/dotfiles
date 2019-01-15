@@ -27,7 +27,7 @@ fontawesome() {
 }
 
 first_segment() {
-    echo "$(colorize '#282828' '#000000' '')$(colorize '#d8d8d8' '#282828' " $@ ")"
+    echo "$(colorize '#282828' '#000000' '')$(colorize '#282828' '#282828' '█')$(colorize '#d8d8d8' '#282828' "$@ ")"
 }
 
 segment() {
