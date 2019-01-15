@@ -8,11 +8,10 @@ if get_state > /dev/null; then
     done
 fi
 
-nm_status="$(nmcli -terse device status)"
-head -1 <<< "$nm_status" | IFS=: read device type devstate connection rest
+nmcli -terse device status | head -1 | IFS=: read device type devstate connection rest
 
 if [[ $type == 'wifi' ]]; then
-    icon="$(fontawesome '')"
+    icon="$(fontawesome "\uf1eb")"
 
     case "$devstate" in
         'connected')
@@ -28,5 +27,11 @@ if [[ $type == 'wifi' ]]; then
             ;;
     esac
 fi
+
+nmcli -terse connection show --active | while IFS=: read name uuid type device rest; do
+    if [[ $type == 'vpn' ]]; then
+        segment "$(fontawesome "\uf023") ${name}"
+    fi
+done
 
 set_state 1
