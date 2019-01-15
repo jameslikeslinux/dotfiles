@@ -39,24 +39,20 @@ esac
 case "$type $state" in
     'wifi connected')
         signal="$(iw dev "$device" link | awk '/signal:/ { print $2 $3 }')"
-        output="${icon} ${signal}"
+        output="${icon} ${signal} $(rate)"
         ;;
 
-    'wifi connecting'*)
+    *' connected')
+        output="${icon} $(rate)"
+        ;;
+
+    *' connecting'*)
         output="${icon} ..."
         ;;
 
-#    *' connected')
-#        output="${icon} $(rate)"
-#        ;;
-#
-#    *' connecting'*)
-#        output="${icon} ..."
-#        ;;
-#
-#    *' disconnected')
-#        output="${icon}"
-#        ;;
+    *' disconnected')
+        output="${icon}"
+        ;;
 
     *)
         ;;
