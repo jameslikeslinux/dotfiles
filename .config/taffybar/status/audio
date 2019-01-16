@@ -25,11 +25,14 @@ pactl list sinks | awk -v default_sink="$default_sink" '
     /\tDescription:/ { if (is_default) { print substr($0, index($0, ": ") + 2) } }
     /\tMute:/        { if (is_default) { print $2 } }
     /\tVolume:/      { if (is_default) { print $7 } }
-' | tr '\n' ':' | IFS=':' read description mute volume rest
+    /\tActive Port:/ { if (is_default) { print $3 } }
+' | tr '\n' ':' | IFS=':' read description mute volume port rest
 
 if [[ $description == 'Built-in Audio Analog'* ]]; then
     if [[ $mute == 'yes' ]]; then
         icon="$(fontawesome "\uf6a9")"
+    elif [[ $port == 'analog-output-headphones' ]]; then
+        icon="$(fontawesome "\uf025")"
     else
         icon="$(fontawesome "\uf028")"
     fi
