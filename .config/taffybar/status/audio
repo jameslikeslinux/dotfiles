@@ -28,7 +28,8 @@ pactl list sinks | awk -v default_sink="$default_sink" '
     /\tActive Port:/ { if (is_default) { print $3 } }
 ' | tr '\n' ':' | IFS=':' read description mute volume port rest
 
-if [[ $description == 'Built-in Audio Analog'* ]]; then
+if [[ $description == 'Built-in Audio Analog'* ||
+      $description == 'Dell AC511 USB SoundBar Analog Stereo' ]]; then
     if [[ $mute == 'yes' ]]; then
         icon="$(fontawesome "\uf6a9")"
     elif [[ $port == 'analog-output-headphones' ]]; then
