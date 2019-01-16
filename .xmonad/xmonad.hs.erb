@@ -113,7 +113,7 @@ raiseAllNotificationsHook = liftX raiseAllNotifications >> idHook
 manageHook' = composeOne
     [ className =? "ksmserver"      -?> doIgnore
     , className =? "XLogo"          -?> doFloat
-    , className =? "systemsettings" -?> doRectFloat $ W.RationalRect 0.25 0.125 0.5 0.75
+    , className =? "systemsettings" -?> doCenterFloat
     , isDesktop                     -?> doWindowAction sendToBottom
     , isDock                        -?> doWindowAction sendToJustAboveDesktop
     , isOSD                         -?> doCenterFloat
