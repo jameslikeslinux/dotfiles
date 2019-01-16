@@ -1,0 +1,40 @@
+#!/usr/bin/env zsh
+
+if [[ $1 == 'monitor' ]]; then
+    trap '/bin/kill 0' EXIT INT TERM
+
+    pactl subscribe 2>/dev/null | while read line; do
+        if [[ $line == *sink* ]]; then
+            exit
+        fi
+    done
+
+    exit
+fi
+
+source "$(dirname "$0")/lib.zsh" "$0"
+
+if get_state > /dev/null; then
+    timeout 5 "$0" monitor
+fi
+
+default_sink="$(pactl info | awk '/^Default Sink:/ { print $3 }')"
+
+pactl list sinks | awk -v default_sink="$default_sink" '
+    /\tName:/        { is_default = $2 == default_sink }
+    /\tDescription:/ { print substr($0, index($0, ": ") + 2) }
+    /\tMute:/        { if (is_default) { print $2 } }
+    /\tVolume:/      { if (is_default) { print $7 } }
+' | tr '\n' ':' | IFS=':' read description mute volume rest
+
+if [[ $description == 'Built-in Audio Analog'* ]]; then
+    if [[ $mute == 'yes' ]]; then
+        icon="$(fontawesome "\uf6a9")"
+    else
+        icon="$(fontawesome "\uf028")"
+    fi
+
+    segment "${icon} $(printf '%d' "$volume")dB"
+fi
+
+set_state 1
