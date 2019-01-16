@@ -128,16 +128,16 @@ topicConfig = def
     { defaultTopicAction = \topic -> return ()
     , topicActions = fromList $
       <% if @facts['hostname'] == 'owl' -%>
-        [ ("web"   , spawn "~/bin/firefox-wait --new-window about:home")
+        [ ("web"   , spawn "~/.xmonad/scripts/firefox-wait --new-window about:home")
       <% else -%>
-        [ ("web"   , spawn "~/bin/firefox-wait --new-window about:home && ~/bin/firefox-wait twitter.com washingtonpost.com")
+        [ ("web"   , spawn "~/.xmonad/scripts/firefox-wait --new-window about:home && ~/.xmonad/scripts/firefox-wait twitter.com washingtonpost.com")
       <% end -%>
         , ("ops"   , (ask >>= spawn . terminal . config))
         , ("dev"   , (ask >>= spawn . terminal . config))
         , ("music" , spawn "google-play-music-desktop-player")
-        , ("mail"  , spawn "~/bin/firefox-wait --new-window https://mail.google.com/mail/u/0/#inbox && ~/bin/firefox-wait --new-window https://mail.google.com/mail/u/1/#inbox")
+        , ("mail"  , spawn "~/.xmonad/scripts/firefox-wait --new-window https://mail.google.com/mail/u/0/#inbox && ~/.xmonad/scripts/firefox-wait --new-window https://mail.google.com/mail/u/1/#inbox")
       <% if @facts['hostname'] == 'eagle' -%>
-        , ("chat"  , spawn "~/bin/firefox-wait --new-window teams.webex.com")
+        , ("chat"  , spawn "~/.xmonad/scripts/firefox-wait --new-window teams.webex.com")
       <% end -%>
         ]
     }
@@ -246,9 +246,9 @@ main = xmonad
     , ("M1-S-<Tab>"    , windows W.focusUp)
     , ("M-p"           , spawnRofi "-show drun")
     , ("M-w"           , spawnRofi "-show window")
-    , ("M1-S-a"        , unGrab >> spawn "xdotool keyup alt+shift && ~/bin/bw-type jtl/admin 3523ac3d-3fa3-4fa3-9638-a91a00f9a9a8")
-    , ("M1-S-s"        , unGrab >> spawn "xdotool keyup alt+shift && ~/bin/bw-type jtl/root 25d44246-0ed1-41e3-a0cc-a91a00f9a9a8")
-    , ("M1-S-u"        , unGrab >> spawn "xdotool keyup alt+shift && ~/bin/bw-type UMD e2ddb2b1-6f1a-4ca6-b388-a91a00f9a9a8")
+    , ("M1-S-a"        , unGrab >> spawn "xdotool keyup alt+shift && ~/.xmonad/scripts/bw-type jtl/admin 3523ac3d-3fa3-4fa3-9638-a91a00f9a9a8")
+    , ("M1-S-s"        , unGrab >> spawn "xdotool keyup alt+shift && ~/.xmonad/scripts/bw-type jtl/root 25d44246-0ed1-41e3-a0cc-a91a00f9a9a8")
+    , ("M1-S-u"        , unGrab >> spawn "xdotool keyup alt+shift && ~/.xmonad/scripts/bw-type UMD e2ddb2b1-6f1a-4ca6-b388-a91a00f9a9a8")
     , ("M-S-d"         , spawn "pkill dunst; exec dunst")
     , ("<XF86AudioMute>"       , spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
     , ("<XF86AudioLowerVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ -1dB")
