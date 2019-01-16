@@ -112,7 +112,7 @@ taffybarConfig :: SimpleTaffyConfig
 taffybarConfig = defaultSimpleTaffyConfig
     { monitorsAction = return [0]
     , startWidgets   = [workspaces, windows]
-    , endWidgets     = [clock, networkStatus, loadStatus]
+    , endWidgets     = [clock, powerStatus, networkStatus, loadStatus]
     , barHeight      = <%= (18 * text_scaling_factor).round %>
     , widgetSpacing  = 0
     }
@@ -121,6 +121,7 @@ taffybarConfig = defaultSimpleTaffyConfig
     layout        = layoutNew layoutConfig
     windows       = windowsNew windowsConfig
     clock         = textClockNew Nothing ((colorize "#383838" "#282828" "\xe0b2") ++ (colorize "#383838" "#383838" "\x2588") ++ (colorize "#d8d8d8" "#383838" "%a %b %_d %r ")) 1
+    powerStatus   = statusWidget "power"
     networkStatus = statusWidget "network"
     loadStatus    = statusWidget "load"
 

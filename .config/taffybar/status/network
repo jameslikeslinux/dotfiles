@@ -1,11 +1,19 @@
 #!/usr/bin/env zsh
 
+if [[ $1 == 'monitor' ]]; then
+    trap '/bin/kill 0' EXIT INT TERM
+
+    nmcli monitor | while read line; do
+        exit
+    done
+
+    exit
+fi
+
 source "$(dirname "$0")/lib.zsh" "$0"
 
 if get_state > /dev/null; then
-    (timeout 5 nmcli monitor & print -n "$! ") | while read pid rest; do
-        kill "$pid"
-    done
+    timeout 5 "$0" monitor
 fi
 
 nmcli -terse device status | head -1 | IFS=: read device type devstate connection rest

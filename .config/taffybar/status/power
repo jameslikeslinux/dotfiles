@@ -1,0 +1,58 @@
+#!/usr/bin/env zsh
+
+if [[ $1 == 'monitor' ]]; then
+    trap '/bin/kill 0' EXIT INT TERM
+
+    upower --monitor | while read line; do
+        if [[ $line != Monitoring* ]]; then
+            exit
+        fi
+    done
+
+    exit
+fi
+
+source "$(dirname "$0")/lib.zsh" "$0"
+
+if get_state > /dev/null; then
+    timeout 5 "$0" monitor
+fi
+
+battery_icon() {
+    local percentage="$1" icon
+
+    if (( percentage > 80 )); then
+        icon="\uf240"
+    elif (( percentage > 60 )); then
+        icon="\uf241"
+    elif (( percentage > 40 )); then
+        icon="\uf242"
+    elif (( percentage > 20 )); then
+        icon="\uf243"
+    else
+        icon="\uf244"
+    fi
+
+    fontawesome "$icon"
+}
+
+upower --enumerate | grep '/battery_' | while read battery_object; do
+    info="$(upower --show-info "$battery_object")"
+    state="$(awk '/state:/ { print $2 }' <<< "$info")"
+    percentage="${$(awk '/percentage:/ { print $2 }' <<< "$info")%\%}"
+
+    case "$state" in
+        'discharging')
+            segment "$(battery_icon "$percentage") ${percentage}%"
+            ;;
+
+        'charging')
+            segment "$(fontawesome "\uf0e7") ${percentage}%"
+            ;;
+
+        *)
+            ;;
+    esac
+done
+
+set_state 1
