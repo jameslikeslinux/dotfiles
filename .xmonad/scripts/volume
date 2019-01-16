@@ -1,0 +1,22 @@
+#!/usr/bin/env zsh
+
+if [[ $# != 1 ]]; then
+    echo "Usage: ${0} [VOLUME|toggle-mute]" >&2
+    exit 1
+fi
+
+default_sink="$(pactl info | awk '/^Default Sink:/ { print $3 }')"
+
+pactl list sinks | awk -v default_sink="$default_sink" '
+    /\tName:/        { is_default = $2 == default_sink }
+    /\tDescription:/ { if (is_default) { print substr($0, index($0, ": ") + 2) } }
+' | tr '\n' ':' | IFS=':' read description rest
+
+if [[ $description == 'Built-in Audio Analog'* ||
+      $description == 'Dell AC511 USB SoundBar Analog Stereo' ]]; then
+    if [[ $1 == 'toggle-mute' ]]; then
+        pactl set-sink-mute "$default_sink" toggle
+    else
+        pactl set-sink-volume "$default_sink" "$1"
+    fi
+fi
