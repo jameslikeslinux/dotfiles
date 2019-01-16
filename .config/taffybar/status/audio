@@ -4,7 +4,7 @@ if [[ $1 == 'monitor' ]]; then
     trap '/bin/kill 0' EXIT INT TERM
 
     pactl subscribe 2>/dev/null | while read line; do
-        if [[ $line == *sink* ]]; then
+        if [[ $line == *sink* || $line == *server* ]]; then
             exit
         fi
     done
