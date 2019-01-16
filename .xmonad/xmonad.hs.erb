@@ -127,12 +127,18 @@ topicConfig :: TopicConfig
 topicConfig = def
     { defaultTopicAction = \topic -> return ()
     , topicActions = fromList $
+      <% if @facts['hostname'] == 'owl' -%>
+        [ ("web"   , spawn "~/bin/firefox-wait --new-window about:home")
+      <% else -%>
         [ ("web"   , spawn "~/bin/firefox-wait --new-window about:home && ~/bin/firefox-wait twitter.com washingtonpost.com")
+      <% end -%>
         , ("ops"   , (ask >>= spawn . terminal . config))
         , ("dev"   , (ask >>= spawn . terminal . config))
         , ("music" , spawn "google-play-music-desktop-player")
         , ("mail"  , spawn "~/bin/firefox-wait --new-window https://mail.google.com/mail/u/0/#inbox && ~/bin/firefox-wait --new-window https://mail.google.com/mail/u/1/#inbox")
+      <% if @facts['hostname'] == 'eagle' -%>
         , ("chat"  , spawn "~/bin/firefox-wait --new-window teams.webex.com")
+      <% end -%>
         ]
     }
 
