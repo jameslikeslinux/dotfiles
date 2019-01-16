@@ -39,17 +39,16 @@ battery_icon() {
 upower --enumerate | grep '/battery_' | while read battery_object; do
     info="$(upower --show-info "$battery_object")"
     state="$(awk '/state:/ { print $2 }' <<< "$info")"
+    percentage="${$(awk '/percentage:/ { print $2 }' <<< "$info")%\%}"
 
     case "$state" in
         'discharging')
             tte="$(awk '/time to empty:/ { print $4 substr($5, 0, 1) }' <<< "$info")"
-            percentage="${$(awk '/percentage:/ { print $2 }' <<< "$info")%\%}"
             segment "$(battery_icon "$percentage") ${tte}"
             ;;
 
         'charging')
-            ttf="$(awk '/time to full:/ { print $4 substr($5, 0, 1) }' <<< "$info")"
-            segment "$(fontawesome "\uf0e7") ${ttf}"
+            segment "$(fontawesome "\uf0e7") ${percentage}%"
             ;;
 
         *)
