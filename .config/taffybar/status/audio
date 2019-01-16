@@ -22,7 +22,7 @@ default_sink="$(pactl info | awk '/^Default Sink:/ { print $3 }')"
 
 pactl list sinks | awk -v default_sink="$default_sink" '
     /\tName:/        { is_default = $2 == default_sink }
-    /\tDescription:/ { print substr($0, index($0, ": ") + 2) }
+    /\tDescription:/ { if (is_default) { print substr($0, index($0, ": ") + 2) } }
     /\tMute:/        { if (is_default) { print $2 } }
     /\tVolume:/      { if (is_default) { print $7 } }
 ' | tr '\n' ':' | IFS=':' read description mute volume rest
