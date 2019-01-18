@@ -1,0 +1,30 @@
+#!/usr/bin/env zsh
+
+SELF="$0"
+source "$(dirname "$SELF")/lib.zsh" "$SELF"
+
+main() {
+    if get_state > /dev/null; then
+        timeout 5 "$SELF" wait
+    fi
+
+    if nmcli -terse connection show --active | grep -q ':vpn:'; then
+        segment "$(fontawesome "\uf023")"
+    fi
+
+    set_state 1
+}
+
+case "$1" in
+    'monitor')
+        persistent_monitor nmcli connection monitor
+        ;;
+
+    'wait')
+        read_monitor > /dev/null
+        ;;
+
+    *)
+        main
+        ;;
+esac
