@@ -101,19 +101,13 @@ windowsConfig = defaultWindowsConfig
 statusWidget :: String -> TaffyIO Gtk.Widget
 statusWidget cmd = do
     dataDir <- liftIO $ getXdgDirectory XdgConfig "taffybar"
-    widget <- commandRunnerNew 0 (dataDir ++ "/status/" ++ cmd) [] $ T.pack ""
-    ebox <- Gtk.eventBoxNew
-    Gtk.containerAdd ebox widget
-    Gtk.eventBoxSetVisibleWindow ebox False
-    Gtk.onWidgetButtonPressEvent ebox $ onClick [Gdk.EventTypeButtonPress] (spawnCommand "xlogo")
-    Gtk.widgetShowAll ebox
-    Gtk.toWidget ebox
+    commandRunnerNew 0 (dataDir ++ "/status/" ++ cmd) [] $ T.pack ""
 
 taffybarConfig :: SimpleTaffyConfig
 taffybarConfig = defaultSimpleTaffyConfig
     { monitorsAction = return [0]
     , startWidgets   = [workspaces, windows]
-    , endWidgets     = [clock, vpnStatus, audioStatus, networkStatus, powerStatus, loadStatus]
+    , endWidgets     = clock : statusWidgets
     , barHeight      = <%= (18 * text_scaling_factor).round %>
     , widgetSpacing  = 0
     }
@@ -122,11 +116,7 @@ taffybarConfig = defaultSimpleTaffyConfig
     layout        = layoutNew layoutConfig
     windows       = windowsNew windowsConfig
     clock         = textClockNew Nothing ((colorize "#383838" "#282828" "\xe0b2") ++ (colorize "#383838" "#383838" "\x2588") ++ (colorize "#d8d8d8" "#383838" "%a %b %_d %r ")) 1
-    vpnStatus     = statusWidget "vpn"
-    audioStatus   = statusWidget "audio"
-    networkStatus = statusWidget "network"
-    powerStatus   = statusWidget "power"
-    loadStatus    = statusWidget "load"
+    statusWidgets = map statusWidget ["vpn", "audio", "network", "power", "load"]
 
 main :: IO ()
 main = do
