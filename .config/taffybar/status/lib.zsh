@@ -3,6 +3,9 @@ TAFFYBAR_NAME='taffybar-linux-x86_64.real'
 STATE_NAME="_STATUS_${STATUS_NAME:u}_STATE"
 FIFO="/tmp/.status-${STATUS_NAME}.fifo"
 
+# POSIX says in shells without job control (i.e. scripts), sleep(1) must not
+# handle signals.  Here is my crude workaround to make sure things are cleaned
+# up in a timely manner.
 delay() {
     sleep $1 &
     trap "kill $!" INT TERM
@@ -14,13 +17,14 @@ delay() {
 persistent_monitor() {
     while
         start_monitor "$@"
-        (( ? <= 128 ))
+        (( ? <= 128 ))  # start_monitor was interrupted
     do
         delay 1 || break
     done
 }
 
 start_monitor() {
+    # Clean up after self
     trap "rm -f '$FIFO'" EXIT
 
     if [[ ! -p $FIFO ]]; then
@@ -28,6 +32,14 @@ start_monitor() {
         mkfifo "$FIFO"
     fi
 
+    # POSIX FIFOs are normally write only on this end, and attempts to open the
+    # fifo block until a reader also opens the FIFO.  And, when the reader
+    # closes the FIFO, any data in it is lost.  This special Linux behavior
+    # (see fifo(7)) of opening the FIFO in read-write mode allows for writing
+    # to it while no readers are available.  Additionally when readers close
+    # the FIFO, any data they have not read is retained.  This makes this
+    # option a nice, simple, but crude, form of 'reliable' message passing.
+    # Reliable enough for this application.
     exec 4<>"$FIFO"
 
     # Run the monitor process in the background
