@@ -37,7 +37,7 @@ case "$1" in
         ;;
 
     'wait')
-        read_monitor
+        read_monitor > /dev/null
         ;;
 
     *)
