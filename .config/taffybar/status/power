@@ -41,7 +41,7 @@ main() {
 
         case "$state" in
             'discharging')
-                tte="$(awk '/time to empty:/ { print $4 substr($5, 0, 1) }' <<< "$info")"
+                tte="${$(awk '/time to empty:/ { print $4 substr($5, 0, 1) }' <<< "$info"):-...}"
                 segment "$(battery_icon "$percentage") ${tte}"
                 ;;
 
