@@ -28,8 +28,10 @@ start_monitor() {
         mkfifo "$FIFO"
     fi
 
+    exec 4<>"$FIFO"
+
     # Run the monitor process in the background
-    "$@" > "$FIFO" &
+    "$@" >&4 &
 
     # When terminated, kill the background process.  The background process may
     # be blocked waiting for something to open the FIFO, so use SIGKILL--these
@@ -43,8 +45,7 @@ start_monitor() {
 
 read_monitor() {
    if [[ -p $FIFO ]]; then
-       read line < "$FIFO"
-       print "$line"
+       read -re < "$FIFO"
    else
        delay 1
        return 1
