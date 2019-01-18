@@ -8,7 +8,7 @@ main() {
         timeout 5 "$SELF" wait
     fi
 
-    if nmcli -terse connection show --active | grep -q ':vpn:'; then
+    if nmcli --terse --fields type,state connection show | grep -q 'vpn:activated'; then
         segment "$(fontawesome "\uf023")"
     fi
 

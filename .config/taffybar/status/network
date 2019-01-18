@@ -8,7 +8,7 @@ main() {
         timeout 5 "$SELF" wait
     fi
 
-    nmcli -terse device status | head -1 | IFS=: read device type devstate connection rest
+    nmcli --terse device status | head -1 | IFS=: read device type devstate connection rest
 
     if [[ $type == 'wifi' ]]; then
         icon="$(fontawesome "\uf1eb")"
