@@ -1,6 +1,55 @@
-STATUS_NAME="$(basename "$1" | tr 'a-z' 'A-Z')"
+STATUS_NAME="$(basename "$1")"
 TAFFYBAR_NAME='taffybar-linux-x86_64.real'
-STATE_NAME="_STATUS_${STATUS_NAME}_STATE"
+STATE_NAME="_STATUS_${STATUS_NAME:u}_STATE"
+FIFO="/tmp/.status-${STATUS_NAME}.fifo"
+
+delay() {
+    sleep $1 &
+    trap "kill $!" INT TERM
+    wait; rc=$?
+    trap - INT TERM
+    return $rc
+}
+
+persistent_monitor() {
+    while
+        start_monitor "$@"
+        (( ? <= 128 ))
+    do
+        delay 1 || break
+    done
+}
+
+start_monitor() {
+    trap "rm -f '$FIFO'" EXIT
+
+    if [[ ! -p $FIFO ]]; then
+        rm -f "$FIFO"
+        mkfifo "$FIFO"
+    fi
+
+    # Run the monitor process in the background
+    "$@" > "$FIFO" &
+
+    # When terminated, kill the background process.  The background process may
+    # be blocked waiting for something to open the FIFO, so use SIGKILL--these
+    # monitor processes are nothing to worry about.
+    trap "kill -9 $!" INT TERM
+    wait; rc=$?
+    trap - INT TERM
+
+    return $rc
+}
+
+read_monitor() {
+   if [[ -p $FIFO ]]; then
+       read line < "$FIFO"
+       print "$line"
+   else
+       delay 1
+       return 1
+   fi
+}
 
 get_state() {
     local state="$(xprop -name "$TAFFYBAR_NAME" "$STATE_NAME" | awk -F '"' '/=/ { print $2 }')"

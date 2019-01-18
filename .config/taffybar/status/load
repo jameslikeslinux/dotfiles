@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
 
-source "$(dirname "$0")/lib.zsh" "$0"
+SELF="$0"
+source "$(dirname "$SELF")/lib.zsh" "$SELF"
 
 get_state > /dev/null && sleep 5
 read load rest < /proc/loadavg

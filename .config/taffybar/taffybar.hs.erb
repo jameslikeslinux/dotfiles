@@ -12,6 +12,8 @@ import qualified Data.Text as T
 import qualified GI.Gtk as Gtk
 import qualified GI.Gdk as Gdk
 import System.Directory
+import System.Posix.Signals
+import System.Process
 import System.Taffybar
 import System.Taffybar.Context (TaffyIO)
 import System.Taffybar.SimpleConfig
@@ -22,7 +24,6 @@ import System.Taffybar.Widget.Util
 import System.Taffybar.Widget.Windows
 import System.Taffybar.Widget.Workspaces
 import System.Taffybar.Information.EWMHDesktopInfo
-import System.Process
 
 wrap :: String -> String -> String -> String
 wrap start end text = start ++ text ++ end
@@ -127,6 +128,10 @@ taffybarConfig = defaultSimpleTaffyConfig
     loadStatus    = statusWidget "load"
 
 main :: IO ()
-main = simpleTaffybar taffybarConfig
+main = do
+    let monitorTypes = ["audio", "network", "power"]
+    monitorProcs <- mapM (\base -> spawnCommand $ "~/.config/taffybar/status/" ++ base ++ " monitor") monitorTypes
+    installHandler sigTERM (Catch (mapM_ terminateProcess monitorProcs >> Gtk.mainQuit)) Nothing
+    simpleTaffybar taffybarConfig
 
 -- vim: filetype=haskell

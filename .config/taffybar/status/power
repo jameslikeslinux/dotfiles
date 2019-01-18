@@ -1,22 +1,15 @@
 #!/usr/bin/env zsh
 
-if [[ $1 == 'monitor' ]]; then
-    trap '/bin/kill 0' EXIT INT TERM
+SELF="$0"
+source "$(dirname "$SELF")/lib.zsh" "$SELF"
 
-    upower --monitor | while read line; do
+wait_for_events() {
+    while line="$(read_monitor)"; do
         if [[ $line != Monitoring* ]]; then
             exit
         fi
     done
-
-    exit
-fi
-
-source "$(dirname "$0")/lib.zsh" "$0"
-
-if get_state > /dev/null; then
-    timeout 5 "$0" monitor
-fi
+}
 
 battery_icon() {
     local percentage="$1" icon
@@ -36,24 +29,44 @@ battery_icon() {
     fontawesome "$icon"
 }
 
-upower --enumerate | grep '/battery_' | while read battery_object; do
-    info="$(upower --show-info "$battery_object")"
-    state="$(awk '/state:/ { print $2 }' <<< "$info")"
-    percentage="${$(awk '/percentage:/ { print $2 }' <<< "$info")%\%}"
+main() {
+    if get_state > /dev/null; then
+        timeout 5 "$SELF" wait
+    fi
 
-    case "$state" in
-        'discharging')
-            tte="$(awk '/time to empty:/ { print $4 substr($5, 0, 1) }' <<< "$info")"
-            segment "$(battery_icon "$percentage") ${tte}"
-            ;;
+    upower --enumerate | grep '/battery_' | while read battery_object; do
+        info="$(upower --show-info "$battery_object")"
+        state="$(awk '/state:/ { print $2 }' <<< "$info")"
+        percentage="${$(awk '/percentage:/ { print $2 }' <<< "$info")%\%}"
 
-        'charging')
-            segment "$(fontawesome "\uf0e7") ${percentage}%"
-            ;;
+        case "$state" in
+            'discharging')
+                tte="$(awk '/time to empty:/ { print $4 substr($5, 0, 1) }' <<< "$info")"
+                segment "$(battery_icon "$percentage") ${tte}"
+                ;;
 
-        *)
-            ;;
-    esac
-done
+            'charging')
+                segment "$(fontawesome "\uf0e7") ${percentage}%"
+                ;;
 
-set_state 1
+            *)
+                ;;
+        esac
+    done
+
+    set_state 1
+}
+
+case "$1" in
+    'monitor')
+        persistent_monitor upower --monitor
+        ;;
+
+    'wait')
+        wait_for_events
+        ;;
+
+    *)
+        main
+        ;;
+esac
