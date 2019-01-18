@@ -5,5 +5,5 @@ source "$(dirname "$SELF")/lib.zsh" "$SELF"
 
 get_state > /dev/null && sleep 5
 read load rest < /proc/loadavg
-first_segment "$(fontawesome "\uf2db") ${load}"
+first_segment "$(fontawesome "\uf233") ${load}"
 set_state 1
