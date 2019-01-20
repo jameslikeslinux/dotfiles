@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 SELF="$0"
-source "$(dirname "$SELF")/lib.zsh" "$SELF"
+source "$(dirname "$(readlink -f "$SELF")")/lib.zsh" "$SELF"
 
 main() {
     if get_state > /dev/null; then

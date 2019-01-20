@@ -1,0 +1,53 @@
+#!/usr/bin/env zsh
+
+SELF="$0"
+source "$(dirname "$(readlink -f "$SELF")")/lib.zsh" "$SELF"
+
+main() {
+    local action state
+
+    action="$(timeout 60 "$SELF" wait)"
+    state="$(get_state)"
+
+    case "$action" in
+        'reset')
+            state='off'
+            ;;
+
+        'toggle')
+            [[ $state == 'on' ]] && state='off' || state='on'
+            ;;
+
+        *) # timeout
+            [[ $state == 'on' ]] && qdbus org.freedesktop.ScreenSaver /org/freedesktop/ScreenSaver org.freedesktop.ScreenSaver.SimulateUserActivity
+            ;;
+    esac
+
+    if [[ $state == 'on' ]]; then
+        segment "$(fontawesome "\uf108")"
+    fi
+
+    set_state "$state"
+}
+
+case "$1" in
+    'monitor')
+        start_monitor_loop sleep inf
+        ;;
+
+    'wait')
+        get_event
+        ;;
+
+    'toggle')
+        send_event 'toggle'
+        ;;
+
+    'reset')
+        send_event 'reset'
+        ;;
+
+    *)
+        main
+        ;;
+esac

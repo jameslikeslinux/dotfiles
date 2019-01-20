@@ -116,11 +116,11 @@ taffybarConfig = defaultSimpleTaffyConfig
     layout        = layoutNew layoutConfig
     windows       = windowsNew windowsConfig
     clock         = textClockNew Nothing ((colorize "#383838" "#282828" "\xe0b2") ++ (colorize "#383838" "#383838" "\x2588") ++ (colorize "#d8d8d8" "#383838" "%a %b %_d %r ")) 1
-    statusWidgets = map statusWidget ["vpn", "audio", "network", "power", "load"]
+    statusWidgets = map statusWidget ["vpn", "inhibitor", "audio", "network", "power", "load"]
 
 main :: IO ()
 main = do
-    let monitorTypes = ["vpn", "audio", "network", "power"]
+    let monitorTypes = ["vpn", "inhibitor", "audio", "network", "power"]
     monitorProcs <- mapM (\base -> spawnCommand $ "~/.config/taffybar/status/" ++ base ++ " monitor") monitorTypes
     installHandler sigTERM (Catch (mapM_ terminateProcess monitorProcs >> Gtk.mainQuit)) Nothing
     simpleTaffybar taffybarConfig
