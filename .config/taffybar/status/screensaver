@@ -11,19 +11,19 @@ main() {
 
     case "$action" in
         'reset')
-            state='off'
+            state='on'
             ;;
 
         'toggle')
-            [[ $state == 'on' ]] && state='off' || state='on'
+            [[ $state == 'off' ]] && state='on' || state='off'
             ;;
 
         *) # timeout
-            [[ $state == 'on' ]] && qdbus org.freedesktop.ScreenSaver /org/freedesktop/ScreenSaver org.freedesktop.ScreenSaver.SimulateUserActivity
+            [[ $state == 'off' ]] && qdbus org.freedesktop.ScreenSaver /org/freedesktop/ScreenSaver org.freedesktop.ScreenSaver.SimulateUserActivity
             ;;
     esac
 
-    if [[ $state == 'on' ]]; then
+    if [[ $state == 'off' ]]; then
         segment "$(fontawesome "\uf108")"
     fi
 
