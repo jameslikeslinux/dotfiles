@@ -3,18 +3,19 @@ TAFFYBAR_NAME='taffybar-linux-x86_64.real'
 STATE_NAME="_STATUS_${STATUS_NAME:u}_STATE"
 FIFO="/tmp/.status-${STATUS_NAME}.fifo"
 
-# POSIX says in shells without job control (i.e. scripts), sleep(1) must not
-# handle signals.  Here is my crude workaround to make sure things are cleaned
-# up in a timely manner.
+# Make 'sleep' interruptible
 delay() {
+    local rc
+
     sleep $1 &
     trap "kill $!" INT TERM
     wait; rc=$?
     trap - INT TERM
+
     return $rc
 }
 
-persistent_monitor() {
+start_monitor_loop() {
     while
         start_monitor "$@"
         (( ? <= 128 ))  # start_monitor was interrupted
@@ -24,8 +25,10 @@ persistent_monitor() {
 }
 
 start_monitor() {
+    local rc
+
     # Clean up after self
-    trap "rm -f '$FIFO'" EXIT
+    trap 'rm -f "$FIFO"' EXIT
 
     if [[ ! -p $FIFO ]]; then
         rm -f "$FIFO"
@@ -38,7 +41,7 @@ start_monitor() {
     # (see fifo(7)) of opening the FIFO in read-write mode allows for writing
     # to it while no readers are available.  Additionally when readers close
     # the FIFO, any data they have not read is retained.  This makes this
-    # option a nice, simple, but crude, form of 'reliable' message passing.
+    # option a nice, simple, if crude, form of 'reliable' message passing.
     # Reliable enough for this application.
     exec 4<>"$FIFO"
 
@@ -55,12 +58,17 @@ start_monitor() {
     return $rc
 }
 
-read_monitor() {
+send_event() {
+    if [[ -p $FIFO ]]; then
+        print "$@" > "$FIFO"
+    fi
+}
+
+get_event() {
    if [[ -p $FIFO ]]; then
        read -re < "$FIFO"
    else
-       delay 1
-       return 1
+       delay 1 && return 1
    fi
 }
 

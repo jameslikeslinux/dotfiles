@@ -17,11 +17,11 @@ main() {
 
 case "$1" in
     'monitor')
-        persistent_monitor nmcli connection monitor
+        start_monitor_loop nmcli connection monitor
         ;;
 
     'wait')
-        read_monitor > /dev/null
+        get_event > /dev/null
         ;;
 
     *)

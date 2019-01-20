@@ -33,11 +33,11 @@ main() {
 
 case "$1" in
     'monitor')
-        persistent_monitor nmcli device monitor
+        start_monitor_loop nmcli device monitor
         ;;
 
     'wait')
-        read_monitor > /dev/null
+        get_event > /dev/null
         ;;
 
     *)

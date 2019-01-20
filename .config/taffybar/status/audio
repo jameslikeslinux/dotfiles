@@ -4,9 +4,9 @@ SELF="$0"
 source "$(dirname "$SELF")/lib.zsh" "$SELF"
 
 wait_for_events() {
-    while line="$(read_monitor)"; do
-        if [[ $line == *sink* || $line == *server* ]]; then
-            exit
+    while event="$(get_event)"; do
+        if [[ $event == *sink* || $event == *server* ]]; then
+            break
         fi
     done
 }
@@ -44,7 +44,7 @@ main() {
 
 case "$1" in
     'monitor')
-        persistent_monitor pactl subscribe
+        start_monitor_loop pactl subscribe
         ;;
 
     'wait')

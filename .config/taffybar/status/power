@@ -4,8 +4,8 @@ SELF="$0"
 source "$(dirname "$SELF")/lib.zsh" "$SELF"
 
 wait_for_events() {
-    while line="$(read_monitor)"; do
-        if [[ $line != Monitoring* ]]; then
+    while event="$(get_event)"; do
+        if [[ $event != Monitoring* ]]; then
             exit
         fi
     done
@@ -59,7 +59,7 @@ main() {
 
 case "$1" in
     'monitor')
-        persistent_monitor upower --monitor
+        start_monitor_loop upower --monitor
         ;;
 
     'wait')
