@@ -32,7 +32,7 @@ start_monitor() {
 
     if [[ ! -p $FIFO ]]; then
         rm -f "$FIFO"
-        mkfifo "$FIFO"
+        mkfifo -m 600 "$FIFO"
     fi
 
     # POSIX FIFOs are normally write only on this end, and attempts to open the

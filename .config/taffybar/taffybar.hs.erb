@@ -121,7 +121,8 @@ taffybarConfig = defaultSimpleTaffyConfig
 main :: IO ()
 main = do
     let monitorTypes = ["vpn", "screensaver", "audio", "network", "power"]
-    monitorProcs <- mapM (\base -> spawnCommand $ "~/.config/taffybar/status/" ++ base ++ " monitor") monitorTypes
+    dataDir <- getXdgDirectory XdgConfig "taffybar"
+    monitorProcs <- mapM (\base -> spawnProcess (dataDir ++ "/status/" ++ base) ["monitor"]) monitorTypes
     installHandler sigTERM (Catch (mapM_ terminateProcess monitorProcs >> Gtk.mainQuit)) Nothing
     simpleTaffybar taffybarConfig
 
