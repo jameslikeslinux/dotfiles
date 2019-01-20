@@ -83,13 +83,6 @@ workspacesConfig = defaultWorkspacesConfig
     , urgentWorkspaceState = True
     }
 
-layoutConfig :: LayoutConfig
-layoutConfig = defaultLayoutConfig
-    { formatLayout = layoutLabeler }
-  where
-    layoutLabeler label = do
-      return . T.pack . colorize "#d8d8d8" "#383838" . wrap " " (" " ++ (colorize "#383838" "#000000" "\xe0b0")) . T.unpack $ label
-
 windowsConfig :: WindowsConfig
 windowsConfig = defaultWindowsConfig
     { getActiveLabel = activeWindowLabeler }
@@ -113,7 +106,6 @@ taffybarConfig = defaultSimpleTaffyConfig
     }
   where
     workspaces    = workspacesNew Main.workspacesConfig
-    layout        = layoutNew layoutConfig
     windows       = windowsNew windowsConfig
     clock         = textClockNew Nothing ((colorize "#383838" "#282828" "\xe0b2") ++ (colorize "#383838" "#383838" "\x2588") ++ (colorize "#d8d8d8" "#383838" "%a %b %_d %r ")) 1
     statusWidgets = map statusWidget ["vpn", "screensaver", "audio", "network", "power", "load"]
