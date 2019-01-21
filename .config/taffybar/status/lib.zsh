@@ -72,15 +72,24 @@ get_event() {
    fi
 }
 
+taffybar_id() {
+    xprop -name "$TAFFYBAR_NAME" WM_CLIENT_LEADER | awk '{ print $5 }'
+}
+
 get_state() {
-    local state="$(xprop -name "$TAFFYBAR_NAME" "$STATE_NAME" | awk -F '"' '/=/ { print $2 }')"
-    [[ $state == '' ]] && return 1
-    print "$state"
+    local state taffybar_id="$(taffybar_id)"
+    if [[ $taffybar_id ]]; then
+        state="$(xprop -id "$taffybar_id" "$STATE_NAME" | awk -F '"' '/=/ { print $2 }')"
+        [[ $state ]] || return 1
+        print "$state"
+    fi
 }
 
 set_state() {
-    local state="$1"
-    xprop -name "$TAFFYBAR_NAME" -f "$STATE_NAME" 8s -set "$STATE_NAME" "$state"
+    local state="$1" taffybar_id="$(taffybar_id)"
+    if [[ $taffybar_id ]]; then
+        xprop -id "$taffybar_id" -f "$STATE_NAME" 8s -set "$STATE_NAME" "$state"
+    fi
 }
 
 
