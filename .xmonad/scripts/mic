@@ -1,0 +1,19 @@
+#!/usr/bin/env zsh
+
+if [[ $# != 1 ]]; then
+    echo "Usage: ${0} toggle-mute" >&2
+    exit 1
+fi
+
+default_source="$(pactl info | awk '/^Default Source:/ { print $3 }')"
+
+pactl list sources | awk -v default_source="$default_source" '
+    /\tName:/        { is_default = $2 == default_source }
+    /\tDescription:/ { if (is_default) { print substr($0, index($0, ": ") + 2) } }
+' | read description
+
+if [[ $description == 'Built-in Audio Analog'* ]]; then
+    if [[ $1 == 'toggle-mute' ]]; then
+        pactl set-source-mute "$default_source" toggle
+    fi
+fi
