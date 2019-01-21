@@ -3,7 +3,11 @@
 SELF="$0"
 source "$(dirname "$(readlink -f "$SELF")")/lib.zsh" "$SELF"
 
-get_state > /dev/null && sleep 5
+if get_state > /dev/null; then
+    sleep 1
+else
+    set_state 1
+fi
+
 read load rest < /proc/loadavg
 first_segment "$(fontawesome "\uf233") ${load}"
-set_state 1
