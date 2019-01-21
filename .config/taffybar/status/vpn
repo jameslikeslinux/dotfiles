@@ -6,13 +6,13 @@ source "$(dirname "$(readlink -f "$SELF")")/lib.zsh" "$SELF"
 main() {
     if get_state > /dev/null; then
         timeout 5 "$SELF" wait
+    else
+        set_state 1
     fi
 
     if nmcli --terse --fields type,state connection show | grep -q 'vpn:activated'; then
         segment "$(fontawesome "\uf023")"
     fi
-
-    set_state 1
 }
 
 case "$1" in

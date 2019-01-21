@@ -4,10 +4,11 @@ SELF="$0"
 source "$(dirname "$(readlink -f "$SELF")")/lib.zsh" "$SELF"
 
 main() {
-    local action state
+    local action prev_state state
 
     action="$(timeout 60 "$SELF" wait)"
-    state="$(get_state)"
+    prev_state="$(get_state)"
+    state="$prev_state"
 
     case "$action" in
         'reset')
@@ -27,7 +28,9 @@ main() {
         segment "$(fontawesome "\uf108")"
     fi
 
-    set_state "$state"
+    if [[ $state != $prev_state ]]; then
+        set_state "$state"
+    fi
 }
 
 case "$1" in

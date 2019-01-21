@@ -6,6 +6,8 @@ source "$(dirname "$(readlink -f "$SELF")")/lib.zsh" "$SELF"
 main() {
     if get_state > /dev/null; then
         timeout 5 "$SELF" wait
+    else
+        set_state 1
     fi
 
     nmcli --terse device status | head -1 | IFS=: read device type devstate connection rest
@@ -27,8 +29,6 @@ main() {
                 ;;
         esac
     fi
-
-    set_state 1
 }
 
 case "$1" in

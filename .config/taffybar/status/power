@@ -32,6 +32,8 @@ battery_icon() {
 main() {
     if get_state > /dev/null; then
         timeout 5 "$SELF" wait
+    else
+        set_state 1
     fi
 
     upower --enumerate | grep '/battery_' | while read battery_object; do
@@ -53,8 +55,6 @@ main() {
                 ;;
         esac
     done
-
-    set_state 1
 }
 
 case "$1" in
