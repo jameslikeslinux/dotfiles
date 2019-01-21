@@ -11,7 +11,7 @@ wait_for_events() {
     done
 }
 
-main() {
+refresh() {
     if get_state > /dev/null; then
         timeout 5 "${SELF}" wait
     else
@@ -52,6 +52,6 @@ case "$1" in
         ;;
 
     *)
-        main
+        refresh
         ;;
 esac

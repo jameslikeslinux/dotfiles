@@ -11,7 +11,7 @@ wait_for_events() {
     done
 }
 
-main() {
+refresh() {
     timeout 2 "$SELF" wait
     if (( ? != 124 )); then
         local brightness="$(qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl brightness)"
@@ -63,6 +63,6 @@ case "$1" in
         ;;
 
     *)
-        main
+        refresh
         ;;
 esac

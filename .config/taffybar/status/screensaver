@@ -3,7 +3,7 @@
 SELF="$0"
 source "$(dirname "$(readlink -f "$SELF")")/lib.zsh" "$SELF"
 
-main() {
+refresh() {
     local action prev_state state
 
     action="$(timeout 60 "$SELF" wait)"
@@ -51,6 +51,6 @@ case "$1" in
         ;;
 
     *)
-        main
+        refresh
         ;;
 esac
