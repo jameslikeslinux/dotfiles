@@ -16,7 +16,7 @@ main() {
     if (( ? != 124 )); then
         brightness="$(< /sys/class/backlight/intel_backlight/brightness)"
         max_brightness="$(< /sys/class/backlight/intel_backlight/max_brightness)"
-        percentage="$(printf "%d" $((brightness * 100.0 / max_brightness)))"
+        percentage="$(printf "%.0f" $((brightness * 100.0 / max_brightness)))"
         segment "$(fontawesome "\uf0eb") ${percentage}%"
     fi
 }
