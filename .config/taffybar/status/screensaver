@@ -4,10 +4,14 @@ SELF="$0"
 source "$(dirname "$(readlink -f "$SELF")")/lib.zsh" "$SELF"
 
 main() {
-    local action state
+    local action
+    local state="$(get_state)"
 
-    action="$(timeout 60 "$SELF" wait)"
-    state="$(get_state)"
+    if [[ $state == 'off' ]]; then
+        action="$(timeout 60 "$SELF" wait)"
+    else
+        action="$(get_event)"
+    fi
 
     case "$action" in
         'reset')

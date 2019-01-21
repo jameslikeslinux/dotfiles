@@ -30,22 +30,30 @@ battery_icon() {
 }
 
 main() {
-    if get_state > /dev/null; then
+    local state="$(get_state)"
+
+    if [[ $state == 'update' ]]; then
         timeout 5 "$SELF" wait
+    elif [[ $state != '' ]]; then
+        wait_for_events
     fi
+
+    state='ok'
 
     upower --enumerate | grep '/battery_' | while read battery_object; do
         info="$(upower --show-info "$battery_object")"
-        state="$(awk '/state:/ { print $2 }' <<< "$info")"
+        powerstate="$(awk '/state:/ { print $2 }' <<< "$info")"
         percentage="${$(awk '/percentage:/ { print $2 }' <<< "$info")%\%}"
 
-        case "$state" in
+        case "$powerstate" in
             'discharging')
+                state='update'
                 tte="${$(awk '/time to empty:/ { print $4 substr($5, 0, 1) }' <<< "$info"):-...}"
                 segment "$(battery_icon "$percentage") ${tte}"
                 ;;
 
             'charging')
+                state='update'
                 segment "$(fontawesome "\uf0e7") ${percentage}%"
                 ;;
 
@@ -54,7 +62,7 @@ main() {
         esac
     done
 
-    set_state 1
+    set_state "$state"
 }
 
 case "$1" in

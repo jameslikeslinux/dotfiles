@@ -4,9 +4,15 @@ SELF="$0"
 source "$(dirname "$(readlink -f "$SELF")")/lib.zsh" "$SELF"
 
 main() {
-    if get_state > /dev/null; then
+    local state="$(get_state)"
+
+    if [[ $state == 'update' ]]; then
         timeout 5 "$SELF" wait
+    elif [[ $state != '' ]]; then
+        get_event > /dev/null
     fi
+
+    state='ok'
 
     nmcli --terse device status | head -1 | IFS=: read device type devstate connection rest
 
@@ -15,6 +21,7 @@ main() {
 
         case "$devstate" in
             'connected')
+                state='update'
                 signal="$(iw dev "$device" link | awk '/signal:/ { print $2 $3 }')"
                 segment "${icon} ${signal}"
                 ;;
@@ -28,7 +35,7 @@ main() {
         esac
     fi
 
-    set_state 1
+    set_state "$state"
 }
 
 case "$1" in
