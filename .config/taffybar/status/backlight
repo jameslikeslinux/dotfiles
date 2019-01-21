@@ -14,10 +14,6 @@ wait_for_events() {
 main() {
     timeout 2 "$SELF" wait
     if (( ? != 124 )); then
-        # This hack triggers xmonad to raise the panel temporarily.  I couldn't
-        # get xmonad to listen for randr events on its own.
-        xdotool key XF86BrightnessAdjust
-
         brightness="$(< /sys/class/backlight/intel_backlight/brightness)"
         max_brightness="$(< /sys/class/backlight/intel_backlight/max_brightness)"
         percentage="$(printf "%.0f" $((brightness * 100.0 / max_brightness)))"
