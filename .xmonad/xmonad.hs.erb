@@ -94,34 +94,26 @@ raiseWindow' window = withDisplay $ \display ->
 
 allWindowsByType :: Query Bool -> X [Window]
 allWindowsByType query = withDisplay $ \display -> do
-    rootw <- asks theRoot
-    (_, _, windows) <- io $ queryTree display rootw
+    (_, _, windows) <- asks theRoot >>= io . queryTree display
     filterM (runQuery query) windows
 
 sendToJustAboveDesktop :: Window -> X ()
 sendToJustAboveDesktop window = do
-    desktops <- allWindowsByType isDesktop
     sendToBottom window
-    mapM_ sendToBottom desktops
+    allWindowsByType isDesktop >>= mapM_ sendToBottom
 
 doWindowAction :: (Window -> X ()) -> ManageHook
-doWindowAction action = do
-    win <- ask
-    liftX $ action win
-    idHook
+doWindowAction action = ask >>= liftX . action >> idHook
 
 raiseAllNotifications :: X ()
-raiseAllNotifications = do
-    notifications <- allWindowsByType isNotification
-    mapM_ raiseWindow' notifications
+raiseAllNotifications = allWindowsByType isNotification >>= mapM_ raiseWindow'
 
 raiseAllNotificationsHook :: ManageHook
 raiseAllNotificationsHook = liftX raiseAllNotifications >> idHook
 
 raisePanelTemporarily :: X ()
 raisePanelTemporarily = do
-    windows <- allWindowsByType isDock
-    mapM_ raiseWindow' windows
+    allWindowsByType isDock >>= mapM_ raiseWindow'
     startTimer 3 >>= XS.put . TID
 
 manageHook' = composeOne
@@ -140,8 +132,7 @@ manageHook' = composeOne
 handleEventHook' event = do
     (TID timerId) <- XS.get
     handleTimer timerId event $ do
-        windows <- allWindowsByType isDock
-        mapM_ sendToJustAboveDesktop windows
+        allWindowsByType isDock >>= mapM_ sendToJustAboveDesktop
         return Nothing
     return (All True)
 
