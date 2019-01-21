@@ -10,7 +10,7 @@ default_sink="$(pactl info | awk '/^Default Sink:/ { print $3 }')"
 pactl list sinks | awk -v default_sink="$default_sink" '
     /\tName:/        { is_default = $2 == default_sink }
     /\tDescription:/ { if (is_default) { print substr($0, index($0, ": ") + 2) } }
-' | tr '\n' ':' | IFS=':' read description rest
+' | read description
 
 if [[ $description == 'Built-in Audio Analog'* ||
       $description == 'Dell AC511 USB SoundBar Analog Stereo' ]]; then
