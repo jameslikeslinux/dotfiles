@@ -44,9 +44,9 @@ import Data.Monoid
 import System.Directory
 
 -- Wrapper for TimerId so it can be stored in ExtensibleState
-data TidState = TID TimerId deriving Typeable
-instance ExtensionClass TidState where
-    initialValue = TID 0
+data PanelTimer = PanelTimer TimerId deriving Typeable
+instance ExtensionClass PanelTimer where
+    initialValue = PanelTimer 0
 
 startupHook' = do
     spawn "feh --bg-scale --no-fehbg ~/.wallpaper.png"
@@ -114,7 +114,7 @@ raiseAllNotificationsHook = liftX raiseAllNotifications >> idHook
 raisePanelTemporarily :: X ()
 raisePanelTemporarily = do
     allWindowsByType isDock >>= mapM_ raiseWindow'
-    startTimer 3 >>= XS.put . TID
+    startTimer 3 >>= XS.put . PanelTimer
 
 manageHook' = composeOne
     [ className =? "ksmserver"      -?> doIgnore
@@ -130,7 +130,7 @@ manageHook' = composeOne
 
 -- Based on https://stackoverflow.com/questions/11045239/can-xmonads-loghook-be-run-at-set-intervals-rather-than-in-merely-response-to/14297833
 handleEventHook' event = do
-    (TID timerId) <- XS.get
+    (PanelTimer timerId) <- XS.get
     handleTimer timerId event $ do
         allWindowsByType isDock >>= mapM_ sendToJustAboveDesktop
         return Nothing
