@@ -6,7 +6,7 @@ source "$(dirname "$(readlink -f "$SELF")")/lib.zsh" "$SELF"
 wait_for_events() {
     while event="$(get_event)"; do
         if [[ $event == *'property Backlight'*'state NewValue' ]]; then
-            return
+            break
         fi
     done
 }
@@ -14,9 +14,9 @@ wait_for_events() {
 main() {
     timeout 2 "$SELF" wait
     if (( ? != 124 )); then
-        brightness="$(< /sys/class/backlight/intel_backlight/brightness)"
-        max_brightness="$(< /sys/class/backlight/intel_backlight/max_brightness)"
-        percentage="$(printf "%.0f" $((brightness * 100.0 / max_brightness)))"
+        local brightness="$(qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl brightness)"
+        local max_brightness="$(qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl brightnessMax)"
+        local percentage="$(printf "%.0f" $((brightness * 100.0 / max_brightness)))"
         segment "$(fontawesome "\uf0eb") ${percentage}%"
     fi
 }

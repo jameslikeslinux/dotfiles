@@ -6,7 +6,7 @@ source "$(dirname "$(readlink -f "$SELF")")/lib.zsh" "$SELF"
 wait_for_events() {
     while event="$(get_event)"; do
         if [[ $event != Monitoring* ]]; then
-            return
+            break
         fi
     done
 }
