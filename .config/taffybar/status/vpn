@@ -5,7 +5,7 @@ source "$(dirname "$(readlink -f "$SELF")")/lib.zsh" "$SELF"
 
 main() {
     if get_state > /dev/null; then
-        get_event > /dev/null
+        timeout 5 "$SELF" wait
     fi
 
     if nmcli --terse --fields type,state connection show | grep -q 'vpn:activated'; then
@@ -18,6 +18,10 @@ main() {
 case "$1" in
     'monitor')
         start_monitor_loop nmcli connection monitor
+        ;;
+
+    'wait')
+        get_event > /dev/null
         ;;
 
     *)

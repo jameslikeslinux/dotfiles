@@ -13,7 +13,7 @@ wait_for_events() {
 
 main() {
     if get_state > /dev/null; then
-        wait_for_events
+        timeout 5 "${SELF}" wait
     fi
 
     default_sink="$(pactl info | awk '/^Default Sink:/ { print $3 }')"
@@ -45,6 +45,10 @@ main() {
 case "$1" in
     'monitor')
         start_monitor_loop pactl subscribe
+        ;;
+
+    'wait')
+        wait_for_events
         ;;
 
     *)
