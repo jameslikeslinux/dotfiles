@@ -114,7 +114,7 @@ raiseAllNotificationsHook = liftX raiseAllNotifications >> idHook
 raisePanelTemporarily :: X ()
 raisePanelTemporarily = do
     allWindowsByType isDock >>= mapM_ raiseWindow'
-    startTimer 3 >>= XS.put . PanelTimer
+    startTimer 2 >>= XS.put . PanelTimer
 
 manageHook' = composeOne
     [ className =? "ksmserver"      -?> doIgnore
