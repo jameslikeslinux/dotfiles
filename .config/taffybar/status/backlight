@@ -1,0 +1,36 @@
+#!/usr/bin/env zsh
+
+SELF="$0"
+source "$(dirname "$(readlink -f "$SELF")")/lib.zsh" "$SELF"
+
+wait_for_events() {
+    while event="$(get_event)"; do
+        if [[ $event == *'property Backlight'*'state NewValue' ]]; then
+            return
+        fi
+    done
+}
+
+main() {
+    timeout 2 "$SELF" wait
+    if (( ? != 124 )); then
+        brightness="$(< /sys/class/backlight/intel_backlight/brightness)"
+        max_brightness="$(< /sys/class/backlight/intel_backlight/max_brightness)"
+        percentage="$(printf "%d" $((brightness * 100.0 / max_brightness)))"
+        segment "$(fontawesome "\uf0eb") ${percentage}%"
+    fi
+}
+
+case "$1" in
+    'monitor')
+        start_monitor_loop xev -root -event randr
+        ;;
+
+    'wait')
+        wait_for_events
+        ;;
+
+    *)
+        main
+        ;;
+esac
