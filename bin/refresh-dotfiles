@@ -38,7 +38,7 @@ Options:
 END
 }
 
-ARGS=$(getopt -o 'h' -l 'no-fetch,help' -n 'refresh-dotfiles' -- "$@")
+ARGS=$(getopt -o 'hu:' -l 'no-fetch,help,user:' -n 'refresh-dotfiles' -- "$@")
 
 if [ $? -ne 0 ]; then
     usage
@@ -46,6 +46,8 @@ if [ $? -ne 0 ]; then
 fi
 
 eval set -- "$ARGS"
+
+user="$USER"
 
 while true; do
     case "$1" in
@@ -57,6 +59,11 @@ while true; do
             shift
             usage
             exit 0
+            ;;
+        '-u'|'--user')
+            shift
+            user=$1
+            shift
             ;;
         '--')
             shift
@@ -73,6 +80,7 @@ generate_manifest() {
         cat <<END
 file { '${BASEDIR}/${template%.erb}':
   mode    => '${mode}',
+  owner   => '${user}',
   content => template('${BASEDIR}/${template}'),
 }
 
@@ -111,6 +119,7 @@ END
 #
 cd "$BASEDIR"
 touch "$DOT_TEMPLATES"
+chown "$user" "$DOT_TEMPLATES"
 
 branch="$(git rev-parse --abbrev-ref HEAD)"
 
