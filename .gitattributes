@@ -1,1 +1,2 @@
-*.gif   -text
+*.gif -text
+* text=auto eol=lf
