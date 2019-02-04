@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [[ $1 ]]; then
-    export HOME=~"$1"
+    export HOME="$(eval echo "~${1}")"
     userargs=('--user' "$1")
 else
     export HOME=~
