@@ -110,7 +110,7 @@ END
 # Main program
 #
 cd "$BASEDIR"
-[[ ! -e $DOT_TEMPLATES ]] && echo > "$DOT_TEMPLATES"
+touch "$DOT_TEMPLATES"
 
 branch="$(git rev-parse --abbrev-ref HEAD)"
 
