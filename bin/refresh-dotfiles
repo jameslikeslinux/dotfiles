@@ -13,16 +13,19 @@ BASEDIR="$(readlink -f "$(dirname "$0")/..")"
 TMPFILE="$(mktemp)"
 trap "rm -f '$TMPFILE'" EXIT INT TERM
 
+# A place to keep track of what this script manages
+DOT_TEMPLATES_ORIG="${BASEDIR}/.templates"
+
 if [[ $OSTYPE == 'cygwin' ]]; then
     BASEDIR="$(cygpath -am "$BASEDIR")"
     TMPFILE="$(cygpath -am "$TMPFILE")"
     PUPPET='puppet.bat'
+
+    DOT_TEMPLATES="${BASEDIR}/.templates"
 else
     PUPPET='puppet'
+    DOT_TEMPLATES="$DOT_TEMPLATES_ORIG"
 fi
-
-# A place to keep track of what this script manages
-DOT_TEMPLATES="${BASEDIR}/.templates"
 
 #
 # Read and parse command line options
@@ -110,7 +113,7 @@ END
 # Main program
 #
 cd "$BASEDIR"
-touch "$DOT_TEMPLATES"
+touch "$DOT_TEMPLATES_ORIG"
 
 branch="$(git rev-parse --abbrev-ref HEAD)"
 
