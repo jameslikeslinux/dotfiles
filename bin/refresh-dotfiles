@@ -111,6 +111,7 @@ END
 #
 cd "$BASEDIR"
 touch "$DOT_TEMPLATES"
+dot_templates_mode="$(stat -c '%a' "$DOT_TEMPLATES")"
 
 branch="$(git rev-parse --abbrev-ref HEAD)"
 
@@ -126,4 +127,7 @@ if [[ $branch == 'master' || $BASEDIR != $(readlink -f "$HOME") ]]; then
     rmdir --ignore-fail-on-non-empty /tmp/cache
     generate_manifest > "$TMPFILE"
     RUBYLIB="${BASEDIR}/lib/ruby" "$PUPPET" apply "$TMPFILE"
+
+    # Puppet on Windows messes with the permissions of this file; restore it
+    chmod "$dot_templates_mode" "$DOT_TEMPLATES"
 fi
