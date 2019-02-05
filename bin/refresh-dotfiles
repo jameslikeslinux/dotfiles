@@ -68,11 +68,18 @@ while true; do
     esac
 done
 
+mode() {
+    if [[ $OSTYPE == 'cygwin' ]]; then
+        stat -c '%a' "$(cygpath "$1")"
+    else
+        stat -c '%a' "$1"
+    fi
+}
 
 generate_manifest() {
     # Create/update dotfiles from templates in git
     git ls-files '*.erb' | while read template; do
-        mode="$(stat -c '%a' "$template")"
+        mode="$(mode "$template")"
         cat <<END
 file { '${BASEDIR}/${template%.erb}':
   mode    => '${mode}',
