@@ -123,6 +123,7 @@ fi
 # Process templates with Puppet unless we're on a non-master branch
 if [[ $branch == 'master' || $BASEDIR != $(readlink -f "$HOME") ]]; then
     "$PUPPET" module install puppetlabs-stdlib
+    rmdir --ignore-fail-on-non-empty /tmp/cache
     generate_manifest > "$TMPFILE"
     RUBYLIB="${BASEDIR}/lib/ruby" "$PUPPET" apply "$TMPFILE"
 fi
