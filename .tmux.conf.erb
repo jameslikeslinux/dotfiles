@@ -73,6 +73,9 @@ run-shell ~/.tmux/plugins/tmux-pain-control/pain_control.tmux
 
 # Enable copying to system clipboard
 # https://github.com/tmux-plugins/tmux-yank
+<% if @facts['osfamily'] == 'windows' -%>
+set -g @override_copy_command 'putclip'
+<% end -%>
 run-shell ~/.tmux/plugins/tmux-yank/yank.tmux
 
 # Sensible defaults (does not change anything already set above)
