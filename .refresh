@@ -2,9 +2,10 @@
 
 if [[ $1 ]]; then
     export HOME="$(eval echo "~${1}")"
+    userargs=('--user' "$1")
 else
     export HOME=~
 fi
 
 BASEDIR="$(readlink -f "$(dirname "$0")")"
-exec "${BASEDIR}/bin/refresh-dotfiles" --no-fetch
+exec "${BASEDIR}/bin/refresh-dotfiles" --no-fetch "${userargs[@]}"
