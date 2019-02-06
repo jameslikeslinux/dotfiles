@@ -41,7 +41,7 @@ Options:
 END
 }
 
-ARGS=$(getopt -o 'hu:' -l 'no-fetch,help,user:' -n 'refresh-dotfiles' -- "$@")
+ARGS=$(getopt -o 'h' -l 'no-fetch,help' -n 'refresh-dotfiles' -- "$@")
 
 if [ $? -ne 0 ]; then
     usage
@@ -49,8 +49,6 @@ if [ $? -ne 0 ]; then
 fi
 
 eval set -- "$ARGS"
-
-user="$(whoami)"
 
 while true; do
     case "$1" in
@@ -63,19 +61,12 @@ while true; do
             usage
             exit 0
             ;;
-        '-u'|'--user')
-            shift
-            user="$1"
-            shift
-            ;;
         '--')
             shift
             break
             ;;
     esac
 done
-
-group="$(id -gn "$user")"
 
 mode() {
     if [[ $OSTYPE == 'cygwin' ]]; then
@@ -92,8 +83,6 @@ generate_manifest() {
         cat <<END
 file { '${BASEDIR}/${template%.erb}':
   mode    => '${mode}',
-  owner   => '${user}',
-  group   => '${group}',
   content => template('${BASEDIR}/${template}'),
 }
 
@@ -130,12 +119,8 @@ END
 #
 # Main program
 #
-
-set -e
-
 cd "$BASEDIR"
 touch "$DOT_TEMPLATES_ORIG"
-chown "${user}:${group}" "$DOT_TEMPLATES_ORIG"
 
 branch="$(git rev-parse --abbrev-ref HEAD)"
 
@@ -151,5 +136,4 @@ if [[ $branch == 'master' || $BASEDIR != $(readlink -f "$HOME") ]]; then
     [[ -d /tmp/cache ]] && rmdir --ignore-fail-on-non-empty /tmp/cache
     generate_manifest > "$TMPFILE"
     RUBYLIB="${BASEDIR}/lib/ruby" "$PUPPET" apply "$TMPFILE"
-    exit 1
 fi
