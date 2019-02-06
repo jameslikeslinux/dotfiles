@@ -50,7 +50,7 @@ fi
 
 eval set -- "$ARGS"
 
-user="$USER"
+user="$(whoami)"
 
 while true; do
     case "$1" in
@@ -151,4 +151,5 @@ if [[ $branch == 'master' || $BASEDIR != $(readlink -f "$HOME") ]]; then
     [[ -d /tmp/cache ]] && rmdir --ignore-fail-on-non-empty /tmp/cache
     generate_manifest > "$TMPFILE"
     RUBYLIB="${BASEDIR}/lib/ruby" "$PUPPET" apply "$TMPFILE"
+    exit 1
 fi
