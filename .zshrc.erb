@@ -91,7 +91,10 @@ stty -ixon      # make ^S available to shell
 zstyle ':prompt:mine' hide-users '(james|jlee|jtl|root)'
 
 # Figure out if I'm running as a priviliged user
-if [[ $EUID == 0 || ($OS == 'Windows_NT' && -w '/cygdrive/c') ]]; then
+if [[ $EUID == 0  ]]; then
+    zstyle ':prompt:mine' root true
+fi
+if [[ $OS == 'Windows_NT' ]] && id -Gnz | tr '\0' '\n' | grep -q '^Administrators$'; then
     zstyle ':prompt:mine' root true
 fi
 
