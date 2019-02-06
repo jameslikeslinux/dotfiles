@@ -146,11 +146,7 @@ p() {
 compdef "_files -W ${HOME}/projects" p
 
 # Set standard umask
-if [[ $OS == 'Windows_NT' ]]; then
-    umask 002
-else
-    umask 022
-fi
+umask 022
 
 # Glue polutes my shell
 # (for some reason these have to go here, not .zshenv)
