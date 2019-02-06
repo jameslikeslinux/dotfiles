@@ -34,21 +34,31 @@ fi
 
 tmux_commands=($(TMUX='' tmux list-commands | gawk '{ gsub("[()]", "", $2); print $1; print $2 }'))
 
+is_windows_admin() {
+    [[ $OS == 'Windows_NT' ]] && id -Gnz | tr '\0' '\n' | grep -q '^Administrators$'
+}
+
 exec_tmux() {
-    if tmux list-sessions > /dev/null 2>&1; then
+    local -a socket_name
+
+    if is_windows_admin; then
+        socket_name=(-L admin)
+    fi
+
+    if tmux "${socket_name[@]}" list-sessions > /dev/null 2>&1; then
         if [[ ! $TMUX ]]; then
             # Store *outside* TERM inside tmux
-            tmux set-environment -g TERM "$TERM"
+            tmux "${socket_name[@]}" set-environment -g TERM "$TERM"
 
             # Ensure the tmux server has the latest Kerberos ticket cache and
             # that it always has up-to-date AFS tokens.
             if [[ $KRB5CCNAME ]]; then
-                tmux set-environment -g KRB5CCNAME "$KRB5CCNAME"
+                tmux "${socket_name[@]}" set-environment -g KRB5CCNAME "$KRB5CCNAME"
                 if [[ -x $(whence aklog) ]]; then
-                    tmux run-shell aklog
+                    tmux "${socket_name[@]}" run-shell aklog
                 fi
             else
-                tmux set-environment -gr KRB5CCNAME
+                tmux "${socket_name[@]}" set-environment -gr KRB5CCNAME
             fi
         fi
     elif systemctl --user > /dev/null 2>&1; then
@@ -56,7 +66,7 @@ exec_tmux() {
         exec systemd-run --user --scope --unit tmux tmux "$@"
     fi
 
-    exec tmux "$@"
+    exec tmux "${socket_name[@]}" "$@"
 }
 
 tmux_new_session() {
@@ -117,6 +127,8 @@ default_session_name() {
                 fi
             fi
         fi
+    elif is_windows_admin; then
+        name="${name}-admin"
     fi
 
     print "$name"
