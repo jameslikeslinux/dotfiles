@@ -130,6 +130,9 @@ END
 #
 # Main program
 #
+
+set -e
+
 cd "$BASEDIR"
 touch "$DOT_TEMPLATES_ORIG"
 chown "${user}:${group}" "$DOT_TEMPLATES_ORIG"
