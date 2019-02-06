@@ -75,7 +75,7 @@ while true; do
     esac
 done
 
-group="$(id -g "$user")"
+group="$(id -gn "$user")"
 
 mode() {
     if [[ $OSTYPE == 'cygwin' ]]; then
