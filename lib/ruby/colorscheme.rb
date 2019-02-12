@@ -97,6 +97,10 @@ class ColorScheme
     ColorScheme.new('.colorscheme-light.yaml')
   end
 
+  def self.bright
+    ColorScheme.new('.colorscheme-bright.yaml')
+  end
+
   def initialize(filename)
     @scheme_data = YAML.load_file(File.join(File.dirname(__FILE__), '..', '..', filename))
     @colors = BASE_TO_ANSI.keys.each_with_object(Hash.new) do |term_colors, colors_acc|
