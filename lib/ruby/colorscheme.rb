@@ -52,10 +52,14 @@ class ColorScheme
       mix(@colorscheme.colors_by_base[0x07], weight)
     end
 
-    # Add a bit of 'black' to a color.  White is defined by color 0, the end of the
+    # Add a bit of 'black' to a color.  Black is defined by color 0, the end of the
     # gray scale in a color scheme.  (This is usually #000000, or close.)
     def shade(weight = 50)
       mix(@colorscheme.colors_by_base[0x00], weight)
+    end
+
+    def invert
+      Color.new(@colorscheme, "%02x%02x%02x" % rgb.map { |n| n ^ 255 }, nil, nil, nil)
     end
 
     def x11
