@@ -128,6 +128,10 @@ branch="$(git rev-parse --abbrev-ref HEAD)"
 if [[ -z $no_fetch ]]; then
     git fetch
     git reset --hard "origin/${branch}"
+
+    if [[ $OSTYPE == 'cygwin' ]]; then
+        "$PUPPET" resource file "${BASEDIR}/.ssh/config.erb" 'mode=600'
+    fi
 fi
 
 # Process templates with Puppet unless we're on a non-master branch
