@@ -1,6 +1,11 @@
 [$Version]
 update_info=kscreenlocker.upd:0.1-autolock
 
+<% if @facts['hostname'] == 'falcon' -%>
+[Daemon]
+Autolock=false
+
+<% end -%>
 [Greeter]
 Theme=org.kde.breeze.desktop
 WallpaperPlugin=org.kde.color
