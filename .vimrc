@@ -40,6 +40,26 @@ set showcmd
 " Use space as leader in a way that it still appears in the showcmd
 map <Space> <Leader>
 
+" Make switching between buffers easier
+nnoremap <Leader>n :bn<CR>
+nnoremap <Leader>p :bp<CR>
+nnoremap <Leader>a :b#<CR>
+
+" Create shortcuts to switch between indenting styles:
+" indent with spaces:
+nnoremap <Leader>2 :setlocal shiftwidth=2 tabstop=8 expandtab<CR>
+nnoremap <Leader>4 :setlocal shiftwidth=4 tabstop=8 expandtab<CR>
+nnoremap <Leader>8 :setlocal shiftwidth=8 tabstop=8 expandtab<CR>
+
+" indent with tabs:
+nnoremap <Leader><M-2> :setlocal shiftwidth=2 tabstop=2 noexpandtab<CR>
+nnoremap <Leader><M-4> :setlocal shiftwidth=4 tabstop=4 noexpandtab<CR>
+nnoremap <Leader><M-8> :setlocal shiftwidth=8 tabstop=8 noexpandtab<CR>
+
+" sturdiva mode
+" (maintain existing shiftwidth, but also enable hard tabs)
+nnoremap <Leader>s :setlocal tabstop=8 noexpandtab<CR>
+
 " Default to four spaces for tabs
 set shiftwidth=4
 set expandtab
@@ -53,19 +73,6 @@ augroup indentation
     " Makefiles must use hard tabs, but let them appear as four spaces
     autocmd FileType make setlocal tabstop=4 noexpandtab
 augroup end
-
-" Create shortcuts to switch between indenting styles:
-" default 4-space indent
-nnoremap <Leader>0 :setlocal shiftwidth=4 tabstop=8 expandtab<CR>
-" modern 2-space indent
-nnoremap <Leader>1 :setlocal shiftwidth=2 tabstop=8 expandtab<CR>
-" 4-space hard tab
-nnoremap <Leader>2 :setlocal shiftwidth=4 tabstop=4 noexpandtab<CR>
-" 8-space hard tab
-nnoremap <Leader>3 :setlocal shiftwidth=8 tabstop=8 noexpandtab<CR>
-" sturdiva mode (ugh)
-" (maintain existing shiftwidth, but also enable hard tabs)
-nnoremap <Leader>4 :setlocal tabstop=8 noexpandtab<CR>
 
 " Load Pathogen
 runtime bundle/vim-pathogen/autoload/pathogen.vim
