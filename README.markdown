@@ -15,12 +15,13 @@ set of defaults that (hopefully) everyone can agree on.
 
 ## Installation
 
-If you don't have a preferred installation method, I recommend
-installing [pathogen.vim](https://github.com/tpope/vim-pathogen), and
-then simply copy and paste:
+Install using your favorite package manager, or use Vim's built-in package
+support:
 
-    cd ~/.vim/bundle
-    git clone git://github.com/tpope/vim-sensible.git
+    mkdir -p ~/.vim/pack/tpope/start
+    cd ~/.vim/pack/tpope/start
+    git clone https://tpope.io/vim/sensible.git
+    vim -u NONE -c "helptags sensible/doc" -c q
 
 ## Features
 
@@ -31,6 +32,7 @@ mostly `:set` calls.)  Here's a taste:
 * `'incsearch'`: Start searching before pressing enter.
 * `'listchars'`: Makes `:set list` (visible whitespace) prettier.
 * `'scrolloff'`: Always show at least one line above/below the cursor.
+* `'autoread'`: Autoload file changes. You can undo by pressing `u`.
 * `runtime! macros/matchit.vim`: Load the version of matchit.vim that ships
   with Vim.
 
@@ -50,7 +52,7 @@ documentation for an option.  If you install [scriptease.vim][], you can press
 
 Normally, sensible.vim loads after your vimrc, making it a bit tricky to
 override (although you could use `after/plugin/sensible.vim`).  If you want to
-load it earlier, add the following line to you vimrc, then put your overrides
+load it earlier, add the following line to your vimrc, then put your overrides
 below.
 
     runtime! plugin/sensible.vim
