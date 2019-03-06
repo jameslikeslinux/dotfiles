@@ -43,7 +43,7 @@ map <Space> <Leader>
 " Make switching between buffers easier
 nnoremap <Leader>n :bn<CR>
 nnoremap <Leader>p :bp<CR>
-nnoremap <Leader>a :b#<CR>
+nnoremap <Leader>b :b#<CR>
 
 " Create shortcuts to switch between indenting styles:
 " indent with spaces:
