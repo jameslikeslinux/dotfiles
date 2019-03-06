@@ -52,9 +52,9 @@ nnoremap <Leader>4 :setlocal shiftwidth=4 tabstop=8 expandtab<CR>
 nnoremap <Leader>8 :setlocal shiftwidth=8 tabstop=8 expandtab<CR>
 
 " indent with tabs:
-nnoremap <Leader><M-2> :setlocal shiftwidth=2 tabstop=2 noexpandtab<CR>
-nnoremap <Leader><M-4> :setlocal shiftwidth=4 tabstop=4 noexpandtab<CR>
-nnoremap <Leader><M-8> :setlocal shiftwidth=8 tabstop=8 noexpandtab<CR>
+nnoremap <Leader>2 :setlocal shiftwidth=2 tabstop=2 noexpandtab<CR>
+nnoremap <Leader>4 :setlocal shiftwidth=4 tabstop=4 noexpandtab<CR>
+nnoremap <Leader>8 :setlocal shiftwidth=8 tabstop=8 noexpandtab<CR>
 
 " sturdiva mode
 " (maintain existing shiftwidth, but also enable hard tabs)
