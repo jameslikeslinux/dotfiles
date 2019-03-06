@@ -4,9 +4,13 @@ Manage your `'runtimepath'` with ease.  In practical terms, pathogen.vim
 makes it super easy to install plugins and runtime files in their own
 private directories.
 
+**For new users, I recommend using Vim's built-in package management
+instead.**  `:help packages`
+
 ## Installation
 
-Install to `~/.vim/autoload/pathogen.vim`.  Or copy and paste:
+Install to `~/.vim/autoload/pathogen.vim`.
+Or copy and paste the following into your terminal/shell:
 
     mkdir -p ~/.vim/autoload ~/.vim/bundle && \
     curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
@@ -60,6 +64,14 @@ Finally, pathogen.vim has a rich API that can manipulate `'runtimepath'`
 and other comma-delimited path options in ways most people will never
 need to do.  If you're one of those edge cases, look at the source.
 It's well documented.
+
+## Native Vim Package Management
+
+Vim 8 includes support for package management in a manner similar to
+pathogen.vim.  If you'd like to transition to this native support,
+pathogen.vim can help.  Calling `pathogen#infect()` on an older version of Vim
+will supplement the `bundle/{}` default with `pack/{}/start/{}`, effectively
+backporting a subset of the new native functionality.
 
 ## Runtime File Editing
 
