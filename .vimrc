@@ -153,3 +153,9 @@ augroup special_filetypes
     " http://vim.wikia.com/wiki/Always_start_on_first_line_of_git_commit_message
     autocmd FileType gitcommit call setpos('.', [0, 1, 1, 0])
 augroup end
+
+" XXX: Work around painfully slow syntax highlighting for ruby/perl/others:
+" use the legacy regexp engine.  Bug reports suggest this problem is specific
+" to 'relativenumber' configurations, but the slowness arises with 'hlsearch'
+" too.
+set regexpengine=1
