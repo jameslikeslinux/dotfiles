@@ -25,6 +25,9 @@ set clipboard=autoselect
 set splitbelow
 set splitright
 
+" Show line numbers for jumping around
+set relativenumber
+
 " Disable wrapping, show indicators on overflow, scroll smoothly
 set nowrap list sidescroll=1
 
