@@ -164,7 +164,7 @@ topicConfig = def
 <% if @facts['hostname'] == 'eagle' -%>
         , ("chat"   , spawn "~/.xmonad/scripts/firefox-wait --new-window teams.webex.com")
 <% end -%>
-        , ("windows", spawn "virt-viewer --full-screen --connect=qemu:///system --wait --reconnect -- <%= windowsvm %>")
+        , ("windows", spawn "GDK_DPI_SCALE=<%= gui_scaling_factor %> GDK_SCALE=1 virt-viewer --full-screen --connect=qemu:///system --wait --reconnect -- <%= windowsvm %>")
         ]
     }
 
