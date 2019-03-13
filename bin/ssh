@@ -35,7 +35,7 @@ PATH="$(path_remove "$PATH" "$script_dir")"
 # Older versions of OpenSSH don't have the '-G' option in which case this
 # variable will be empty and fall through to the default case in the next
 # conditional.
-hostname="$(ssh -G "$@" 2>/dev/null | awk '/^hostname\s/ { print $2 }')"
+hostname="$(ssh -G "$@" 2>/dev/null | awk '$1 == "hostname" { print $2 }')"
 
 if [[ $hostname == *.internal ]]; then
     ip="$(sed 's/ip-\([[:digit:]]\+\)-\([[:digit:]]\+\)-\([[:digit:]]\+\)-\([[:digit:]]\+\).*/\1.\2.\3.\4/' <<< "$hostname")"
