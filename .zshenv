@@ -1,5 +1,7 @@
-# Always use unicode
-export LANG=en_US.UTF-8
+# Always use unicode except on pfSense
+if [[ $HOST != 'router.mgmt.home' ]]; then
+    export LANG=en_US.UTF-8
+fi
 
 # Set path
 if [[ -e /etc/glue/restrict ]]; then
