@@ -1,0 +1,72 @@
+#	Reconstructed via infocmp from file: /home/james/.terminfo/t/tmux
+# (untranslatable capabilities removed to fit entry within 1023 bytes)
+# (sgr removed to fit entry within 1023 bytes)
+# (acsc removed to fit entry within 1023 bytes)
+tmux|tmux terminal multiplexer:\
+	:am:bs:hs:km:mi:ms:pt:xn:\
+	:Co#8:co#80:it#8:li#24:pa#64:\
+	:@7=\E[4~:AB=\E[4%dm:AF=\E[3%dm:AL=\E[%dL:DC=\E[%dP:\
+	:DL=\E[%dM:DO=\E[%dB:F1=\E[23~:F2=\E[24~:IC=\E[%d@:\
+	:Km=\E[M:LE=\E[%dD:RI=\E[%dC:UP=\E[%dA:ZH=\E[3m:ZR=\E[23m:\
+	:ae=^O:al=\E[L:as=^N:bl=^G:bt=\E[Z:cb=\E[1K:cd=\E[J:ce=\E[K:\
+	:cl=\E[H\E[J:cm=\E[%i%d;%dH:cr=\r:cs=\E[%i%d;%dr:\
+	:ct=\E[3g:dc=\E[P:dl=\E[M:do=\n:ds=\E]0;\007:eA=\E(B\E)0:\
+	:ei=\E[4l:fs=^G:ho=\E[H:im=\E[4h:is=\E)0:k1=\EOP:k2=\EOQ:\
+	:k3=\EOR:k4=\EOS:k5=\E[15~:k6=\E[17~:k7=\E[18~:k8=\E[19~:\
+	:k9=\E[20~:k;=\E[21~:kB=\E[Z:kD=\E[3~:kI=\E[2~:kN=\E[6~:\
+	:kP=\E[5~:kb=^H:kd=\EOB:ke=\E[?1l\E>:kh=\E[1~:kl=\EOD:\
+	:kr=\EOC:ks=\E[?1h\E=:ku=\EOA:le=^H:mb=\E[5m:md=\E[1m:\
+	:me=\E[0m:mh=\E[2m:mr=\E[7m:nd=\E[C:nw=\EE:op=\E[39;49m:\
+	:rc=\E8:rs=\Ec\E[?1000l\E[?25h:sc=\E7:se=\E[27m:sf=\n:\
+	:so=\E[7m:sr=\EM:st=\EH:ta=^I:te=\E[?1049l:ti=\E[?1049h:\
+	:ts=\E]0;:ue=\E[24m:up=\EM:us=\E[4m:vb=\Eg:\
+	:ve=\E[34h\E[?25h:vi=\E[?25l:vs=\E[34l:
+
+#	Reconstructed via infocmp from file: /home/james/.terminfo/t/tmux-256color
+# (untranslatable capabilities removed to fit entry within 1023 bytes)
+# (sgr removed to fit entry within 1023 bytes)
+# (acsc removed to fit entry within 1023 bytes)
+tmux-256color|tmux with 256 colors:\
+	:am:bs:hs:km:mi:ms:pt:xn:\
+	:Co#256:co#80:it#8:li#24:pa#32767:\
+	:@7=\E[4~:AB=\E[48;5;%dm:AF=\E[38;5;%dm:AL=\E[%dL:\
+	:DC=\E[%dP:DL=\E[%dM:DO=\E[%dB:F1=\E[23~:F2=\E[24~:\
+	:IC=\E[%d@:Km=\E[M:LE=\E[%dD:RI=\E[%dC:UP=\E[%dA:ZH=\E[3m:\
+	:ZR=\E[23m:ae=^O:al=\E[L:as=^N:bl=^G:bt=\E[Z:cb=\E[1K:\
+	:cd=\E[J:ce=\E[K:cl=\E[H\E[J:cm=\E[%i%d;%dH:cr=\r:\
+	:cs=\E[%i%d;%dr:ct=\E[3g:dc=\E[P:dl=\E[M:do=\n:\
+	:ds=\E]0;\007:eA=\E(B\E)0:ei=\E[4l:fs=^G:ho=\E[H:im=\E[4h:\
+	:is=\E)0:k1=\EOP:k2=\EOQ:k3=\EOR:k4=\EOS:k5=\E[15~:\
+	:k6=\E[17~:k7=\E[18~:k8=\E[19~:k9=\E[20~:k;=\E[21~:\
+	:kB=\E[Z:kD=\E[3~:kI=\E[2~:kN=\E[6~:kP=\E[5~:kb=^H:kd=\EOB:\
+	:ke=\E[?1l\E>:kh=\E[1~:kl=\EOD:kr=\EOC:ks=\E[?1h\E=:\
+	:ku=\EOA:le=^H:mb=\E[5m:md=\E[1m:me=\E[0m:mh=\E[2m:\
+	:mr=\E[7m:nd=\E[C:nw=\EE:op=\E[39;49m:rc=\E8:\
+	:rs=\Ec\E[?1000l\E[?25h:sc=\E7:se=\E[27m:sf=\n:so=\E[7m:\
+	:sr=\EM:st=\EH:ta=^I:te=\E[?1049l:ti=\E[?1049h:ts=\E]0;:\
+	:ue=\E[24m:up=\EM:us=\E[4m:vb=\Eg:ve=\E[34h\E[?25h:\
+	:vi=\E[?25l:vs=\E[34l:
+
+rxvt-unicode-256color-powerline:\
+	:tc=rxvt-unicode-256color:
+
+tmux-256color-powerline:\
+	:tc=tmux-256color:
+
+tmux-powerline:\
+	:tc=tmux:
+
+tmux-truecolor:\
+	:tc=tmux-256color:
+
+tmux-truecolor-powerline:\
+	:tc=tmux-256color:
+
+xterm-256color-powerline:\
+	:tc=xterm-256color:
+
+xterm-truecolor:\
+	:tc=xterm-256color:
+
+xterm-truecolor-powerline:\
+	:tc=xterm-256color:
