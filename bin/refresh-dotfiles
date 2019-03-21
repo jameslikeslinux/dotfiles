@@ -9,6 +9,12 @@
 # Process files relative to this script
 BASEDIR="$(readlink -f "$(dirname "$0")/..")"
 
+# Just download and extract compiled repository in non-git-based directories
+if [[ ! -d "$BASEDIR/.git" ]]; then
+    curl -s https://codeload.github.com/iamjamestl/dotfiles/tar.gz/compiled | tar -C "$BASEDIR" -xvzf - --strip 1
+    exit
+fi
+
 # Create place to store generated Puppet manifest
 TMPFILE="$(mktemp)"
 trap "rm -f '$TMPFILE'" EXIT INT TERM
