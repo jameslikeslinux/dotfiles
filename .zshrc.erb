@@ -10,6 +10,11 @@ fi
 # This is kind of a hack, but not that big of a deal
 [[ -e /etc/zsh/zprofile ]] && source $HOME/.zshenv
 
+# My only FreeBSD system, pfSense, doesn't really support unicode
+if [[ $OSTYPE == freebsd* ]]; then
+    export TERM="${TERM%-powerline}"
+fi
+
 <% require 'colorscheme'
 cs = ColorScheme.dark
 xterm_escapes = cs.terminal.map do |c|
