@@ -29,6 +29,8 @@ elif [[ -e /etc/glue ]]; then
     else
         exec su -c "$command"
     fi
+elif [[ $HOST == 'router.mgmt.home' ]]; then
+    exec sudo -E "${@:--s}"
 else
     exec sudo "${@:--s}"
 fi
