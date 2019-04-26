@@ -6,13 +6,14 @@ text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1
 [global]
 geometry = "<%= (400 * gui_scaling_factor).round %>x4-<%= (7 * text_scaling_factor).round %>+<%= (25 * text_scaling_factor).round %>"
 shrink = true
+corner_radius = <%= (4 * gui_scaling_factor).round %>
 padding = <%= (4 * gui_scaling_factor).round %>
 horizontal_padding = <%= (8 * gui_scaling_factor).round %>
 separator_height = <%= (1 * gui_scaling_factor).round %>
 separator_color = foreground
 transparency = 10
 
-font = sans <%= (9 * text_scaling_factor).round %>
+font = sans 9
 markup = full
 format = "<b>%s</b>\n%b"
 word_wrap = true
