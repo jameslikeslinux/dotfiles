@@ -152,7 +152,7 @@ topicConfig :: TopicConfig
 topicConfig = def
     { defaultTopicAction = \topic -> return ()
     , topicActions = fromList $
-<% if @facts['hostname'] == 'owl' -%>
+<% if ['owl', 'caracara'].include? @facts['hostname'] -%>
         [ ("web"    , spawn "~/.xmonad/scripts/firefox-wait --new-window about:home")
 <% else -%>
         [ ("web"    , spawn "~/.xmonad/scripts/firefox-wait --new-window about:home && ~/.xmonad/scripts/firefox-wait twitter.com washingtonpost.com")
