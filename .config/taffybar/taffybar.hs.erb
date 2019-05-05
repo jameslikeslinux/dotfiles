@@ -108,7 +108,7 @@ taffybarConfig = defaultSimpleTaffyConfig
   where
     workspaces    = workspacesNew Main.workspacesConfig
     windows       = windowsNew windowsConfig
-    clock         = textClockNew Nothing ((colorize "#383838" "#282828" "\xe0b2") ++ (colorize "#d8d8d8" "#383838" " %a %b %_d %r ")) 1
+    clock         = textClockNew Nothing ("<span fgcolor='#383838' bgcolor='#282828' letter_spacing='<%= (3333 * (text_scaling_factor - 1.1)).round %>'>\xe0b2</span>" ++ (colorize "#d8d8d8" "#383838" " %a %b %_d %r ")) 1
     statusWidgets = map statusWidget ["vpn", "screensaver", "backlight", "audio", "network", "power", "load"]
 
 main :: IO ()

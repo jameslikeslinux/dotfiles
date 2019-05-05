@@ -106,7 +106,8 @@ fontawesome() {
 }
 
 first_segment() {
-    print "$(colorize '#282828' '#000000' '')$(colorize '#d8d8d8' '#282828' " $@ ")"
+<% tweak = (3333 * ((@facts['scaling'] ? @facts['scaling']['text'] : 1) - 1.1)).round -%>
+    print "<span fgcolor='#282828' bgcolor='#000000' letter_spacing='<%= tweak %>'></span>$(colorize '#d8d8d8' '#282828' " $@")<span bgcolor='#282828' letter_spacing='-<%= tweak %>'> </span>"
 }
 
 segment() {
