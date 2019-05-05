@@ -159,7 +159,7 @@ topicConfig = def
 <% end -%>
         , ("ops"    , (ask >>= spawn . terminal . config))
         , ("dev"    , (ask >>= spawn . terminal . config))
-        , ("music"  , spawn "google-play-music-desktop-player")
+        , ("music"  , spawn "chromium --start-fullscreen https://play.google.com/music/listen")
         , ("mail"   , spawn "~/.xmonad/scripts/firefox-wait --new-window https://mail.google.com/mail/u/0/#inbox && ~/.xmonad/scripts/firefox-wait --new-window https://mail.google.com/mail/u/1/#inbox")
 <% if @facts['hostname'] == 'eagle' -%>
         , ("chat"   , spawn "~/.xmonad/scripts/firefox-wait --new-window teams.webex.com")
@@ -268,7 +268,7 @@ main = xmonad
     , ("M-S-q"         , spawn "qdbus org.kde.ksmserver /KSMServer logout 1 0 1")
     , ("M-s"           , raisePanelTemporarily >> spawn "~/.xmonad/scripts/screensaver toggle")
     , ("M-<Escape>"    , unGrab >> spawn "~/.xmonad/scripts/screensaver reset; loginctl lock-session")
-    , ("M-<Space>"     , spawn "qdbus org.mpris.MediaPlayer2.google-play-music-desktop-player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
+    , ("M-<Space>"     , spawn "qdbus org.mpris.MediaPlayer2.chrome /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause")
     , ("M-<Tab>"       , sendMessage NextLayout)
     , ("M-<Backspace>" , setLayout $ Layout layoutHook')
     , ("M1-<Tab>"      , windows W.focusDown)
