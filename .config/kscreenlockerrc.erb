@@ -1,7 +1,7 @@
 [$Version]
 update_info=kscreenlocker.upd:0.1-autolock
 
-<% if @facts['hostname'] == 'falcon' -%>
+<% if ['falcon', 'owl'].include? @facts['hostname'] -%>
 [Daemon]
 Autolock=false
 
