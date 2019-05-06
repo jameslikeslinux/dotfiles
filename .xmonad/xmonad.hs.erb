@@ -50,7 +50,7 @@ instance ExtensionClass PanelTimer where
     initialValue = PanelTimer 0
 
 startupHook' = do
-    spawn "feh --bg-scale --no-fehbg ~/.wallpaper.png"
+    spawn "feh --bg-scale --no-xinerama --no-fehbg ~/.wallpaper.png"
     spawnOnce "compton"
     spawnOnce "dunst"
     spawnOnce "taffybar"
