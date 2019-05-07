@@ -159,7 +159,7 @@ topicConfig = def
 <% end -%>
         , ("ops"    , (ask >>= spawn . terminal . config))
         , ("dev"    , (ask >>= spawn . terminal . config))
-        , ("music"  , spawn "chromium --start-fullscreen https://play.google.com/music/listen")
+        , ("music"  , spawn "chromium --app=https://play.google.com/music/listen")
         , ("mail"   , spawn "~/.xmonad/scripts/firefox-wait --new-window https://mail.google.com/mail/u/0/#inbox && ~/.xmonad/scripts/firefox-wait --new-window https://mail.google.com/mail/u/1/#inbox")
 <% if @facts['hostname'] == 'eagle' -%>
         , ("chat"   , spawn "~/.xmonad/scripts/firefox-wait --new-window teams.webex.com")
