@@ -1,6 +1,9 @@
 " Behave less like vi
 set nocompatible
 
+" Allow unsaved buffers
+set hidden
+
 " Set terminal title
 set title
 
