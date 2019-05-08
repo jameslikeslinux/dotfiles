@@ -45,6 +45,7 @@ nnoremap <Leader>n :bn<CR>
 nnoremap <Leader>p :bp<CR>
 nnoremap <Leader>a <C-^>
 nnoremap <Leader>b :CtrlPBuffer<CR>
+nnoremap <Leader>w :w<CR>
 
 " Create shortcuts to switch between indenting styles:
 " indent with spaces:
