@@ -43,7 +43,6 @@ map <Space> <Leader>
 " Make switching between buffers easier
 nnoremap <Leader>n :bn<CR>
 nnoremap <Leader>p :bp<CR>
-nnoremap <Leader>b :b#<CR>
 
 " Create shortcuts to switch between indenting styles:
 " indent with spaces:
@@ -83,14 +82,6 @@ set noshowmode
 
 " Hide empty airline sections
 let g:airline_skip_empty_sections = 1
-
-" Show tabline
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_nr_show = 1
-
-" Don't use separators for the buffer/tab list
-let g:airline#extensions#tabline#left_sep = ''
-let g:airline#extensions#tabline#left_alt_sep = ''
 
 " Enable powerline characters on supported terminals
 if &term =~# 'powerline'
@@ -146,6 +137,7 @@ let g:airline_theme_patch_func = 'AirlineThemePatch'
 let g:ctrlp_map = '<C-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_show_hidden = 1
+nnoremap <Leader>b :CtrlPBuffer<CR>
 
 augroup special_filetypes
     autocmd!
