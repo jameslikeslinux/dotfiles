@@ -86,6 +86,11 @@ set noshowmode
 " Hide empty airline sections
 let g:airline_skip_empty_sections = 1
 
+" Show fancy tabline when more than one tab exists
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#show_buffers = 0
+let g:airline#extensions#tabline#tab_min_count = 2
+
 " Enable powerline characters on supported terminals
 if &term =~# 'powerline'
     let g:airline_powerline_fonts = 1
