@@ -40,6 +40,8 @@ map <Space> <Leader>
 " Make switching between buffers easier
 nnoremap <Leader>n :bn<CR>
 nnoremap <Leader>p :bp<CR>
+nnoremap <Leader>a <C-^>
+nnoremap <Leader>b :CtrlPBuffer<CR>
 
 " Create shortcuts to switch between indenting styles:
 " indent with spaces:
@@ -134,7 +136,6 @@ let g:airline_theme_patch_func = 'AirlineThemePatch'
 let g:ctrlp_map = '<C-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_show_hidden = 1
-nnoremap <Leader>b :CtrlPBuffer<CR>
 
 augroup special_filetypes
     autocmd!
