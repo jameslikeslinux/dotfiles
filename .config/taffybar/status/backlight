@@ -3,14 +3,6 @@
 SELF="$0"
 source "$(dirname "$(readlink -f "$SELF")")/lib.zsh" "$SELF"
 
-wait_for_events() {
-    while event="$(get_event)"; do
-        if [[ $event == *'property Backlight'*'state NewValue' ]]; then
-            break
-        fi
-    done
-}
-
 refresh() {
     timeout 2 "$SELF" wait
     if (( ? != 124 )); then
@@ -47,11 +39,11 @@ change_brightness() {
 
 case "$1" in
     'monitor')
-        start_monitor_loop xev -root -event randr
+        start_monitor_loop inotifywait --quiet --monitor --event modify /sys/class/backlight/*/actual_brightness
         ;;
 
     'wait')
-        wait_for_events
+        get_event > /dev/null
         ;;
 
     'increase')
