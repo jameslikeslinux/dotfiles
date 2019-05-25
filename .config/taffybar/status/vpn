@@ -5,7 +5,7 @@ source "$(dirname "$(readlink -f "$SELF")")/lib.zsh" "$SELF"
 
 refresh() {
     if get_state > /dev/null; then
-        timeout 5 "$SELF" wait
+        timeout 60 "$SELF" wait
     else
         set_state 1
     fi
