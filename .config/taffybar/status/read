@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+FIFO="/tmp/status-${UID}/${1}.fifo"
+
+if [[ -p "$FIFO" ]]; then
+    read -re < "$FIFO"
+else
+    sleep 1
+fi

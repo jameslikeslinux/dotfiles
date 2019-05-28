@@ -1,0 +1,372 @@
+#!/usr/bin/env ruby
+
+require 'concurrent'
+require 'fileutils'
+
+class StatusWidget
+  STATUS_FIFO_DIR = "/tmp/status-#{Process.uid}".freeze
+
+  def initialize(name, timeout = nil)
+    @fifo_name = File.join(STATUS_FIFO_DIR, "#{name}.fifo")
+    @timeout = timeout
+  end
+
+  def monitor
+    mkfifo
+    puts segments
+    start_timer
+    loop do
+      start_monitor
+      sleep 1
+    end
+  end
+
+  def cleanup
+    @fifo.close
+    File.unlink @fifo_name
+    FileUtils.rmdir STATUS_FIFO_DIR
+  end
+
+  protected
+
+  def trigger
+    stop_timer
+    puts segments
+    start_timer
+  end
+
+  def fontawesome(char)
+    "<span font='FontAwesome 5 Free Solid'>#{char}</span>"
+  end
+
+  def segment(str, first = false)
+    if first
+      content = colorize('#d8d8d8', '#282828', " #{str}")
+<% tweak = (3333 * ((@facts['scaling'] ? @facts['scaling']['text'] : 1) - 1.1)).round -%>
+      "<span fgcolor='#282828' bgcolor='#000000' letter_spacing='<%= tweak %>'></span>#{content}<span bgcolor='#282828' letter_spacing='-<%= tweak %>'> </span>"
+    else
+      content = colorize('#d8d8d8', '#282828', " #{str} ")
+      "#{colorize '#000000', '#282828', ''}#{content}"
+    end
+  end
+
+  def puts(str)
+    @fifo.puts(str)
+    @fifo.flush
+  end
+
+  private
+
+  def mkfifo
+    Dir.mkdir(STATUS_FIFO_DIR) unless Dir.exist?(STATUS_FIFO_DIR)
+    File.mkfifo(@fifo_name, 0600) unless File.exist?(@fifo_name)
+    @fifo = open(@fifo_name, 'w+')
+  end
+
+  def colorize(fg, bg, text)
+    "<span fgcolor='#{fg}' bgcolor='#{bg}'>#{text}</span>"
+  end
+
+  def start_timer
+    if @timeout
+      @timer = Concurrent::TimerTask.new(execution_interval: @timeout) { puts segments }
+      @timer.execute
+    end
+  end
+
+  def stop_timer
+    if @timer
+      @timer.shutdown
+      @timer = nil
+    end
+  end
+end
+
+class LoadStatus < StatusWidget
+  def initialize
+    super('load', 1)
+  end
+
+  private
+
+  def start_monitor
+    sleep
+  end
+
+  def segments
+    segment(File.read('/proc/loadavg').split(' ').first, first: true)
+  end
+end
+
+class PowerStatus < StatusWidget
+  def initialize
+    super('power', 5)
+  end
+
+  def cleanup
+    Process.kill('TERM', @p.pid) unless @p.closed?
+    super
+  end
+
+  private
+
+  def start_monitor
+    @p = IO.popen('upower --monitor')
+    @p.each do |line|
+      if line !~ /^Monitoring/
+        trigger
+      end
+    end
+    @p.close
+  end
+
+  def segments
+    `upower --enumerate`.lines.map do |line|
+      if line =~ /\/battery_/
+        battery_object = line
+        state = nil; percentage = nil; tte = '...'
+        `upower --show-info #{battery_object}`.each_line do |info_line|
+          if info_line =~ /state:\s+(.*)/
+            state = $1
+          elsif info_line =~ /percentage:\s+(.*)%/
+            percentage = $1.to_i
+          elsif info_line =~ /time to empty:\s(.*)\s(\w)/
+            tte = "#{$1}#{$2}"
+          end
+        end
+
+        case state
+        when 'discharging'
+          segment "#{battery_icon(percentage)} #{tte}"
+        when 'charging'
+          segment "#{fontawesome "\uf0e7"} #{percentage}%"
+        else
+          ''
+        end
+      else
+        ''
+      end
+    end.join
+  end
+
+  def battery_icon(percentage)
+    if percentage > 80
+      fontawesome "\uf240"
+    elsif percentage > 60
+      fontawesome "\uf241"
+    elsif percentage > 40
+      fontawesome "\uf242"
+    elsif percentage > 20
+      fontawesome "\uf243"
+    else
+      fontawesome "\uf244"
+    end
+  end
+end
+
+class NetworkStatus < StatusWidget
+  def initialize
+    super('network', 5)
+  end
+
+  def cleanup
+    Process.kill('TERM', @p.pid) unless @p.closed?
+    super
+  end
+
+  private
+
+  def start_monitor
+    @p = IO.popen('nmcli device monitor')
+    @p.each { trigger }
+    @p.close
+  end
+
+  def segments
+    (device, type, devstate, connection) = `nmcli --terse device status`.lines.first.chomp.split(':')
+
+    if type == 'wifi'
+      icon = fontawesome "\uf1eb"
+
+      case devstate
+      when 'connected'
+        signal = `iw dev #{device} link`.each_line do |line|
+          if line =~ /signal:\s+(.+)\s(.+)/
+            break "#{$1}#{$2}"
+          end
+        end
+        segment "#{icon} #{signal}"
+      when /connecting/
+        segment "#{icon} ..."
+      else
+        ''
+      end
+    else
+      ''
+    end
+  end
+end
+
+class AudioStatus < StatusWidget
+  def initialize
+    super('audio')
+  end
+
+  def cleanup
+    Process.kill('TERM', @p.pid) unless @p.closed?
+    super
+  end
+
+  private
+
+  def start_monitor
+    @p = IO.popen('pactl subscribe')
+    @p.each do |line|
+      if line =~ /\s(sink|server)\s/
+        trigger
+      end
+    end
+    @p.close
+  end
+
+  def segments
+    default_sink = `pactl info`.each_line do |line|
+      if line =~ /^Default Sink:/
+        break line.split(' ')[2]
+      end
+    end
+
+    is_default = false
+    description = nil; mute = nil; volume = nil; port = nil
+    `pactl list sinks`.each_line do |line|
+      tokens = line.split(' ')
+      if line =~ /\tName:/
+        is_default = tokens[1] == default_sink
+      elsif is_default
+        case line
+        when /\tDescription: (.*)/
+          description = $1
+        when /\tMute:/
+          mute = tokens[1]
+        when /\tVolume:/
+          volume = tokens[6]
+        when /\tActive Port:/
+          port = tokens[2]
+          break
+        end
+      end
+    end
+
+    if description =~ /Built-in Audio Analog/ or
+       description == 'Dell AC511 USB SoundBar Analog Stereo'
+      icon = if mute == 'yes'
+               fontawesome "\uf6a9"
+             elsif port == 'analog-output-headphones'
+               fontawesome "\uf025"
+             else
+               fontawesome "\uf028"
+             end
+
+      segment "#{icon} #{volume.to_f.round}dB"
+    else
+      ''
+    end
+  end
+end
+
+class BacklightStatus < StatusWidget
+  def initialize
+    super('backlight')
+  end
+
+  def cleanup
+    Process.kill('TERM', @p.pid) unless @p.closed?
+    super
+  end
+
+  private
+
+  def start_monitor
+    @p = IO.popen('inotifywait --quiet --monitor --event modify /sys/class/backlight/*/actual_brightness')
+    @p.each { trigger }
+    @p.close
+  end
+
+  def segments
+    brightness = `qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl brightness`.to_i
+    max_brightness = `qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl brightnessMax`.to_i
+    percentage = brightness * 100.0 / max_brightness
+    @clear_thread.exit if @clear_thread
+    @clear_thread = Thread.new { sleep 2; puts '' }
+    segment "#{fontawesome "\uf0eb"} #{percentage.round}%"
+  end
+end
+
+class ScreensaverStatus < StatusWidget
+  def initialize
+    super('screensaver', 60)
+  end
+
+  def cleanup
+    Process.kill('TERM', @p.pid) unless @p.closed?
+    super
+  end
+
+  private
+
+  def start_monitor
+    @p = IO.popen('inotifywait --quiet --monitor --event create --event delete --include screensaver.inhibit $XDG_RUNTIME_DIR')
+    @p.each { trigger }
+    @p.close
+  end
+
+  def segments
+    if File.exist?(File.join(ENV['XDG_RUNTIME_DIR'], 'screensaver.inhibit'))
+      system 'qdbus org.freedesktop.ScreenSaver /org/freedesktop/ScreenSaver org.freedesktop.ScreenSaver.SimulateUserActivity'
+      segment fontawesome "\uf108"
+    else
+      ''
+    end
+  end
+end
+
+class VpnStatus < StatusWidget
+  def initialize
+    super('vpn')
+  end
+
+  def cleanup
+    Process.kill('TERM', @p.pid) unless @p.closed?
+    super
+  end
+
+  private
+
+  def start_monitor
+    @p = IO.popen('nmcli connection monitor')
+    @p.each { trigger }
+    @p.close
+  end
+
+  def segments
+    if `nmcli --terse --fields type,state connection show`.include?('vpn:activated')
+      segment fontawesome "\uf023"
+    else
+      ''
+    end
+  end
+end
+
+widgets = [
+  LoadStatus.new,
+  PowerStatus.new,
+  NetworkStatus.new,
+  AudioStatus.new,
+  BacklightStatus.new,
+  ScreensaverStatus.new,
+  VpnStatus.new,
+]
+
+at_exit { widgets.each(&:cleanup) }
+threads = widgets.map { |widget| Thread.new { widget.monitor } }
+threads.each(&:join)
