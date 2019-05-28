@@ -1,1 +1,40 @@
-../../.config/taffybar/status/backlight
+#!/usr/bin/env zsh
+
+change_brightness() {
+    local current="$(qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl brightness)"
+    local max="$(qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl brightnessMax)"
+    local steps="$(qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl brightnessSteps)"
+    local increment=$((max * 1.0 / steps))
+
+    # Snap the current value to the nearest increment
+    current=$((current / increment))
+    current="$(printf '%.0f' "$current")"
+    current=$((current * increment))
+
+    [[ $1 == 'decrease' ]] && increment=$((-increment))
+
+    local new=$((current + increment))
+
+    if (( new > max )); then
+        new=$max
+    elif (( new < 0 )); then
+        new=0
+    fi
+
+    qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl setBrightness "$(printf '%.0f' "$new")"
+}
+
+case "$1" in
+    'increase')
+        change_brightness increase
+        ;;
+
+    'decrease')
+        change_brightness decrease
+        ;;
+
+    *)
+        print "Unhandled argument '$1'" >&2
+        exit 1
+        ;;
+esac

@@ -1,1 +1,22 @@
-../../.config/taffybar/status/screensaver
+#!/usr/bin/env zsh
+
+INHIBITOR_FILE="${XDG_RUNTIME_DIR}/screensaver.inhibit"
+
+case "$1" in
+    'toggle')
+        if [[ -f "$INHIBITOR_FILE" ]]; then
+            rm -f "$INHIBITOR_FILE"
+        else
+            touch "$INHIBITOR_FILE"
+        fi
+        ;;
+
+    'reset')
+        rm -f "$INHIBITOR_FILE"
+        ;;
+
+    *)
+        print "Unhandled argument '$1'" >&2
+        exit 1
+        ;;
+esac

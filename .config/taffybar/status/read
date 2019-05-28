@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 FIFO="/tmp/status-${UID}/${1}.fifo"
 
