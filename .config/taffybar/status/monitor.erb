@@ -130,7 +130,7 @@ class PowerStatus < StatusWidget
             state = $1
           elsif info_line =~ /percentage:\s+(.*)%/
             percentage = $1.to_i
-          elsif info_line =~ /time to empty:\s(.*)\s(\w)/
+          elsif info_line =~ /time to empty:\s+(.*)\s(\w)/
             tte = "#{$1}#{$2}"
           end
         end
@@ -370,3 +370,5 @@ widgets = [
 at_exit { widgets.each(&:cleanup) }
 threads = widgets.map { |widget| Thread.new { widget.monitor } }
 threads.each(&:join)
+
+# vim: filetype=ruby
