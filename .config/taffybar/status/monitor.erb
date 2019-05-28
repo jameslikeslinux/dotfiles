@@ -281,16 +281,20 @@ class BacklightStatus < StatusWidget
   end
 
   def cleanup
-    Process.kill('TERM', @p.pid) unless @p.closed?
+    Process.kill('TERM', @p.pid) if @p and !@p.closed?
     super
   end
 
   private
 
   def start_monitor
-    @p = IO.popen('inotifywait --quiet --monitor --event modify /sys/class/backlight/*/actual_brightness')
-    @p.each { trigger }
-    @p.close
+    if Dir.glob('/sys/class/backlight/*/actual_brightness').empty?
+      sleep
+    else
+      @p = IO.popen('inotifywait --quiet --monitor --event modify /sys/class/backlight/*/actual_brightness')
+      @p.each { trigger }
+      @p.close
+    end
   end
 
   def segments
