@@ -94,7 +94,8 @@ class LoadStatus < StatusWidget
   end
 
   def segments
-    segment(File.read('/proc/loadavg').split(' ').first, first: true)
+    loadavg = File.read('/proc/loadavg').split(' ').first
+    segment("#{fontawesome "\uf233"} #{loadavg}", first: true)
   end
 end
 
