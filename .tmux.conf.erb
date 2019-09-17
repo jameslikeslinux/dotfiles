@@ -28,6 +28,9 @@ bind-key M-d run-shell "t '#S' -D"
 # Shortcut to kill all other windows than the current one
 bind-key M-& confirm-before -p 'kill other windows? (y/n)' 'kill-window -a'
 
+# Shortcut to toggle synchronized panes
+bind-key S set-window-option synchronize-panes
+
 # Send keys to initialize my home directory on non-AFS RHEL 7 systems
 bind-key I confirm-before -p 'initialize home directory? (y/n)' "send-keys -l 'cd && rm -rf .git && git init && git remote add origin https://gitlab.umd.edu/jtl/dotfiles.git && git fetch --depth=1 && git reset --hard origin/rhel7-noafs && git checkout rhel7-noafs && exec \$SHELL\n'"
 
