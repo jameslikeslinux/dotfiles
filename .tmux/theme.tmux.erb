@@ -47,7 +47,7 @@ fi
 # Appearance settings that apply to all terminal types
 tmux set -g status-style "bg=${base01}"
 tmux set -g status-left-length 100
-tmux set -g status-right "#[fg=${base08},bold]#{?pane_synchronized,SYNC,}#[fg=${version_color},none] v$(< ~/.version) "
+tmux set -g status-right "#[fg=${base08},bold]#{?pane_synchronized,<SYNC>,}#[fg=${version_color},none] v$(< ~/.version) "
 tmux setw -g window-status-separator ''
 tmux setw -g window-status-format ' #I: #W#F '
 tmux setw -g window-status-current-format ' #I: #W#F '
