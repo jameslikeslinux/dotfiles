@@ -31,8 +31,8 @@ bind-key M-& confirm-before -p 'kill other windows? (y/n)' 'kill-window -a'
 # Shortcut to toggle synchronized panes
 bind-key S set-window-option synchronize-panes
 
-# Send keys to initialize my home directory on non-AFS RHEL 7 systems
-bind-key I confirm-before -p 'initialize home directory? (y/n)' "send-keys -l 'cd && rm -rf .git && git init && git remote add origin https://gitlab.umd.edu/jtl/dotfiles.git && git fetch --depth=1 && git reset --hard origin/rhel7-noafs && git checkout rhel7-noafs && exec \$SHELL\n'"
+# Send keys to initialize my home directory on non-AFS RHEL systems
+bind-key I confirm-before -p 'initialize home directory? (y/n)' "send-keys -l 'if grep -q 7\\. /etc/redhat-release; then branch=rhel7-noafs; else branch=compiled; fi && cd && rm -rf .git && git init && git remote add origin https://gitlab.umd.edu/jtl/dotfiles.git && git fetch --depth=1 && git reset --hard \"origin/\${branch}\" && git checkout \"\$branch\" && exec \$SHELL\n'"
 
 # Make double and triple click work outside of copy mode
 # (already works inside it with default bindings)
