@@ -279,6 +279,7 @@ main = xmonad
     , ("M1-S-s"        , unGrab >> spawn "xdotool keyup alt+shift && ~/.xmonad/scripts/bw-type jtl/root 25d44246-0ed1-41e3-a0cc-a91a00f9a9a8")
     , ("M1-S-u"        , unGrab >> spawn "xdotool keyup alt+shift && ~/.xmonad/scripts/bw-type UMD e2ddb2b1-6f1a-4ca6-b388-a91a00f9a9a8")
     , ("M-S-d"         , spawn "pkill dunst; exec dunst")
+    , ("M-`"           , spawn "~/.xmonad/scripts/toggle-dpms")
 <% if @facts['hostname'] == 'falcon' -%>
     , ("M-<Up>"        , spawn "~/bin/switch-input pc")
     , ("M-<Down>"      , spawn "~/bin/switch-input tv")

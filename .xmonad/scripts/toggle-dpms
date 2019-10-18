@@ -1,0 +1,35 @@
+#!/usr/bin/env zsh
+
+ddcutil() {
+    sudo ddcutil "$@"
+}
+
+dpms_on() {
+    local display="$1"
+    ddcutil --brief -d "$display" getvcp d6 | grep -q 'x04$'
+}
+
+set_dpms() {
+    local display="$1" state="$2"
+
+    case "$state" in
+        'on')
+            ddcutil -d "$display" setvcp d6 0x04
+            ;;
+        'off')
+            ddcutil -d "$display" setvcp d6 0x01
+            ;;
+        *)
+            echo 'Unknown state "${state}"' >&2
+            exit 1
+            ;;
+    esac
+}
+
+ddcutil detect | awk '/^Display/ { print $2 }' | while read display; do
+    if dpms_on "$display"; then
+        set_dpms "$display" off
+    else
+        set_dpms "$display" on
+    fi
+done
