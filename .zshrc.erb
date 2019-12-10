@@ -132,7 +132,7 @@ alias vi="$EDITOR"
 unalias cp 2>/dev/null
 alias mv='mv -f'
 alias rm='rm -f'
-alias r='eval "$(t show-environment -s; t show-environment -gs KRB5CCNAME 2>/dev/null)" && TERM="${${(s/ /)$(t show-options -s default-terminal)}[2]//\"/}" && exec $SHELL'
+alias r='eval "$(t show-environment -s)" && TERM="${${(s/ /)$(t show-options -s default-terminal)}[2]//\"/}" && exec $SHELL'
 alias bigsnaps='zfs list -t snapshot -s used'
 unalias suafs 2>/dev/null
 unalias a 2>/dev/null

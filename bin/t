@@ -53,12 +53,12 @@ exec_tmux() {
             # Ensure the tmux server has the latest Kerberos ticket cache and
             # that it always has up-to-date AFS tokens.
             if [[ $KRB5CCNAME ]]; then
-                tmux "${socket_name[@]}" set-environment -g KRB5CCNAME "$KRB5CCNAME"
+                tmux "${socket_name[@]}" set-environment KRB5CCNAME "$KRB5CCNAME"
                 if [[ -x $(whence aklog) ]]; then
                     tmux "${socket_name[@]}" run-shell aklog
                 fi
             else
-                tmux "${socket_name[@]}" set-environment -gr KRB5CCNAME
+                tmux "${socket_name[@]}" set-environment -r KRB5CCNAME
             fi
         fi
     elif systemctl --user > /dev/null 2>&1; then
