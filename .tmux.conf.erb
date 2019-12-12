@@ -92,3 +92,7 @@ bind-key c command-prompt -p '(new-window)' "run-shell \"$HOME/.tmux/new-window.
 
 # Override prefix , to enable automatic renaming when an empty name is supplied
 bind-key , command-prompt -p '(rename-window)' -I '#W' "run-shell \"$HOME/.tmux/rename-window.tmux '%%'\""
+
+# Override swap-window keybindings to ensure the target is not selected
+bind-key -r < swap-window -d -t -1
+bind-key -r > swap-window -d -t +1
