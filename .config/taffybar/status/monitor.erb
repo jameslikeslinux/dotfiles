@@ -184,7 +184,7 @@ class NetworkStatus < StatusWidget
   end
 
   def segments
-    (device, type, devstate, connection) = `nmcli --terse device status`.lines.first.chomp.split(':')
+    (device, type, devstate, connection) = `nmcli --colors no --terse device status`.lines.first.chomp.split(':')
 
     if type == 'wifi'
       icon = fontawesome "\uf1eb"
@@ -354,7 +354,7 @@ class VpnStatus < StatusWidget
   end
 
   def segments
-    if `nmcli --terse --fields type,state connection show`.include?('vpn:activated')
+    if `nmcli --colors no --terse --fields type,state connection show`.include?('vpn:activated')
       segment fontawesome "\uf023"
     else
       ''
