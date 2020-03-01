@@ -64,11 +64,11 @@ workspacesLabelSetter :: Workspace -> WorkspacesIO String
 workspacesLabelSetter workspace = do
     workspacesRef <- asks workspacesVar
     workspaces    <- lift $ readMVar workspacesRef
-    let nonEmptyWorkspaces  = filter (\(_, w) -> workspaceState w /= Empty) $ M.toList workspaces
-    let (lastWsIdx, _)      = last nonEmptyWorkspaces
-    let wsIdx@(WSIdx wsNum) = workspaceIdx workspace
-    let endMarker           = if wsIdx == lastWsIdx then "\x00a0" else ""
-    let name                = (show $ wsNum + 1) ++ ": " ++ workspaceName workspace ++ endMarker
+    let nonEmptyWorkspaces        = filter (\(_, w) -> workspaceState w /= Empty) $ M.toList workspaces
+    let (lastWsIdx, _)            = last nonEmptyWorkspaces
+    let wsIdx@(WorkspaceId wsNum) = workspaceIdx workspace
+    let endMarker                 = if wsIdx == lastWsIdx then "\x00a0" else ""
+    let name                      = (show $ wsNum + 1) ++ ": " ++ workspaceName workspace ++ endMarker
     return $ case workspaceState workspace of
         Active  -> workspaceDecorator "#282828" "#7cafc2" True name
         Visible -> workspaceDecorator "#d8d8d8" "#383838" False name
