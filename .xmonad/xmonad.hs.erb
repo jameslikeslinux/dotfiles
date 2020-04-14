@@ -138,15 +138,7 @@ handleEventHook' event = do
         return Nothing
     return (All True)
 
-<%
-windowsvm = case @facts['hostname']
-            when 'eagle'
-              'osprey'
-            when 'owl'
-              'kite'
-            end
--%>
-workspaces' = ["web", "ops", "dev", "music", "mail", "chat", "seven", "eight", "nine"<%= windowsvm ? ', "windows"' : '' %>]
+workspaces' = ["web", "ops", "dev", "music", "mail", "chat", "seven", "eight", "nine", "windows"]
 
 topicConfig :: TopicConfig
 topicConfig = def
@@ -164,7 +156,8 @@ topicConfig = def
 <% if @facts['hostname'] == 'eagle' -%>
         , ("chat"   , spawn "~/.xmonad/scripts/firefox-wait --new-window teams.webex.com")
 <% end -%>
-        , ("windows", spawn "GDK_DPI_SCALE=<%= gui_scaling_factor %> GDK_SCALE=1 virt-viewer --full-screen --connect=qemu:///system --wait --reconnect -- <%= windowsvm %>")
+<% libvirtd_connect_str = @facts['hostname'] == 'eagle' ? 'qemu:///system' : 'qemu+ssh://root@eagle/system' -%>
+        , ("windows", spawn "GDK_DPI_SCALE=<%= gui_scaling_factor %> GDK_SCALE=1 virt-viewer --full-screen --connect=<%= libvirtd_connect_str %> --wait --reconnect osprey")
         ]
     }
 
