@@ -29,8 +29,7 @@ fi
 export VISUAL=$EDITOR
 export PAGER="less"
 
-# Extra environmental variables
-export DISTCC_DIR='/var/tmp/portage/.distcc/'
+# For my custom terminal types
 export TERMINFO="${HOME}/.terminfo"
 
 # Enable X apps through sudo (along with env_keep)
