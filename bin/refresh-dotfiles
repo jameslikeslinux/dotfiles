@@ -144,6 +144,6 @@ if [[ $branch == 'master' || $BASEDIR != $(readlink -f "$HOME") ]]; then
     RUBYLIB="${BASEDIR}/lib/ruby" "$PUPPET" apply "$TMPFILE"
 
     if [[ $OSTYPE == 'cygwin' ]]; then
-        chmod 664 "${BASEDIR}/.ssh/config"
+        "$PUPPET" resource file "${BASEDIR}/.ssh/config" 'mode=600'
     fi
 fi
