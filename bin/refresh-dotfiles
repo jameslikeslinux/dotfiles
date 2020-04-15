@@ -134,10 +134,6 @@ branch="$(git rev-parse --abbrev-ref HEAD)"
 if [[ -z $no_fetch ]]; then
     git fetch
     git reset --hard "origin/${branch}"
-
-    if [[ $OSTYPE == 'cygwin' ]]; then
-        "$PUPPET" resource file "${BASEDIR}/.ssh/config.erb" 'mode=600'
-    fi
 fi
 
 # Process templates with Puppet unless we're on a non-master branch
@@ -146,4 +142,8 @@ if [[ $branch == 'master' || $BASEDIR != $(readlink -f "$HOME") ]]; then
     [[ -d /tmp/cache ]] && rmdir --ignore-fail-on-non-empty /tmp/cache
     generate_manifest > "$TMPFILE"
     RUBYLIB="${BASEDIR}/lib/ruby" "$PUPPET" apply "$TMPFILE"
+
+    if [[ $OSTYPE == 'cygwin' ]]; then
+        chmod 664 "${BASEDIR}/.ssh/config"
+    fi
 fi
