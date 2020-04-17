@@ -9,8 +9,9 @@ set -g renumber-windows on
 set -g set-titles on
 set -g set-titles-string '#S:#I:#W > #T'
 
-# Enable pointy clicky
+# Improve interactivity
 set -g mouse on
+setw -g mode-keys vi
 
 # Configure additional variables to update on session attachment
 run-shell ~/.tmux/env.tmux
