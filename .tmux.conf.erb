@@ -59,10 +59,6 @@ set -g @scroll-without-changing-pane on
 set -g @emulate-scroll-for-no-mouse-alternate-buffer on
 run-shell ~/.tmux/plugins/tmux-better-mouse-mode/scroll_copy_mode.tmux
 
-# Really cool enhanced search (with a bunch of pre-defined regexes)
-# https://github.com/tmux-plugins/tmux-copycat
-run-shell ~/.tmux/plugins/tmux-copycat/copycat.tmux
-
 # Easy logging and screen capturing
 # https://github.com/tmux-plugins/tmux-logging
 run-shell ~/.tmux/plugins/tmux-logging/logging.tmux
@@ -77,6 +73,11 @@ run-shell ~/.tmux/plugins/tmux-pain-control/pain_control.tmux
 set -g @override_copy_command 'putclip'
 <% end -%>
 run-shell ~/.tmux/plugins/tmux-yank/yank.tmux
+
+# Really cool enhanced search (with a bunch of pre-defined regexes)
+# Modifies keybindings from tmux-yank so it needs to come after.
+# https://github.com/tmux-plugins/tmux-copycat
+run-shell ~/.tmux/plugins/tmux-copycat/copycat.tmux
 
 # Sensible defaults (does not change anything already set above)
 # https://github.com/tmux-plugins/tmux-sensible
