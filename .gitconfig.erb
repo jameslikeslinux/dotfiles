@@ -1,9 +1,9 @@
 [user]
 	name = James T. Lee
-<% if @facts['nest'] -%>
-	email = james@james.tl
-<% else -%>
+<% require 'etc'; if Etc.getlogin == 'jtl' -%>
 	email = jtl@umd.edu
+<% else -%>
+	email = james@james.tl
 <% end -%>
 [color]
 	ui = auto
