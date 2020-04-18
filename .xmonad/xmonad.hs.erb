@@ -223,7 +223,7 @@ main = xmonad
     , workspaces         = workspaces'
     , borderWidth        = <%= (3 * gui_scaling_factor).round %>
     , focusedBorderColor = "<%= dark[0x08].web %>"
-    , normalBorderColor  = "<%= dark[0x04].web %>"
+    , normalBorderColor  = "<%= dark[0x03].web %>"
     }
     `additionalKeysP`
     [ ("M-0"           , windows $ W.greedyView "windows")
