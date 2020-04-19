@@ -145,9 +145,9 @@ topicConfig = def
     { defaultTopicAction = \topic -> return ()
     , topicActions = fromList $
 <% if ['owl', 'caracara'].include? @facts['hostname'] -%>
-        [ ("web"    , spawn "~/.xmonad/scripts/firefox-wait --new-window about:home")
+        [ ("web"    , spawn "~/.xmonad/scripts/firefox-wait --new-window about:blank")
 <% else -%>
-        [ ("web"    , spawn "~/.xmonad/scripts/firefox-wait --new-window about:home && ~/.xmonad/scripts/firefox-wait twitter.com washingtonpost.com")
+        [ ("web"    , spawn "~/.xmonad/scripts/firefox-wait --new-window about:blank && ~/.xmonad/scripts/firefox-wait twitter.com washingtonpost.com")
 <% end -%>
         , ("ops"    , (ask >>= spawn . terminal . config))
         , ("dev"    , (ask >>= spawn . terminal . config))
