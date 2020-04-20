@@ -12,7 +12,7 @@ gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
 #window {
     background-color: rgba(<%= dark[0x00].rgb.join(', ') %>, 90%);
     border: <%= (3 * gui_scaling_factor).round %>px;
-    border-color: <%= dark[0x04].web %>;
+    border-color: <%= dark[0x03].web %>;
     padding: <%= (2 * gui_scaling_factor).round %>px;
 }
 
@@ -21,7 +21,7 @@ gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
 }
 
 #scrollbar {
-    handle-color: <%= dark[0x04].web %>;
+    handle-color: <%= dark[0x03].web %>;
     handle-width: 1ch;
 }
 
