@@ -10,7 +10,7 @@ gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
 }
 
 #window {
-    background-color: rgba(<%= light[0x00].rgb.join(', ') %>, 90%);
+    background-color: rgba(<%= light[0x00].rgb.join(', ') %>, 100%);
     border: <%= (3 * gui_scaling_factor).round %>px;
     border-color: <%= light[0x03].web %>;
     padding: <%= (2 * gui_scaling_factor).round %>px;
