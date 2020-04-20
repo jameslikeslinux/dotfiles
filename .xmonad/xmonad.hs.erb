@@ -274,7 +274,7 @@ main = xmonad
     , ("M-S-d"         , spawn "pkill dunst; exec dunst")
     , ("M-`"           , spawn "~/.xmonad/scripts/toggle-dpms")
 <% if @facts['hostname'] == 'falcon' -%>
-    , ("M-b"           , spawn "~/bin/brightness")
+    , ("M-b"           , rofi >>= \cmd -> spawn $ "env ROFI='" ++ cmd ++ "' ~/bin/brightness")
     , ("M-<Up>"        , spawn "~/bin/switch-input pc")
     , ("M-<Down>"      , spawn "~/bin/switch-input tv")
     , ("M-<Left>"      , spawn "~/bin/switch-input falcon")
