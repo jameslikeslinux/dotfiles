@@ -76,10 +76,6 @@ augroup indentation
     autocmd FileType make setlocal tabstop=4 noexpandtab
 augroup end
 
-" Load Pathogen
-runtime bundle/vim-pathogen/autoload/pathogen.vim
-execute pathogen#infect()
-
 " Let airline show the mode
 set noshowmode
 
