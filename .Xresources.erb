@@ -38,14 +38,14 @@ URxvt.urgentOnBell: true
 URxvt.letterSpace: -1
 
 <% dark.terminal.each do |c| -%>
-XTerm*color<%= c.ansi %>: <%= c.x11 %>
+xterm*color<%= c.ansi %>: <%= c.x11 %>
 <% end -%>
-XTerm*foreground: <%= dark.foreground.x11 %>
-XTerm*background: <%= dark.background.x11 %>
-XTerm*borderColor: <%= dark.background.x11 %>
-XTerm*cursorColor: <%= dark.cursor.x11 %>
-XTerm*termName: xterm-256color-powerline
-XTerm*faceName: monospace
-XTerm*faceSize: 9
-XTerm*internalBorder: <%= (2 * gui_scaling_factor).round %>
-XTerm*saveLines: 10000
+xterm*foreground: <%= dark.foreground.x11 %>
+xterm*background: <%= dark.background.x11 %>
+xterm*borderColor: <%= dark.background.x11 %>
+xterm*cursorColor: <%= dark.cursor.x11 %>
+xterm*termName: xterm-256color-powerline
+xterm*faceName: monospace
+xterm*faceSize: 9
+xterm*internalBorder: <%= (2 * gui_scaling_factor).round %>
+xterm*saveLines: 10000
