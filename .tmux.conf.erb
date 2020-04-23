@@ -42,11 +42,11 @@ bind-key -T root DoubleClick1Pane if-shell -Ft{mouse} '#{alternate_on}' 'send-ke
 bind-key -T root TripleClick1Pane if-shell -Ft{mouse} '#{alternate_on}' 'send-keys -M' 'copy-mode -t\{mouse\}; send-keys -t\{mouse\} -X select-line'
 
 # Enable primary selection clipboard using xterm OSC escape sequence
-set -s set-clipboard on
-set -s terminal-overrides 'rxvt-unicode*:Ms=\E]52;%p1%s;%p2%s\007,tmux*:Ms=\E]52;%p1%s;%p2%s\007'
+set -g set-clipboard on
+set -g terminal-overrides 'rxvt-unicode*:Ms=\E]52;%p1%s;%p2%s\007,tmux*:Ms=\E]52;%p1%s;%p2%s\007'
 
 # Enable real truecolor when the TERM indicates support
-set -sa terminal-overrides ',*truecolor*:Tc'
+set -ga terminal-overrides ',*truecolor*:Tc'
 
 # Reload this config on attach
 set-hook -g client-session-changed 'source-file ~/.tmux.conf'
