@@ -35,6 +35,9 @@ bind-key S set-window-option synchronize-panes
 # Send keys to initialize my home directory on non-AFS RHEL systems
 bind-key I confirm-before -p 'initialize home directory? (y/n)' "send-keys 'if grep -q 7\\. /etc/redhat-release; then branch=rhel7-noafs; else branch=compiled; fi && cd && rm -rf .git && git init && git remote add origin https://gitlab.umd.edu/jtl/dotfiles.git && git fetch --depth=1 && git reset --hard \"origin/\${branch}\" && git checkout \"\$branch\" && exec \$SHELL' Enter"
 
+# Send keys for compatibility with hosts that do not contain my terminfo files
+bind-key X send-keys 'export TERM=screen-256color' Enter
+
 # Make double and triple click work outside of copy mode
 # (already works inside it with default bindings)
 # From: https://github.com/wincent/wincent/blob/master/roles/dotfiles/files/.tmux.conf
