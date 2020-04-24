@@ -87,16 +87,22 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 0
 let g:airline#extensions#tabline#tab_min_count = 2
 
-" Enable powerline characters on supported terminals
+" Don't fall back to weird unicode symbols; just use ascii
+let g:airline_symbols_ascii = 1
+
+" Tweak appearance
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+let g:airline_symbols.maxlinenr = ''
+
 if &term =~# 'powerline'
+    " Enable powerline characters on supported terminals
     let g:airline_powerline_fonts = 1
 
     " Use more common, single-width glyphs for line count and whitespace
     " problem indicator (utf8proc incorrectly reports the airline defaults as
     " two spaces wide)
-    if !exists('g:airline_symbols')
-        let g:airline_symbols = {}
-    endif
     let g:airline_symbols.linenr = ''
     let g:airline_symbols.maxlinenr = '≡'
     let g:airline_symbols.whitespace = '!'
