@@ -1,0 +1,4 @@
+'g:jk_jumps_minimum_lines'	jk-jumps.txt	/*'g:jk_jumps_minimum_lines'*
+jk-jumps	jk-jumps.txt	/*jk-jumps*
+jk-jumps-options	jk-jumps.txt	/*jk-jumps-options*
+jk-jumps.txt	jk-jumps.txt	/*jk-jumps.txt*

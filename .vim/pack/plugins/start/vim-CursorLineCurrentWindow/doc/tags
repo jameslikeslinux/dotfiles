@@ -1,0 +1,17 @@
+CursorLineCurrentWindow-configuration	CursorLineCurrentWindow.txt	/*CursorLineCurrentWindow-configuration*
+CursorLineCurrentWindow-contribute	CursorLineCurrentWindow.txt	/*CursorLineCurrentWindow-contribute*
+CursorLineCurrentWindow-dependencies	CursorLineCurrentWindow.txt	/*CursorLineCurrentWindow-dependencies*
+CursorLineCurrentWindow-description	CursorLineCurrentWindow.txt	/*CursorLineCurrentWindow-description*
+CursorLineCurrentWindow-history	CursorLineCurrentWindow.txt	/*CursorLineCurrentWindow-history*
+CursorLineCurrentWindow-ideas	CursorLineCurrentWindow.txt	/*CursorLineCurrentWindow-ideas*
+CursorLineCurrentWindow-installation	CursorLineCurrentWindow.txt	/*CursorLineCurrentWindow-installation*
+CursorLineCurrentWindow-known-problems	CursorLineCurrentWindow.txt	/*CursorLineCurrentWindow-known-problems*
+CursorLineCurrentWindow-limitations	CursorLineCurrentWindow.txt	/*CursorLineCurrentWindow-limitations*
+CursorLineCurrentWindow-todo	CursorLineCurrentWindow.txt	/*CursorLineCurrentWindow-todo*
+CursorLineCurrentWindow-usage	CursorLineCurrentWindow.txt	/*CursorLineCurrentWindow-usage*
+CursorLineCurrentWindow.txt	CursorLineCurrentWindow.txt	/*CursorLineCurrentWindow.txt*
+CursorLineCurrentWindow.vim	CursorLineCurrentWindow.txt	/*CursorLineCurrentWindow.vim*
+g:CursorLineCurrentWindow_OptionNames	CursorLineCurrentWindow.txt	/*g:CursorLineCurrentWindow_OptionNames*
+w:persistent_cursorcolumn	CursorLineCurrentWindow.txt	/*w:persistent_cursorcolumn*
+w:persistent_cursorline	CursorLineCurrentWindow.txt	/*w:persistent_cursorline*
+w:persistent_wincolor	CursorLineCurrentWindow.txt	/*w:persistent_wincolor*
