@@ -60,26 +60,33 @@ workspaceDecorator fg bg bold s =
       | '\x00a0' `notElem` s = ""
       | otherwise            = colorize bg "#000000" "\xe0b0"
 
-workspacesLabelSetter :: Workspace -> WorkspacesIO String
-workspacesLabelSetter workspace = do
+workspaceLabel :: Workspace -> [(WorkspaceId, Workspace)] -> String
+workspaceLabel workspace nonEmptyWorkspaces
+  | nonEmptyWorkspaces == [] = ""
+  | otherwise =
+        case workspaceState workspace of
+            Active    -> workspaceDecorator "#282828" "#7cafc2" True name
+            Visible   -> workspaceDecorator "#d8d8d8" "#383838" False name
+            Hidden    -> workspaceDecorator "#d8d8d8" "#282828" False name
+            Urgent    -> workspaceDecorator "#282828" "#f7ca88" False name
+            otherwise -> ""
+      where
+        (lastWsIdx, _)            = last nonEmptyWorkspaces
+        wsIdx@(WorkspaceId wsNum) = workspaceIdx workspace
+        endMarker                 = if wsIdx == lastWsIdx then "\x00a0" else ""
+        name                      = (show $ wsNum + 1) ++ ": " ++ workspaceName workspace ++ endMarker
+
+workspaceLabelSetter :: Workspace -> WorkspacesIO String
+workspaceLabelSetter workspace = do
     workspacesRef <- asks workspacesVar
     workspaces    <- lift $ readMVar workspacesRef
-    let nonEmptyWorkspaces        = filter (\(_, w) -> workspaceState w /= Empty) $ M.toList workspaces
-    let (lastWsIdx, _)            = last nonEmptyWorkspaces
-    let wsIdx@(WorkspaceId wsNum) = workspaceIdx workspace
-    let endMarker                 = if wsIdx == lastWsIdx then "\x00a0" else ""
-    let name                      = (show $ wsNum + 1) ++ ": " ++ workspaceName workspace ++ endMarker
-    return $ case workspaceState workspace of
-        Active  -> workspaceDecorator "#282828" "#7cafc2" True name
-        Visible -> workspaceDecorator "#d8d8d8" "#383838" False name
-        Hidden  -> workspaceDecorator "#d8d8d8" "#282828" False name
-        Urgent  -> workspaceDecorator "#282828" "#f7ca88" False name
-        Empty   -> name
+    let nonEmptyWorkspaces = filter (\(_, w) -> workspaceState w /= Empty) $ M.toList workspaces
+    return $ workspaceLabel workspace nonEmptyWorkspaces
 
 workspacesConfig :: WorkspacesConfig
 workspacesConfig = defaultWorkspacesConfig
     { widgetBuilder        = buildButtonController buildLabelController
-    , labelSetter          = workspacesLabelSetter
+    , labelSetter          = workspaceLabelSetter
     , showWorkspaceFn      = hideEmpty
     , urgentWorkspaceState = True
     }
