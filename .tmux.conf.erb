@@ -14,7 +14,10 @@ set -g mouse on
 setw -g mode-keys vi
 
 # Configure additional variables to update on session attachment
-run-shell ~/.tmux/env.tmux
+set -ga update-environment DBUS_SESSION_BUS_ADDRESS
+set -ga update-environment SESSION_MANAGER
+set -ga update-environment SWAYSOCK
+set -ga update-environment WAYLAND_DISPLAY
 
 # Configure my status bar, color scheme, and prefix based on TERM
 run-shell ~/.tmux/theme.tmux
