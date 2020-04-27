@@ -16,15 +16,6 @@ setw -g mode-keys vi
 # Configure additional variables to update on session attachment
 run-shell ~/.tmux/env.tmux
 
-# Update vars set by sway or plasma to control scale
-set -ga update-environment GDK_DPI_SCALE
-set -ga update-environment GDK_SCALE
-set -ga update-environment QT_AUTO_SCREEN_SCALE_FACTOR
-set -ga update-environment QT_FONT_DPI
-set -ga update-environment QT_SCALE_FACTOR
-set -ga update-environment XCURSOR_THEME
-set -ga update-environment XCURSOR_SIZE
-
 # Configure my status bar, color scheme, and prefix based on TERM
 run-shell ~/.tmux/theme.tmux
 
