@@ -15,8 +15,12 @@ exec_always {
 # Load legacy preferences into xwayland
 exec_always xrdb -merge ~/.config/sway/Xresources
 
+# Cosmetics
 output * bg ~/.wallpaper.png fill
+gaps inner 14
+default_border pixel 3
 
+# Keybindings
 set $mod Mod4
 bindsym $mod+Shift+Return exec urxvt
 bindsym $mod+x kill
