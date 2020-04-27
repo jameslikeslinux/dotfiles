@@ -21,7 +21,7 @@ run-shell ~/.tmux/theme.tmux
 
 # Define simple way to run my 't' command
 # (this overrides the stupid clock keybinding)
-bind-key t command-prompt -I 't ' "run-shell '%%'"
+bind-key t command-prompt -I 't ' "run-shell '~/bin/%%'"
 
 # Shortcut to detach all other clients attached to this session
 bind-key M-d run-shell "t '#S' -D"
