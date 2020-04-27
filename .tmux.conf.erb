@@ -19,6 +19,10 @@ set -ga update-environment SESSION_MANAGER
 set -ga update-environment SWAYSOCK
 set -ga update-environment WAYLAND_DISPLAY
 
+# These may be set by my sway wrapper
+set -ga update-environment GDK_DPI_SCALE
+set -ga update-environment QT_FONT_DPI
+
 # Configure my status bar, color scheme, and prefix based on TERM
 run-shell ~/.tmux/theme.tmux
 
