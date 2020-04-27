@@ -11,6 +11,7 @@ for var in DBUS_SESSION_BUS_ADDRESS \
            SESSION_MANAGER \
            SWAYSOCK \
            WAYLAND_DISPLAY \
+           XDG_SESSION_TYPE \
            GDK_DPI_SCALE \
            GDK_SCALE \
            QT_AUTO_SCREEN_SCALE_FACTOR \
