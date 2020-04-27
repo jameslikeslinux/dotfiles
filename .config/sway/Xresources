@@ -1,0 +1,2 @@
+#include "/etc/sway/Xresources"
+#include "../../.Xresources.common"
