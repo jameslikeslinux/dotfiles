@@ -14,10 +14,7 @@ set -g mouse on
 setw -g mode-keys vi
 
 # Configure additional variables to update on session attachment
-set -ga update-environment DBUS_SESSION_BUS_ADDRESS
-set -ga update-environment SESSION_MANAGER
-set -ga update-environment SWAYSOCK
-set -ga update-environment WAYLAND_DISPLAY
+run-shell ~/.tmux/env.tmux
 
 # Update vars set by sway or plasma to control scale
 set -ga update-environment GDK_DPI_SCALE
