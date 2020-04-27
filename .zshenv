@@ -41,3 +41,6 @@ export XAUTHORITY="${XAUTHORITY-$HOME/.Xauthority}"
 if [[ $SSH_AUTH_SOCK == '' && -S "${XDG_RUNTIME_DIR}/ssh-agent.socket" ]]; then
     export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 fi
+
+# Use Plasma theme outside of Plasma
+export QT_QPA_PLATFORMTHEME=kde
