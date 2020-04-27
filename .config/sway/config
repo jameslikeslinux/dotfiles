@@ -1,16 +1,15 @@
 # Load system configs like input and output configuration
 include /etc/sway/config.d/*
 
-
 # Plasma provides idle, power management, and Qt theming, among many other things
 exec plasma_session
 
 # GTK on Wayland does not use Plasma's XSettings daemon
 # See: https://github.com/swaywm/sway/wiki/GTK-3-settings-on-Wayland
 exec_always {
-    gsettings set $gnome-schema gtk-theme 'Breeze-Mine'
-    gsettings set $gnome-schema icon-theme 'breeze'
-    gsettings set $gnome-schema cursor-theme 'breeze_cursors'
+    gsettings set org.gnome.desktop.interface gtk-theme 'Breeze-Mine'
+    gsettings set org.gnome.desktop.interface icon-theme 'breeze-dark'
+    gsettings set org.gnome.desktop.interface cursor-theme 'breeze_cursors'
 }
 
 # Load legacy preferences into xwayland
