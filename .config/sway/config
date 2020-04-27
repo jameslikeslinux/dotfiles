@@ -19,12 +19,13 @@ exec_always xrdb -merge ~/.config/sway/Xresources
 output * bg ~/.wallpaper.png fill
 gaps inner 14
 default_border pixel 3
+default_floating_border pixel 3
 
 # Keybindings
 set $mod Mod4
 bindsym $mod+Shift+Return exec urxvt
 bindsym $mod+x kill
-bindsym $mod+p exec rofi -show drun
+bindsym $mod+p exec rofi -show drun -dpi 104
 bindsym $mod+q reload
 bindsym $mod+Shift+q exec swaynag -t warning -m '' -b 'Yes, exit sway' 'swaymsg exit'
 
@@ -33,10 +34,15 @@ bindsym $mod+l focus right
 bindsym $mod+j focus down
 bindsym $mod+k focus up
 
-bindsym $mod+Shift+h shrink width 10px
-bindsym $mod+Shift+l grow width 10px
-bindsym $mod+Shift+j shrink height 10px
-bindsym $mod+Shift+k grow height 10px
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+l move right
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+
+bindsym $mod+less resize shrink width 3ppt
+bindsym $mod+greater resize grow width 3ppt
+bindsym $mod+minus resize shrink height 3ppt
+bindsym $mod+plus resize grow height 3ppt
 
 floating_modifier $mod normal
 
@@ -63,3 +69,5 @@ bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
 bindsym $mod+f fullscreen
+
+exec waybar
