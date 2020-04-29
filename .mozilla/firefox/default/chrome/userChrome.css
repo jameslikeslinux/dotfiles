@@ -1,0 +1,2 @@
+/* See: https://www.reddit.com/r/firefox/comments/672ef7/rightclick_menu_open_under_mouse_cursor/?st=j8gt6u78&sh=c59dd405 */
+#contentAreaContextMenu { margin: 3px 0 0 3px }
