@@ -61,8 +61,8 @@ workspaceDecorator fg bg bold s =
       | otherwise            = colorize bg "#000000" "\xe0b0"
 
 workspaceLabel :: Workspace -> [(WorkspaceId, Workspace)] -> String
-workspaceLabel workspace nonEmptyWorkspaces
-  | nonEmptyWorkspaces == [] = ""
+workspaceLabel workspace occupiedWorkspaces
+  | occupiedWorkspaces == [] = ""
   | otherwise =
         case workspaceState workspace of
             Active    -> workspaceDecorator "#282828" "#7cafc2" True name
@@ -71,7 +71,7 @@ workspaceLabel workspace nonEmptyWorkspaces
             Urgent    -> workspaceDecorator "#282828" "#f7ca88" False name
             otherwise -> ""
       where
-        (lastWsIdx, _)            = last nonEmptyWorkspaces
+        (lastWsIdx, _)            = last occupiedWorkspaces
         wsIdx@(WorkspaceId wsNum) = workspaceIdx workspace
         endMarker                 = if wsIdx == lastWsIdx then "\x00a0" else ""
         name                      = (show $ wsNum + 1) ++ ": " ++ workspaceName workspace ++ endMarker
@@ -80,8 +80,8 @@ workspaceLabelSetter :: Workspace -> WorkspacesIO String
 workspaceLabelSetter workspace = do
     workspacesRef <- asks workspacesVar
     workspaces    <- lift $ readMVar workspacesRef
-    let nonEmptyWorkspaces = filter (\(_, w) -> workspaceState w /= Empty) $ M.toList workspaces
-    return $ workspaceLabel workspace nonEmptyWorkspaces
+    let occupiedWorkspaces = filter (\(_, w) -> workspaceState w /= Empty) $ M.toList workspaces
+    return $ workspaceLabel workspace occupiedWorkspaces
 
 workspacesConfig :: WorkspacesConfig
 workspacesConfig = defaultWorkspacesConfig
