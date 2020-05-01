@@ -1,13 +1,12 @@
 <% require 'colorscheme'
-dark  = ColorScheme.dark
-light = ColorScheme.light
+dark = ColorScheme.dark
 gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
-light.terminal.each do |c| -%>
+dark.terminal.each do |c| -%>
 *color<%= c.ansi %>: <%= c.x11 %>
 <% end -%>
-*foreground: <%= light.colors_by_base[0x06].x11 %>
-*background: <%= light.colors_by_base[0x01].x11 %>
-*borderColor: <%= light.colors_by_base[0x03].x11 %>
+*foreground: <%= dark.colors_by_base[0x06].x11 %>
+*background: <%= dark.colors_by_base[0x01].x11 %>
+*borderColor: <%= dark.colors_by_base[0x03].x11 %>
 
 <% dark.terminal.each do |c| -%>
 URxvt.color<%= c.ansi %>: <%= c.x11 %>
