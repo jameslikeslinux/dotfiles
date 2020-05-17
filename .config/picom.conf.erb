@@ -1,4 +1,8 @@
 <% gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1 -%>
+backend = "glx";
+vsync = true;
+xrender-sync-fence = true;
+
 shadow = true;
 shadow-radius = <%= (6 * gui_scaling_factor).round %>;
 shadow-offset-x = 0;
