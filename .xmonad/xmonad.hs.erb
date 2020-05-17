@@ -51,7 +51,7 @@ instance ExtensionClass PanelTimer where
 
 startupHook' = do
     spawn "feh --bg-scale --no-xinerama --no-fehbg ~/.wallpaper.png"
-    spawnOnce "compton"
+    spawnOnce "picom"
     spawnOnce "dunst"
     spawnOnce "taffybar"
 <% if @facts['hostname'] == 'eagle' -%>

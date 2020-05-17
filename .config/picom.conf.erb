@@ -2,16 +2,20 @@
 backend = "glx";
 
 shadow = true;
-no-dnd-shadow = true;
-no-dock-shadow = true;
-shadow-radius = <%= (3 * gui_scaling_factor).round %>;
+shadow-radius = <%= (5 * gui_scaling_factor).round %>;
 shadow-offset-x = 0;
 shadow-offset-y = 0;
 shadow-opacity = 0.2;
 shadow-exclude = [ "class_g = 'ksmserver'" ];
-menu-opacity = 0.9;
 
 fading = true;
 fade-delta = 10;
 fade-in-step = 0.125;
 fade-out-step = 0.125;
+
+wintypes:
+{
+  dock: { shadow = false; };
+  dnd:  { shadow = false; };
+  menu: { opacity = 0.9; };
+};
