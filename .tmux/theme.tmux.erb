@@ -21,37 +21,41 @@ if [[ $TERM == *truecolor* ]]; then
 <% cs.colors_by_base.each do |c| -%>
     base<%= c.base %>='#<%= c.hex %>'
 <% end -%>
-    version_color="$base00"
+    status_style="bold"
+    version_style="fg=${base00},none"
     tmux setw -g window-status-last-style "bg=${base02}"
 elif (( terminfo[colors] >= 256 )); then
     tmux_term+='-256color'
 <% cs.colors_by_base.each do |c| -%>
     base<%= c.base %>='colour<%= c.ansi %>'
 <% end -%>
-    version_color="$base00"
+    status_style="bold"
+    version_style="fg=${base00},none"
     tmux setw -g window-status-last-style "bg=${base02}"
 elif (( terminfo[colors] >= 16 )); then
 <% cs.colors_by_base(16).each do |c| -%>
     base<%= c.base %>='colour<%= c.ansi %>'
 <% end -%>
-    version_color='colour8'
+    status_style="bold"
+    version_style="fg=colour8,none"
     tmux setw -g window-status-last-style "bold"
 else
 <% cs.colors_by_base(8).each do |c| -%>
     base<%= c.base %>='colour<%= c.ansi %>'
 <% end -%>
-    version_color='colour8'
+    status_style="nobold"
+    version_style="fg=colour8,bold"
     tmux setw -g window-status-last-style "bold"
 fi
 
 # Appearance settings that apply to all terminal types
 tmux set -g status-style "bg=${base01}"
 tmux set -g status-left-length 100
-tmux set -g status-right "#[fg=${base08},bold]#{?pane_synchronized,<SYNC>,}#[fg=${version_color},none] v$(< ~/.version) "
+tmux set -g status-right "#[fg=${base08},bold]#{?pane_synchronized,<SYNC>,}#[${version_style}] v$(< ~/.version) "
 tmux setw -g window-status-separator ''
 tmux setw -g window-status-format ' #I: #W#F '
 tmux setw -g window-status-current-format ' #I: #W#F '
-tmux setw -g window-status-current-style "bg=blue,fg=${base01},bold"
+tmux setw -g window-status-current-style "bg=blue,fg=${base01},${status_style}"
 tmux setw -g window-status-activity-style "bg=green,fg=${base01}"
 tmux setw -g window-status-bell-style "bg=yellow,fg=${base01}"
 
@@ -74,7 +78,7 @@ else
 fi
 
 tmux set -g status-left-style "bg=${session_color},fg=${base01}"
-tmux set -g status-left " #[bold]#S#[nobold] #[reverse]${separator} "
+tmux set -g status-left " #[${status_style}]#S#[nobold] #[reverse]${separator} "
 
 # 'tmux_term' is built up based on the outside terminal capabilities and is
 # one of:
