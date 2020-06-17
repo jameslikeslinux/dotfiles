@@ -2,6 +2,7 @@
 dark = ColorScheme.dark
 text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1 -%>
 env:
+  TERM: 'alacritty-powerline'
   WINIT_X11_SCALE_FACTOR: '<%= text_scaling_factor %>'
 
 window:

@@ -20,7 +20,7 @@ default_floating_border pixel 3
 
 # Keybindings
 set $mod Mod4
-bindsym $mod+Shift+Return exec urxvt
+bindsym $mod+Shift+Return exec alacritty
 bindsym $mod+x kill
 bindsym $mod+p exec rofi -show drun -dpi 104
 bindsym $mod+q reload
