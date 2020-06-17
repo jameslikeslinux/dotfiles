@@ -33,6 +33,9 @@ URxvt.secondaryWheel: true
 URxvt.termName: rxvt-unicode-256color-powerline
 URxvt.urgentOnBell: true
 URxvt.letterSpace: -1
+<% if @facts['platform'] == 'pinebookpro' -%>
+URxvt.buffered: false
+<% end -%>
 
 <% dark.terminal.each do |c| -%>
 xterm*color<%= c.ansi %>: <%= c.x11 %>
