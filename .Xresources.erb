@@ -34,6 +34,7 @@ URxvt.termName: rxvt-unicode-256color-powerline
 URxvt.urgentOnBell: true
 URxvt.letterSpace: -1
 <% if @facts['platform'] == 'pinebookpro' -%>
+! Xft double buffering is slow on panfrost
 URxvt.buffered: false
 <% end -%>
 
@@ -49,4 +50,13 @@ xterm*faceName: monospace
 xterm*faceSize: 9
 xterm*internalBorder: <%= (2 * gui_scaling_factor).round %>
 xterm*saveLines: 10000
+! Enable OSC 52 for tmux selection to primary buffer
 xterm*allowWindowOps: true
+! Selections should only go to primary buffer
+xterm*selectToClipboard: false
+xterm*VT100*translations: #override \n\
+    Ctrl Alt <Key>+: larger-vt-font() \n\
+    Ctrl Alt <Key>-: smaller-vt-font() \n\
+    Ctrl Alt <Key>0: set-vt-font(d) \n\
+    Ctrl Alt <Key>c: copy-selection(CLIPBOARD) \n\
+    Ctrl Alt <Key>v: insert-selection(CLIPBOARD)
