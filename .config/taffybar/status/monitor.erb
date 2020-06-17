@@ -258,7 +258,7 @@ class AudioStatus < StatusWidget
       end
     end
 
-    if description =~ /Built-in Audio Analog/ or
+    if description =~ /Built-in Audio (Analog|Stereo)/ or
        description == 'Dell AC511 USB SoundBar Analog Stereo'
       icon = if mute == 'yes'
                fontawesome "\uf6a9"
