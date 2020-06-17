@@ -55,8 +55,9 @@ xterm*allowWindowOps: true
 ! Selections should only go to primary buffer
 xterm*selectToClipboard: false
 xterm*VT100*translations: #override \n\
+    Ctrl Meta <Key>c: copy-selection(CLIPBOARD) \n\
+    Ctrl Meta <Key>v: insert-selection(CLIPBOARD) \n\
     Ctrl Meta <Key>+: larger-vt-font() \n\
     Ctrl Meta <Key>-: smaller-vt-font() \n\
     Ctrl Meta <Key>0: set-vt-font(d) \n\
-    Ctrl Meta <Key>c: copy-selection(CLIPBOARD) \n\
-    Ctrl Meta <Key>v: insert-selection(CLIPBOARD)
+    Ctrl Meta <Key>n: spawn-new-terminal()
