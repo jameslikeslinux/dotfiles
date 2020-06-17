@@ -166,7 +166,7 @@ prompt_mine_precmd() {
 
     # Set terminal title
     case $TERM in
-        alacritty*|rxvt*|xterm*|screen*|tmux*)
+        rxvt*|xterm*|screen*|tmux*)
             print -Pn "\e]0;%n${admin_title}@%m:${uniq_cwd}\a"
             ;;
     esac
