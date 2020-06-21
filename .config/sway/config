@@ -14,7 +14,8 @@ exec_always {
 
 # Cosmetics
 output * bg ~/.wallpaper.png stretch
-gaps inner 14   # XXX: Scale with text
+# XXX: Scale with text
+gaps inner 14
 default_border pixel 3
 default_floating_border pixel 3
 
