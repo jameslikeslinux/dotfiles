@@ -1,9 +1,0 @@
-/*
- * Fix context menu position on xmonad.  The 'main-window sizemode' selector
- * exploits a difference between xmonad and sway such that this does not take
- * effect on sway where it's not needed and in fact causes the context menu not
- * to be displayed.
- *
- * See: https://www.reddit.com/r/firefox/comments/672ef7/rightclick_menu_open_under_mouse_cursor/?st=j8gt6u78&sh=c59dd405
- */
-#main-window[sizemode="normal"] #contentAreaContextMenu { margin: 3px 0 0 3px }
