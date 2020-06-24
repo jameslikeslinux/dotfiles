@@ -1,8 +1,11 @@
-.taffy-window * {
+* {
     all: unset;
+}
+
+.taffy-window {
+    color: #d8d8d8;
     font-family: monospace;
     font-size: 9pt;
-    color: #d8d8d8;
 }
 
 .taffy-box {
