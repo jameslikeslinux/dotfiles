@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'concurrent'
 require 'status'
 
 widgets = [
@@ -13,6 +12,5 @@ widgets = [
   VpnStatus.new,
 ]
 
-at_exit { widgets.each(&:cleanup) }
 threads = widgets.map { |widget| Thread.new { widget.monitor } }
 threads.each(&:join)

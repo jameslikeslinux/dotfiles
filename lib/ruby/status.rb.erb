@@ -1,3 +1,4 @@
+require 'concurrent'
 require 'fileutils'
 
 class StatusWidget
@@ -8,20 +9,20 @@ class StatusWidget
     @timeout = timeout
   end
 
-  def monitor
-    mkfifo
+  def run
+    monitor(true)
+  end
+
+  def monitor(stdout = false)
+    pr_set_pdeathsig
+    at_exit { cleanup }
+    @output = stdout ? STDOUT : mkfifo
     puts segments
     start_timer
     loop do
       start_monitor
       sleep 1
     end
-  end
-
-  def cleanup
-    @fifo.close
-    File.unlink @fifo_name
-    FileUtils.rmdir STATUS_FIFO_DIR
   end
 
   protected
@@ -48,16 +49,31 @@ class StatusWidget
   end
 
   def puts(str)
-    @fifo.puts(str)
-    @fifo.flush
+    @output.puts(str)
+    @output.flush
   end
 
   private
 
+  # Workaround https://github.com/Alexays/Waybar/issues/358
+  def pr_set_pdeathsig
+    require 'fiddle'
+    libc = Fiddle.dlopen('/lib64/libc.so.6')
+    prctl = Fiddle::Function.new(libc['prctl'], [Fiddle::TYPE_LONG, Fiddle::TYPE_LONG], Fiddle::TYPE_INT)
+    prctl.call(1, 15)
+  end
+
   def mkfifo
-    Dir.mkdir(STATUS_FIFO_DIR) unless Dir.exist?(STATUS_FIFO_DIR)
-    File.mkfifo(@fifo_name, 0600) unless File.exist?(@fifo_name)
-    @fifo = open(@fifo_name, 'w+')
+    Dir.mkdir STATUS_FIFO_DIR unless Dir.exist? STATUS_FIFO_DIR
+    File.mkfifo(@fifo_name, 0600) unless File.exist? @fifo_name
+    open(@fifo_name, 'w+')
+  end
+
+  def cleanup
+    stop_timer
+    @output.close if @output
+    File.unlink @fifo_name if File.exist? @fifo_name
+    FileUtils.rmdir STATUS_FIFO_DIR
   end
 
   def colorize(fg, bg, text)
@@ -101,11 +117,6 @@ class PowerStatus < StatusWidget
     super('power', 5)
   end
 
-  def cleanup
-    Process.kill('TERM', @p.pid) unless @p.closed?
-    super
-  end
-
   private
 
   def start_monitor
@@ -116,6 +127,11 @@ class PowerStatus < StatusWidget
       end
     end
     @p.close
+  end
+
+  def cleanup
+    Process.kill('TERM', @p.pid) unless @p.closed?
+    super
   end
 
   def segments
@@ -167,17 +183,17 @@ class NetworkStatus < StatusWidget
     super('network', 5)
   end
 
-  def cleanup
-    Process.kill('TERM', @p.pid) unless @p.closed?
-    super
-  end
-
   private
 
   def start_monitor
     @p = IO.popen('nmcli device monitor')
     @p.each { trigger }
     @p.close
+  end
+
+  def cleanup
+    Process.kill('TERM', @p.pid) unless @p.closed?
+    super
   end
 
   def segments
@@ -210,11 +226,6 @@ class AudioStatus < StatusWidget
     super('audio')
   end
 
-  def cleanup
-    Process.kill('TERM', @p.pid) unless @p.closed?
-    super
-  end
-
   private
 
   def start_monitor
@@ -225,6 +236,11 @@ class AudioStatus < StatusWidget
       end
     end
     @p.close
+  end
+
+  def cleanup
+    Process.kill('TERM', @p.pid) unless @p.closed?
+    super
   end
 
   def segments
@@ -277,11 +293,6 @@ class BacklightStatus < StatusWidget
     super('backlight')
   end
 
-  def cleanup
-    Process.kill('TERM', @p.pid) if @p and !@p.closed?
-    super
-  end
-
   private
 
   def start_monitor
@@ -292,6 +303,11 @@ class BacklightStatus < StatusWidget
       @p.each { trigger }
       @p.close
     end
+  end
+
+  def cleanup
+    Process.kill('TERM', @p.pid) if @p and !@p.closed?
+    super
   end
 
   def segments
@@ -309,17 +325,17 @@ class ScreensaverStatus < StatusWidget
     super('screensaver', 30)
   end
 
-  def cleanup
-    Process.kill('TERM', @p.pid) unless @p.closed?
-    super
-  end
-
   private
 
   def start_monitor
     @p = IO.popen('inotifywait --quiet --monitor --event create --event delete --include screensaver.inhibit $XDG_RUNTIME_DIR')
     @p.each { trigger }
     @p.close
+  end
+
+  def cleanup
+    Process.kill('TERM', @p.pid) unless @p.closed?
+    super
   end
 
   def segments
@@ -337,11 +353,6 @@ class VpnStatus < StatusWidget
     super('vpn')
   end
 
-  def cleanup
-    Process.kill('TERM', @p.pid) unless @p.closed?
-    super
-  end
-
   private
 
   def start_monitor
@@ -350,9 +361,68 @@ class VpnStatus < StatusWidget
     @p.close
   end
 
+  def cleanup
+    Process.kill('TERM', @p.pid) unless @p.closed?
+    super
+  end
+
   def segments
     if `nmcli --colors no --terse --fields type,state connection show`.include?('vpn:activated')
       segment fontawesome "\uf023"
+    else
+      ''
+    end
+  end
+end
+
+class SwayWorkspace < StatusWidget
+  def initialize(ws)
+    super('sway-workspaces')
+    @ws = ws
+  end
+
+  def cleanup
+    Process.kill('TERM', @p.pid) unless @p.closed?
+    super
+  end
+
+  private
+
+  def start_monitor
+    @p = IO.popen('swaymsg --monitor --type subscribe \'["workspace"]\'')
+    @p.each do |line|
+      if line =~ /^{/
+        trigger
+      end
+    end
+    @p.close
+  end
+
+  def segments
+    workspaces = JSON.parse(`swaymsg -t get_workspaces`)
+    workspace = workspaces.find { |w| w['name'] == @ws }
+    if workspace
+      if workspace['focused']
+        bgcolor = '#7cafc2'
+        fgcolor = '#282828'
+        font_weight = 'bold'
+      elsif workspace['urgent']
+        bgcolor = '#f7ca88'
+        fgcolor = '#282828'
+        font_weight = 'normal'
+      elsif workspace['visible']
+        bgcolor = '#383838'
+        fgcolor = '#d8d8d8'
+        font_weight = 'normal'
+      else
+        bgcolor = '#282828'
+        fgcolor = '#d8d8d8'
+        font_weight = 'normal'
+      end
+      if workspace == workspaces.last
+        endsep = "<span fgcolor='#{bgcolor}'></span>"
+      end
+      "<span bgcolor='#{bgcolor}' fgcolor='#{fgcolor}' font_weight='#{font_weight}'> #{workspace['num']}: #{workspace['name']} </span>#{endsep}"
     else
       ''
     end
