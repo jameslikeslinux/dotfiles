@@ -49,6 +49,13 @@ class StatusWidget
     end
   end
 
+  def colorize(fg, bg, text, bold=false)
+    fgcolor=" fgcolor='#{fg}'" if fg
+    bgcolor=" bgcolor='#{bg}'" if bg
+    font_weight=" font_weight='bold'" if bold
+    "<span#{fgcolor}#{bgcolor}#{font_weight}>#{text}</span>"
+  end
+
   def puts(str)
     @output.puts(str)
     @output.flush
@@ -75,10 +82,6 @@ class StatusWidget
     @output.close if @output
     File.unlink @fifo_name if File.exist? @fifo_name
     FileUtils.rmdir STATUS_FIFO_DIR
-  end
-
-  def colorize(fg, bg, text)
-    "<span fgcolor='#{fg}' bgcolor='#{bg}'>#{text}</span>"
   end
 
   def start_timer
@@ -377,9 +380,9 @@ class VpnStatus < StatusWidget
 end
 
 class SwayWorkspace < StatusWidget
-  def initialize(ws)
+  def initialize(num)
     super('sway-workspaces')
-    @ws = ws
+    @num = num
   end
 
   def cleanup
@@ -401,29 +404,27 @@ class SwayWorkspace < StatusWidget
 
   def segments
     workspaces = JSON.parse(`swaymsg -t get_workspaces`)
-    workspace = workspaces.find { |w| w['name'] == @ws }
+    workspace = workspaces.find { |w| w['num'] == @num }
     if workspace
       if workspace['focused']
+        fgcolor = '#282828'
         bgcolor = '#7cafc2'
-        fgcolor = '#282828'
-        font_weight = 'bold'
+        bold = true
       elsif workspace['urgent']
-        bgcolor = '#f7ca88'
         fgcolor = '#282828'
-        font_weight = 'normal'
+        bgcolor = '#f7ca88'
+        bold = false
       elsif workspace['visible']
+        fgcolor = '#d8d8d8'
         bgcolor = '#383838'
-        fgcolor = '#d8d8d8'
-        font_weight = 'normal'
+        bold = false
       else
-        bgcolor = '#282828'
         fgcolor = '#d8d8d8'
-        font_weight = 'normal'
+        bgcolor = '#282828'
+        bold = false
       end
-      if workspace == workspaces.last
-        endsep = "<span fgcolor='#{bgcolor}'></span>"
-      end
-      "<span bgcolor='#{bgcolor}' fgcolor='#{fgcolor}' font_weight='#{font_weight}'> #{workspace['num']}: #{workspace['name']} </span>#{endsep}"
+      endsep = workspace == workspaces.last ? colorize(bgcolor, nil, '') : ''
+      colorize(fgcolor, bgcolor, " #{workspace['name']} ", bold) + endsep
     else
       ''
     end
