@@ -1,5 +1,6 @@
 require 'concurrent'
 require 'fileutils'
+require 'json'
 
 class StatusWidget
   STATUS_FIFO_DIR = "/tmp/status-#{Process.uid}".freeze
@@ -130,7 +131,7 @@ class PowerStatus < StatusWidget
   end
 
   def cleanup
-    Process.kill('TERM', @p.pid) unless @p.closed?
+    Process.kill('TERM', @p.pid) if @p and !@p.closed?
     super
   end
 
@@ -192,7 +193,7 @@ class NetworkStatus < StatusWidget
   end
 
   def cleanup
-    Process.kill('TERM', @p.pid) unless @p.closed?
+    Process.kill('TERM', @p.pid) if @p and !@p.closed?
     super
   end
 
@@ -239,7 +240,7 @@ class AudioStatus < StatusWidget
   end
 
   def cleanup
-    Process.kill('TERM', @p.pid) unless @p.closed?
+    Process.kill('TERM', @p.pid) if @p and !@p.closed?
     super
   end
 
@@ -334,7 +335,7 @@ class ScreensaverStatus < StatusWidget
   end
 
   def cleanup
-    Process.kill('TERM', @p.pid) unless @p.closed?
+    Process.kill('TERM', @p.pid) if @p and !@p.closed?
     super
   end
 
@@ -362,7 +363,7 @@ class VpnStatus < StatusWidget
   end
 
   def cleanup
-    Process.kill('TERM', @p.pid) unless @p.closed?
+    Process.kill('TERM', @p.pid) if @p and !@p.closed?
     super
   end
 
@@ -382,7 +383,7 @@ class SwayWorkspace < StatusWidget
   end
 
   def cleanup
-    Process.kill('TERM', @p.pid) unless @p.closed?
+    Process.kill('TERM', @p.pid) if @p and !@p.closed?
     super
   end
 
