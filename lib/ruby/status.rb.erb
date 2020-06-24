@@ -3,9 +3,10 @@ require 'fileutils'
 class StatusWidget
   STATUS_FIFO_DIR = "/tmp/status-#{Process.uid}".freeze
 
-  def initialize(name, timeout = nil)
+  def initialize(name, timeout = nil, stdout = false)
     @fifo_name = File.join(STATUS_FIFO_DIR, "#{name}.fifo")
     @timeout = timeout
+    @stdout = stdout
   end
 
   def monitor
@@ -19,9 +20,11 @@ class StatusWidget
   end
 
   def cleanup
-    @fifo.close
-    File.unlink @fifo_name
-    FileUtils.rmdir STATUS_FIFO_DIR
+    unless @stdout
+      @fifo.close
+      File.unlink @fifo_name
+      FileUtils.rmdir STATUS_FIFO_DIR
+    end
   end
 
   protected
@@ -55,9 +58,13 @@ class StatusWidget
   private
 
   def mkfifo
-    Dir.mkdir(STATUS_FIFO_DIR) unless Dir.exist?(STATUS_FIFO_DIR)
-    File.mkfifo(@fifo_name, 0600) unless File.exist?(@fifo_name)
-    @fifo = open(@fifo_name, 'w+')
+    if !@stdout
+      Dir.mkdir(STATUS_FIFO_DIR) unless Dir.exist?(STATUS_FIFO_DIR)
+      File.mkfifo(@fifo_name, 0600) unless File.exist?(@fifo_name)
+      @fifo = open(@fifo_name, 'w+')
+    else
+      @fifo = STDOUT
+    end
   end
 
   def colorize(fg, bg, text)
