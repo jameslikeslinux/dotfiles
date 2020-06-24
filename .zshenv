@@ -44,3 +44,6 @@ fi
 
 # Use Plasma theme outside of Plasma
 export QT_QPA_PLATFORMTHEME=kde
+
+# To find my custom ruby libraries
+export RUBYLIB="${HOME}/lib/ruby"
