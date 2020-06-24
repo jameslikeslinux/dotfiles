@@ -1,6 +1,3 @@
-#!/usr/bin/env ruby
-
-require 'concurrent'
 require 'fileutils'
 
 class StatusWidget
@@ -361,19 +358,5 @@ class VpnStatus < StatusWidget
     end
   end
 end
-
-widgets = [
-  LoadStatus.new,
-  PowerStatus.new,
-  NetworkStatus.new,
-  AudioStatus.new,
-  BacklightStatus.new,
-  ScreensaverStatus.new,
-  VpnStatus.new,
-]
-
-at_exit { widgets.each(&:cleanup) }
-threads = widgets.map { |widget| Thread.new { widget.monitor } }
-threads.each(&:join)
 
 # vim: filetype=ruby
