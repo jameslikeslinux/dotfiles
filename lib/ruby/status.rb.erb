@@ -1,9 +1,10 @@
+require 'concurrent'
 require 'fileutils'
 
 class StatusWidget
   STATUS_FIFO_DIR = "/tmp/status-#{Process.uid}".freeze
 
-  def initialize(name, timeout = nil, stdout = false)
+  def initialize(name, timeout = nil, stdout: false)
     @fifo_name = File.join(STATUS_FIFO_DIR, "#{name}.fifo")
     @timeout = timeout
     @stdout = stdout
@@ -87,8 +88,8 @@ class StatusWidget
 end
 
 class LoadStatus < StatusWidget
-  def initialize
-    super('load', 1)
+  def initialize(**keyword_args)
+    super('load', 1, **keyword_args)
   end
 
   private
@@ -104,8 +105,8 @@ class LoadStatus < StatusWidget
 end
 
 class PowerStatus < StatusWidget
-  def initialize
-    super('power', 5)
+  def initialize(**keyword_args)
+    super('power', 5, **keyword_args)
   end
 
   def cleanup
@@ -170,8 +171,8 @@ class PowerStatus < StatusWidget
 end
 
 class NetworkStatus < StatusWidget
-  def initialize
-    super('network', 5)
+  def initialize(**keyword_args)
+    super('network', 5, **keyword_args)
   end
 
   def cleanup
@@ -213,8 +214,8 @@ class NetworkStatus < StatusWidget
 end
 
 class AudioStatus < StatusWidget
-  def initialize
-    super('audio')
+  def initialize(**keyword_args)
+    super('audio', **keyword_args)
   end
 
   def cleanup
@@ -280,8 +281,8 @@ class AudioStatus < StatusWidget
 end
 
 class BacklightStatus < StatusWidget
-  def initialize
-    super('backlight')
+  def initialize(**keyword_args)
+    super('backlight', **keyword_args)
   end
 
   def cleanup
@@ -312,8 +313,8 @@ class BacklightStatus < StatusWidget
 end
 
 class ScreensaverStatus < StatusWidget
-  def initialize
-    super('screensaver', 30)
+  def initialize(**keyword_args)
+    super('screensaver', 30, **keyword_args)
   end
 
   def cleanup
@@ -340,8 +341,8 @@ class ScreensaverStatus < StatusWidget
 end
 
 class VpnStatus < StatusWidget
-  def initialize
-    super('vpn')
+  def initialize(**keyword_args)
+    super('vpn', **keyword_args)
   end
 
   def cleanup
