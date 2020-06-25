@@ -15,7 +15,6 @@ class StatusWidget
   end
 
   def monitor(stdout = false)
-    pr_set_pdeathsig
     at_exit { cleanup }
     @output = stdout ? STDOUT : mkfifo(@fifo_name)
     puts segments
@@ -70,14 +69,6 @@ class StatusWidget
   end
 
   private
-
-  # Workaround https://github.com/Alexays/Waybar/issues/358
-  def pr_set_pdeathsig
-    require 'fiddle'
-    libc = Fiddle.dlopen('/lib64/libc.so.6')
-    prctl = Fiddle::Function.new(libc['prctl'], [Fiddle::TYPE_LONG, Fiddle::TYPE_LONG], Fiddle::TYPE_INT)
-    prctl.call(1, 15)
-  end
 
   def cleanup
     stop_timer
