@@ -17,6 +17,7 @@ class StatusWidget
   def monitor(stdout = false)
     at_exit { cleanup }
     @output = stdout ? STDOUT : mkfifo(@fifo_name)
+    Signal.trap('USR1') { trigger }
     puts segments
     start_timer
     loop do
