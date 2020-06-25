@@ -376,6 +376,7 @@ end
 class SwayWorkspaces < StatusWidget
   def initialize(count)
     super('sway-workspaces')
+    @count = count
     @fifos = (1..count).map { |num| mkfifo File.join(STATUS_FIFO_DIR, "sway-workspace-#{num}.fifo") }
   end
 
@@ -402,27 +403,32 @@ class SwayWorkspaces < StatusWidget
 
   def segments
     workspaces = JSON.parse(`swaymsg -t get_workspaces`)
-    workspaces.each do |workspace|
-      fifo = @fifos[workspace['num'] - 1]
-      if workspace['focused']
-        fgcolor = '#282828'
-        bgcolor = '#7cafc2'
-        bold = true
-      elsif workspace['urgent']
-        fgcolor = '#282828'
-        bgcolor = '#f7ca88'
-        bold = false
-      elsif workspace['visible']
-        fgcolor = '#d8d8d8'
-        bgcolor = '#383838'
-        bold = false
+    (1..@count).each do |num|
+      fifo = @fifos[num - 1]
+      workspace = workspaces.find { |ws| ws['num'] == num }
+      if workspace
+        if workspace['focused']
+          fgcolor = '#282828'
+          bgcolor = '#7cafc2'
+          bold = true
+        elsif workspace['urgent']
+          fgcolor = '#282828'
+          bgcolor = '#f7ca88'
+          bold = false
+        elsif workspace['visible']
+          fgcolor = '#d8d8d8'
+          bgcolor = '#383838'
+          bold = false
+        else
+          fgcolor = '#d8d8d8'
+          bgcolor = '#282828'
+          bold = false
+        end
+        endsep = workspace == workspaces.last ? colorize(bgcolor, nil, '') : ''
+        fifo.puts colorize(fgcolor, bgcolor, " #{workspace['name']} ", bold) + endsep
       else
-        fgcolor = '#d8d8d8'
-        bgcolor = '#282828'
-        bold = false
+        fifo.puts ''
       end
-      endsep = workspace == workspaces.last ? colorize(bgcolor, nil, '') : ''
-      fifo.puts colorize(fgcolor, bgcolor, " #{workspace['name']} ", bold) + endsep
       fifo.flush
     end
     nil # don't output any segments
