@@ -109,21 +109,28 @@ default_session_name() {
 
     if [[ $TSESSION ]]; then
         name="$TSESSION"
-    elif [[ $DISPLAY == ':0' ]]; then
-        local _NET_CURRENT_DESKTOP _NET_DESKTOP_NAMES
-        eval "$(xprop -root -notype _NET_CURRENT_DESKTOP 2>/dev/null | sed 's/ = /=/')"
-        eval "$(xprop -root -notype _NET_DESKTOP_NAMES 2>/dev/null | sed 's/ = /=(/; s/,//g; s/$/)/')"
+    elif [[ $DESKTOP_SESSION ]]; then
+        local current_desktop
 
-        if [[ $_NET_CURRENT_DESKTOP && $_NET_DESKTOP_NAMES ]]; then
-            local current_desktop="${_NET_DESKTOP_NAMES[$_NET_CURRENT_DESKTOP + 1]}"
-            if [[ $current_desktop ]]; then
-                name="$current_desktop"
+        if [[ -S $SWAYSOCK ]]; then
+            current_desktop="$(swaymsg -t get_workspaces | jq -r '.[] | select(.focused).name')"
+            current_desktop="${current_desktop#* }"
+        else
+            local _NET_CURRENT_DESKTOP _NET_DESKTOP_NAMES
+            eval "$(xprop -root -notype _NET_CURRENT_DESKTOP 2>/dev/null | sed 's/ = /=/')"
+            eval "$(xprop -root -notype _NET_DESKTOP_NAMES 2>/dev/null | sed 's/ = /=(/; s/,//g; s/$/)/')"
+            if [[ $_NET_CURRENT_DESKTOP && $_NET_DESKTOP_NAMES ]]; then
+                current_desktop="${_NET_DESKTOP_NAMES[$_NET_CURRENT_DESKTOP + 1]}"
+            fi
+        fi
 
-                if [[ ! $TMUX ]]; then
-                    local session_clients="$(tmux list-clients -t "$name")"
-                    if [[ $session_clients ]]; then
-                        name="${name}-scratch"
-                    fi
+        if [[ $current_desktop ]]; then
+            name="$current_desktop"
+
+            if [[ ! $TMUX ]]; then
+                local session_clients="$(tmux list-clients -t "$name")"
+                if [[ $session_clients ]]; then
+                    name="${name}-scratch"
                 fi
             fi
         fi
