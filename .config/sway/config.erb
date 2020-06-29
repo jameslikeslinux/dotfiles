@@ -1,29 +1,24 @@
+<% require 'colorscheme'
+dark = ColorScheme.dark.colors_by_base
+gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
+text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1
+scaling_ratio = text_scaling_factor / gui_scaling_factor
+-%>
 # Load system configs like input and output configuration
 include /etc/sway/config.d/*
 
-# Initialize session (using Plasma)
-exec ~/.config/sway/init
-
-# Plasma normally sets these for me, but not when it is run under another compositor
-# See: https://github.com/swaywm/sway/wiki/GTK-3-settings-on-Wayland
-exec_always {
-    gsettings set org.gnome.desktop.interface gtk-theme 'Breeze-Mine'
-    gsettings set org.gnome.desktop.interface icon-theme 'breeze-dark'
-    gsettings set org.gnome.desktop.interface cursor-theme 'breeze_cursors'
-}
-
 # Cosmetics
 output * bg ~/.wallpaper.png stretch
-# XXX: Scale with text
-gaps inner 14
+gaps inner <%= (13 * scaling_ratio).round %>
 default_border pixel 3
 default_floating_border pixel 3
 
 # Keybindings
 set $mod Mod4
 bindsym $mod+Shift+Return exec urxvt
+bindsym $mod+f fullscreen
 bindsym $mod+x kill
-bindsym $mod+p exec rofi -show drun -dpi 104
+bindsym $mod+p exec rofi -show drun
 bindsym $mod+q reload
 bindsym $mod+Shift+q exec swaynag -t warning -m '' -b 'Yes, exit sway' 'swaymsg exit'
 
@@ -78,6 +73,16 @@ bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
 
-bindsym $mod+f fullscreen
+# Initialize session (using Plasma)
+exec ~/.config/sway/init
 
+# Plasma normally sets these for me, but not when it is run under another compositor
+# See: https://github.com/swaywm/sway/wiki/GTK-3-settings-on-Wayland
+exec_always {
+    gsettings set org.gnome.desktop.interface gtk-theme 'Breeze-Mine'
+    gsettings set org.gnome.desktop.interface icon-theme 'breeze-dark'
+    gsettings set org.gnome.desktop.interface cursor-theme 'breeze_cursors'
+}
+
+exec ~/.config/waybar/status/sway-workspaces-monitor 10
 exec waybar
