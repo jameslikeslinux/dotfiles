@@ -18,7 +18,7 @@ set $mod Mod4
 bindsym $mod+Shift+Return exec urxvt
 bindsym $mod+f fullscreen
 bindsym $mod+x kill
-bindsym $mod+p exec rofi -show drun
+bindsym $mod+p exec rofi -show drun -dpi <%= (96 * scaling_ratio).round %>
 bindsym $mod+q reload
 bindsym $mod+Shift+q exec swaynag -t warning -m '' -b 'Yes, exit sway' 'swaymsg exit'
 
