@@ -76,6 +76,8 @@ bindsym $mod+Shift+0 move container to workspace $ws10
 # Initialize session (using Plasma)
 exec ~/.config/sway/init
 
+# XXX: Everything below might race with the init above.  Rework.
+
 # Plasma normally sets these for me, but not when it is run under another compositor
 # See: https://github.com/swaywm/sway/wiki/GTK-3-settings-on-Wayland
 exec_always {
