@@ -2,11 +2,11 @@
 Description=VPN connection launcher
 PartOf=graphical-session.target
 After=kded5-networkmanagement.service
-ConditionHost=falcon
+ConditionHost=eagle
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/nmcli connection up umd
+ExecStart=/usr/bin/nmcli connection up umd-oitmr
 
 [Install]
 WantedBy=graphical-session.target
