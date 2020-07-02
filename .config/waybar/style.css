@@ -1,0 +1,18 @@
+* {
+    all: unset;
+}
+
+#waybar {
+    background-color: black;
+    color: #d8d8d8;
+    font-family: monospace;
+    font-size: 9pt;
+}
+
+#waybar > box {
+    padding: 2px 0 2px 0;
+}
+
+#clock {
+    background-color: #383838;
+}

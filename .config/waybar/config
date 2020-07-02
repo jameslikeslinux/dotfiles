@@ -1,0 +1,61 @@
+{
+    "output": "eDP-1",
+    "modules-left": [
+        "custom/sway-workspace-1",
+        "custom/sway-workspace-2",
+        "custom/sway-workspace-3",
+        "custom/sway-workspace-4",
+        "custom/sway-workspace-5",
+        "custom/sway-workspace-6",
+        "custom/sway-workspace-7",
+        "custom/sway-workspace-8",
+        "custom/sway-workspace-9",
+        "custom/sway-workspace-10",
+        "sway/window"
+    ],
+    "modules-right": [
+        "custom/load",
+        "clock"
+    ],
+    "custom/sway-workspace-1": {
+        "exec": "$HOME/.config/waybar/status/sway-workspace 1",
+    },
+    "custom/sway-workspace-2": {
+        "exec": "$HOME/.config/waybar/status/sway-workspace 2",
+    },
+    "custom/sway-workspace-3": {
+        "exec": "$HOME/.config/waybar/status/sway-workspace 3",
+    },
+    "custom/sway-workspace-4": {
+        "exec": "$HOME/.config/waybar/status/sway-workspace 4",
+    },
+    "custom/sway-workspace-5": {
+        "exec": "$HOME/.config/waybar/status/sway-workspace 5",
+    },
+    "custom/sway-workspace-6": {
+        "exec": "$HOME/.config/waybar/status/sway-workspace 6",
+    },
+    "custom/sway-workspace-7": {
+        "exec": "$HOME/.config/waybar/status/sway-workspace 7",
+    },
+    "custom/sway-workspace-8": {
+        "exec": "$HOME/.config/waybar/status/sway-workspace 8",
+    },
+    "custom/sway-workspace-9": {
+        "exec": "$HOME/.config/waybar/status/sway-workspace 9",
+    },
+    "custom/sway-workspace-10": {
+        "exec": "$HOME/.config/waybar/status/sway-workspace 10",
+    },
+    "sway/window": {
+        "format": " {}",
+        "max-length": 100
+    },
+    "custom/load": {
+        "exec": "$HOME/.config/waybar/status/widget load"
+    },
+    "clock": {
+        "interval": 1,
+        "format": "<span bgcolor='#282828' fgcolor='#383838'></span> {:%a %b %_d %r} "
+    }
+}

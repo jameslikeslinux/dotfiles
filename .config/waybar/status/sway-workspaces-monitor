@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+require 'status'
+
+if ARGV.length != 1 or ARGV[0] !~ /\d+/
+  STDERR.puts "Usage: #{$0} WSCOUNT"
+  exit 1
+end
+
+SwayWorkspaces.new(ARGV[0].to_i).run

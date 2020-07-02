@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# pr_set_pdeathsig
+# pdeathsig
 #
 # Command wrapper to cause SIGTERM to be sent to the process when its parent
 # dies.  Useful to workaround problems like

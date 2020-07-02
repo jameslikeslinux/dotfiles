@@ -1,0 +1,11 @@
+#!/usr/bin/env -S pdeathsig ruby
+
+require 'status'
+
+if ARGV.length != 1
+  STDERR.puts "Usage: #{$0} WIDGET"
+  exit 1
+end
+
+widget = "#{ARGV[0].capitalize}Status"
+Object.const_get(widget).new.run
