@@ -1,0 +1,10 @@
+[Unit]
+Description=Waybar
+PartOf=graphical-session.target
+ConditionPathExists=$SWAYSOCK
+
+[Service]
+ExecStart=/usr/bin/waybar
+
+[Install]
+WantedBy=graphical-session.target

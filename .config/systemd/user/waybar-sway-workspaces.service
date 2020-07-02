@@ -1,0 +1,9 @@
+[Unit]
+Description=Sway workspaces widgets for Waybar
+PartOf=waybar.service
+
+[Service]
+ExecStart=/bin/sh -c '~/bin/waybar-sway-workspaces'
+
+[Install]
+WantedBy=waybar.service

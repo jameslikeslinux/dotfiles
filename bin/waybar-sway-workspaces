@@ -1,4 +1,10 @@
 #!/usr/bin/env ruby
+#
+# waybar-sway-workspaces
+#
+# Efficiently watch for Sway workspace changes and write workspace status
+# widgets to FIFOs that waybar can read and display
+#
 
 require 'status'
 

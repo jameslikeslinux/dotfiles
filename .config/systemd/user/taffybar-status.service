@@ -1,5 +1,5 @@
 [Unit]
-Description=taffybar status widgets
+Description=Taffybar status widgets
 PartOf=taffybar.service
 
 [Service]

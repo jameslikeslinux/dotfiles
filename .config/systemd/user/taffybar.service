@@ -1,5 +1,5 @@
 [Unit]
-Description=taffybar
+Description=Taffybar
 PartOf=graphical-session.target
 
 [Service]
