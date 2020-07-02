@@ -1,0 +1,11 @@
+[Unit]
+Description=GTK settings
+PartOf=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c '~/bin/gtk-settings'
+RemainAfterExit=yes
+
+[Install]
+WantedBy=graphical-session.target

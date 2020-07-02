@@ -73,18 +73,8 @@ bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
 
-# Initialize session (using Plasma)
-exec '~/bin/reset-systemd-environment && ~/.config/sway/init'
+# Propagate session reload
+exec_always 'systemctl --user reload sway'
 
-# XXX: Everything below might race with the init above.  Rework.
-
-# Plasma normally sets these for me, but not when it is run under another compositor
-# See: https://github.com/swaywm/sway/wiki/GTK-3-settings-on-Wayland
-exec_always {
-    gsettings set org.gnome.desktop.interface gtk-theme 'Breeze-Mine'
-    gsettings set org.gnome.desktop.interface icon-theme 'breeze-dark'
-    gsettings set org.gnome.desktop.interface cursor-theme 'breeze_cursors'
-}
-
-exec ~/.config/waybar/status/sway-workspaces-monitor 10
-exec waybar
+# Initialize session
+exec '~/bin/reset-systemd-environment && systemctl --user start sway-session.target'

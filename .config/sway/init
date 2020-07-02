@@ -1,8 +1,0 @@
-#!/usr/bin/env zsh
-#
-# sway init
-#
-# Start a new Plasma session.
-#
-
-/usr/lib64/libexec/startplasma-waylandsession

@@ -1,0 +1,9 @@
+[Unit]
+Description=Plasma Wayland session
+PartOf=sway-session.target
+
+[Service]
+ExecStart=/usr/lib64/libexec/startplasma-waylandsession
+
+[Install]
+WantedBy=sway-session.target
