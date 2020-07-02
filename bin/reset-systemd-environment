@@ -1,0 +1,11 @@
+#!/usr/bin/env zsh
+#
+# reset-systemd-environment
+#
+# Clean up any lingering environment variables from a previous session.  This
+# is a necessary evil because my user session never ends due to tmux yet
+# environment variables change wildly between graphical sessions.
+#
+
+source "${HOME}/lib/session-vars.sh"
+systemctl --user unset-environment "${SESSION_VARS[@]}"
