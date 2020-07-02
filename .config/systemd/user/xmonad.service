@@ -1,0 +1,6 @@
+[Unit]
+Description=xmonad Watcher
+
+[Service]
+ExecStart=$HOME/bin/wm-wait xmonad
+ExecReload=/bin/true

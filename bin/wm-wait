@@ -1,0 +1,31 @@
+#!/usr/bin/env zsh
+#
+# wm-wait
+#
+# Wait for a given window manager to start and exit.
+# For systemd services.
+#
+
+if [[ $# != 1 ]]; then
+    echo "Usage: ${0} [sway|xmonad]" >&2
+    exit 1
+fi
+
+case "$1" in
+    'sway')
+        regex='/sway(.real)?$'
+        ;;
+    'xmonad')
+        regex='/xmonad-.*-linux$'
+        ;;
+    *)
+        echo "Don't know how to find WM '${1}'" >&2
+        exit 1
+        ;;
+esac
+
+until pid="$(pgrep -U "$UID" -f "$regex")"; do
+    sleep 1
+done
+
+tail -f --pid="$pid" /dev/null

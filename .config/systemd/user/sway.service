@@ -1,0 +1,6 @@
+[Unit]
+Description=Sway Watcher
+
+[Service]
+ExecStart=$HOME/bin/wm-wait sway
+ExecReload=/bin/true
