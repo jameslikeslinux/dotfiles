@@ -24,7 +24,7 @@ case "$1" in
         ;;
 esac
 
-until pid="$(pgrep -U "$UID" -f "$regex")"; do
+until pid="$(pgrep -o -U "$UID" -f "$regex")"; do
     sleep 1
 done
 
