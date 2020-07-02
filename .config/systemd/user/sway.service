@@ -2,5 +2,5 @@
 Description=Sway Watcher
 
 [Service]
-ExecStart=$HOME/bin/wm-wait sway
+ExecStart=/bin/sh -c '~/bin/wm-wait sway'
 ExecReload=/bin/true

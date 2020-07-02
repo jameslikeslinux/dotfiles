@@ -2,5 +2,5 @@
 Description=xmonad Watcher
 
 [Service]
-ExecStart=$HOME/bin/wm-wait xmonad
+ExecStart=/bin/sh -c '~/bin/wm-wait xmonad'
 ExecReload=/bin/true
