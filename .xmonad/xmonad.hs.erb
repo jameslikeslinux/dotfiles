@@ -49,16 +49,16 @@ data PanelTimer = PanelTimer TimerId deriving Typeable
 instance ExtensionClass PanelTimer where
     initialValue = PanelTimer 0
 
-startupHook' = do
-    spawn "feh --bg-scale --no-xinerama --no-fehbg ~/.wallpaper.png"
-    spawnOnce "picom"
-    spawnOnce "dunst"
-    spawnOnce "taffybar"
-<% if @facts['hostname'] == 'eagle' -%>
-    spawnOnce "qdbus org.kde.kded5 /modules/networkmanagement init && nmcli connection up umd-oitmr"
-<% else -%>
-    spawnOnce "qdbus org.kde.kded5 /modules/networkmanagement init"
-<% end -%>
+startupHook' = spawn "systemctl --user start xmonad-session.target"
+--     spawn "feh --bg-scale --no-xinerama --no-fehbg ~/.wallpaper.png"
+--     spawnOnce "picom"
+--     spawnOnce "dunst"
+--     spawnOnce "taffybar"
+-- <% if @facts['hostname'] == 'eagle' -%>
+--     spawnOnce "qdbus org.kde.kded5 /modules/networkmanagement init && nmcli connection up umd-oitmr"
+-- <% else -%>
+--     spawnOnce "qdbus org.kde.kded5 /modules/networkmanagement init"
+-- <% end -%>
 
 logHook' = switchTopicHook >> historyHook >> workspaceHistoryHook
 

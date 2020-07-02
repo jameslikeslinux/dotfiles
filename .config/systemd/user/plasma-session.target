@@ -1,0 +1,4 @@
+[Unit]
+Description=The session started directly by Plasma
+BindsTo=graphical-session.target
+PartOf=sway-session.target xmonad-session.target
