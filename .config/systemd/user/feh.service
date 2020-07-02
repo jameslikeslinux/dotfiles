@@ -1,5 +1,5 @@
 [Unit]
-Description=feh Wallpaper Setter
+Description=feh wallpaper setter
 PartOf=graphical-session.target
 
 [Service]

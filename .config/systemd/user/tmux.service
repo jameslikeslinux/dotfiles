@@ -1,5 +1,5 @@
 [Unit]
-Description=tmux Terminal Multiplexer Server
+Description=tmux terminal multiplexer server
 
 [Service]
 Type=forking

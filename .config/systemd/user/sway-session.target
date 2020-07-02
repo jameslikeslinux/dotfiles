@@ -1,3 +1,3 @@
 [Unit]
-Description=The session started directly by Sway
+Description=session started directly by Sway
 BindsTo=sway.service
