@@ -9,4 +9,4 @@
 
 source "${HOME}/lib/session-vars.sh"
 systemctl --user unset-environment "${SESSION_VARS[@]}"
-systemctl --user import-environment "${SESSION_VARS[@]}"
+systemctl --user import-environment
