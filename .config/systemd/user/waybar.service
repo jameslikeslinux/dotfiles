@@ -3,7 +3,7 @@ Description=Waybar
 PartOf=graphical-session.target
 
 [Service]
-ExecCondition=/usr/bin/test x$XDG_SESSION_TYPE = xwayland
+ExecCondition=/usr/bin/test ${XDG_SESSION_TYPE} = wayland
 ExecStart=/usr/bin/waybar
 
 [Install]

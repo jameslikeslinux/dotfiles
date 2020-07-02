@@ -4,7 +4,7 @@ PartOf=graphical-session.target
 
 [Service]
 Type=oneshot
-ExecCondition=/usr/bin/test x$KDEWM = x/usr/bin/xmonad
+ExecCondition=/usr/bin/test ${KDEWM} = /usr/bin/xmonad
 ExecStart=/usr/bin/qdbus org.kde.kded5 /modules/networkmanagement init
 RemainAfterExit=yes
 

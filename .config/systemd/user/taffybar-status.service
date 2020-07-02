@@ -3,7 +3,7 @@ Description=Taffybar status widgets
 PartOf=taffybar.service
 
 [Service]
-ExecCondition=/usr/bin/test x$KDEWM = x/usr/bin/xmonad
+ExecCondition=/usr/bin/test ${KDEWM} = /usr/bin/xmonad
 ExecStart=/bin/sh -c '~/bin/taffybar-status'
 
 [Install]
