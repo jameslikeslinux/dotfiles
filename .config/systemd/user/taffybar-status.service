@@ -1,0 +1,9 @@
+[Unit]
+Description=taffybar status widgets
+PartOf=taffybar.service
+
+[Service]
+ExecStart=/bin/sh -c '~/bin/taffybar-status'
+
+[Install]
+WantedBy=taffybar.service

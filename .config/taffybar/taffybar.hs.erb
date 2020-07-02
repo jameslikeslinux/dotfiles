@@ -102,7 +102,7 @@ windowsConfig = defaultWindowsConfig
 statusWidget :: String -> TaffyIO Gtk.Widget
 statusWidget cmd = do
     dataDir <- liftIO $ getXdgDirectory XdgConfig "taffybar"
-    commandRunnerNew 0 (dataDir ++ "/status/read") [cmd] $ T.pack ""
+    commandRunnerNew 0 (dataDir ++ "/status-read") [cmd] $ T.pack ""
 
 taffybarConfig :: SimpleTaffyConfig
 taffybarConfig = defaultSimpleTaffyConfig
@@ -119,10 +119,6 @@ taffybarConfig = defaultSimpleTaffyConfig
     statusWidgets = map statusWidget ["vpn", "screensaver", "backlight", "audio", "network", "power", "load"]
 
 main :: IO ()
-main = do
-    dataDir <- getXdgDirectory XdgConfig "taffybar"
-    monitorProc <- spawnProcess (dataDir ++ "/status/monitor") []
-    installHandler sigTERM (Catch (terminateProcess monitorProc >> Gtk.mainQuit)) Nothing
-    simpleTaffybar taffybarConfig
+main = simpleTaffybar taffybarConfig
 
 -- vim: filetype=haskell

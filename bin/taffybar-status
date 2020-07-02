@@ -1,4 +1,10 @@
 #!/usr/bin/env ruby
+#
+# taffybar-status
+#
+# Efficiently watch for changes in various system resources and write widgets
+# to FIFOs that taffybar can read and display
+#
 
 require 'status'
 
