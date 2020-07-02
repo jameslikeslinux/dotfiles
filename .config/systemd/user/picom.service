@@ -3,7 +3,7 @@ Description=picom compositor
 PartOf=graphical-session.target
 
 [Service]
-ExecCondition=/usr/bin/test $KDEWM = /usr/bin/xmonad
+ExecCondition=/usr/bin/test x$KDEWM = x/usr/bin/xmonad
 ExecStart=/usr/bin/picom
 
 [Install]
