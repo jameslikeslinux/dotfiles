@@ -3,8 +3,10 @@ Description=feh Wallpaper Setter
 PartOf=graphical-session.target
 
 [Service]
+Type=oneshot
 ExecCondition=/usr/bin/test $KDEWM == /usr/bin/xmonad
 ExecStart=/bin/sh -c 'feh --bg-scale --no-xinerama --no-fehbg ~/.wallpaper.png'
+RemainAfterExit=yes
 
 [Install]
 WantedBy=graphical-session.target

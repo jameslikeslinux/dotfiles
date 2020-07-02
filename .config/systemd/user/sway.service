@@ -2,5 +2,6 @@
 Description=Sway Watcher
 
 [Service]
+Type=forking
 ExecStart=/bin/sh -c '~/bin/wm-wait sway'
 ExecReload=/bin/true

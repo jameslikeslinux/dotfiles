@@ -28,4 +28,4 @@ until pid="$(pgrep -U "$UID" -f "$regex")"; do
     sleep 1
 done
 
-exec tail -f --pid="$pid" /dev/null
+exec tail -f --pid="$pid" /dev/null &
