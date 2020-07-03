@@ -9,10 +9,7 @@
     font-size: 9pt;
 }
 
-#waybar > box {
-    margin: 2px 0 2px 0;
-}
-
 #clock {
     background-color: #383838;
+    margin: 2px 0 2px 0;
 }
