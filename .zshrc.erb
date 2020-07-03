@@ -6,14 +6,9 @@ if ! is-at-least 5.2; then
     done
 fi
 
-# /etc/zsh/zprofile overwrites stuff set in .zshenv
-# This is kind of a hack, but not that big of a deal
+# /etc/zsh/zprofile overwrites stuff set in .zshenv, specifically on Gentoo
+# where it sources /etc/profile.env.  Ensure my environment takes precedence.
 [[ -e /etc/zsh/zprofile ]] && source $HOME/.zshenv
-
-# My only FreeBSD system, pfSense, doesn't really support unicode
-if [[ $OSTYPE == freebsd* ]]; then
-    export TERM="${TERM%-powerline}"
-fi
 
 <% require 'colorscheme'
 cs = ColorScheme.dark
@@ -41,13 +36,6 @@ fi
 # still want ~/.zlogout evaluated.
 if [[ ! $TMUX ]]; then
     t 2>/dev/null && exit
-fi
-
-# XXX: Rename histfile
-if [[ -f ~/.histfile.$HOST && ! -f ~/.history.$HOST ]]; then
-    mv -f ~/.histfile.$HOST ~/.history.$HOST
-elif [[ -f ~/.histfile.$HOST ]]; then
-    rm -f ~/.histfile.$HOST
 fi
 
 # History settings
@@ -89,10 +77,9 @@ stty -ixon      # make ^S available to shell
 zstyle ':prompt:mine' hide-users '(james|jlee|jtl|root)'
 
 # Figure out if I'm running as a priviliged user
-if [[ $EUID == 0  ]]; then
+if [[ $EUID == 0 ]]; then
     zstyle ':prompt:mine' root true
-fi
-if [[ $OS == 'Windows_NT' ]] && id -Gnz | tr '\0' '\n' | grep -q '^Administrators$'; then
+elif [[ $OS == 'Windows_NT' ]] && id -Gnz | tr '\0' '\n' | grep -q '^Administrators$'; then
     zstyle ':prompt:mine' root true
 fi
 
@@ -149,9 +136,5 @@ if [[ $OS == 'Windows_NT' ]]; then
 else
     umask 022
 fi
-
-# Glue polutes my shell
-# (for some reason these have to go here, not .zshenv)
-unset LESS LESSOPEN
 
 # vim:ft=zsh

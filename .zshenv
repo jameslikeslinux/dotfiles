@@ -1,18 +1,11 @@
-# Always use unicode except on pfSense
-if [[ $HOST != 'router.mgmt.home' ]]; then
-    export LANG=en_US.UTF-8
-fi
+# Always use unicode
+export LANG=en_US.UTF-8
 
 # Set path
-if [[ -e /etc/glue/restrict ]]; then
-    # Glue does special stuff in bash/tcsh shells
-    source ~/.bashrc
-else
-    typeset -U path
-    for dir in /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin /usr/glue/bin /usr/glue/sbin $HOME/bin $HOME/local/bin; do
-        [[ -e $dir ]] && path=($dir $path)
-    done
-fi
+typeset -U path
+for dir in /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin /usr/glue/bin /usr/glue/sbin $HOME/bin $HOME/local/bin; do
+    [[ -e $dir ]] && path=($dir $path)
+done
 
 # Load extra functions
 typeset -U fpath
