@@ -1,9 +1,8 @@
 [Unit]
 Description=Sway workspaces widgets for Waybar
-PartOf=waybar.service
+BindsTo=waybar.service
 
 [Service]
-ExecCondition=/usr/bin/test -S ${SWAYSOCK}
 ExecStart=/bin/sh -c '~/bin/waybar-sway-workspaces 10'
 
 [Install]
