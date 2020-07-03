@@ -31,7 +31,6 @@ import XMonad.Layout.ThreeColumns
 import qualified XMonad.Util.ExtensibleState as XS
 import XMonad.Util.EZConfig
 import XMonad.Util.Run
-import XMonad.Util.SessionStart
 import XMonad.Util.SpawnOnce
 import XMonad.Util.Timer
 import XMonad.Util.Ungrab
@@ -51,10 +50,8 @@ instance ExtensionClass PanelTimer where
     initialValue = PanelTimer 0
 
 startupHook' = do
-    doOnce $ windows $ W.view "web"
     spawn "systemctl --user reload xmonad"
     spawnOnce "systemctl --user start xmonad-session.target"
-    setSessionStarted
 
 logHook' = switchTopicHook >> historyHook >> workspaceHistoryHook
 
