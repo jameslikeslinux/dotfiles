@@ -125,9 +125,7 @@ alias j='ssh -J stowe.umd.edu'
 compdef j=ssh
 
 # Easy way to switch to project
-p() {
-    cd "${HOME}/projects/${1}" && ls
-}
+p() { cd "${HOME}/projects/${1}" && ls }
 compdef "_files -W ${HOME}/projects" p
 
 # Set standard umask
