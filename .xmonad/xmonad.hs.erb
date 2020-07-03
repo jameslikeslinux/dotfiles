@@ -138,16 +138,16 @@ topicConfig = def
     { defaultTopicAction = \topic -> return ()
     , topicActions = fromList $
 <% if ['owl', 'caracara'].include? @facts['hostname'] -%>
-        [ ("web"    , spawn "~/.xmonad/scripts/firefox-wait --new-window about:blank")
+        [ ("web"    , spawn "firefox --browser")
 <% else -%>
-        [ ("web"    , spawn "~/.xmonad/scripts/firefox-wait --new-window about:blank && ~/.xmonad/scripts/firefox-wait twitter.com washingtonpost.com")
+        [ ("web"    , spawn "firefox --browser twitter.com washingtonpost.com")
 <% end -%>
         , ("ops"    , (ask >>= spawn . terminal . config))
         , ("dev"    , (ask >>= spawn . terminal . config))
         , ("music"  , spawn "chromium --app=https://play.google.com/music/listen")
-        , ("mail"   , spawn "~/.xmonad/scripts/firefox-wait --new-window https://mail.google.com/mail/u/0/#inbox && ~/.xmonad/scripts/firefox-wait --new-window https://mail.google.com/mail/u/1/#inbox")
+        , ("mail"   , spawn "firefox --new-window https://mail.google.com/mail/u/0/#inbox --new-window https://mail.google.com/mail/u/1/#inbox")
 <% if @facts['hostname'] == 'eagle' -%>
-        , ("chat"   , spawn "~/.xmonad/scripts/firefox-wait --new-window teams.webex.com")
+        , ("chat"   , spawn "firefox --new-window teams.webex.com")
 <% end -%>
 <% libvirtd_connect_str = @facts['hostname'] == 'eagle' ? 'qemu:///system' : 'qemu+ssh://root@eagle/system' -%>
         , ("windows", spawn "GDK_DPI_SCALE=<%= gui_scaling_factor %> GDK_SCALE=1 virt-viewer --full-screen --connect=<%= libvirtd_connect_str %> --wait --reconnect osprey")
