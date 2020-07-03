@@ -1,10 +1,10 @@
 [Unit]
 Description=Taffybar status widgets
-PartOf=graphical-session.target
+PartOf=taffybar.service
 
 [Service]
 ExecCondition=/usr/bin/test ${KDEWM} = /usr/bin/xmonad
 ExecStart=/bin/sh -c '~/bin/taffybar-status'
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=taffybar.service
