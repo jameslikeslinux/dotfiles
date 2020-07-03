@@ -1,6 +1,7 @@
 [Unit]
 Description=Taffybar status widgets
 BindsTo=taffybar.service
+After=taffybar.service
 
 [Service]
 ExecStart=/bin/sh -c '~/bin/taffybar-status'

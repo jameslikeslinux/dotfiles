@@ -1,6 +1,7 @@
 [Unit]
 Description=Sway workspaces widgets for Waybar
 BindsTo=waybar.service
+After=waybar.service
 
 [Service]
 ExecStart=/bin/sh -c '~/bin/waybar-sway-workspaces 10'
