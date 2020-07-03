@@ -202,12 +202,12 @@ class NetworkStatus < StatusWidget
 
       case devstate
       when 'connected'
-        signal = `iw dev #{device} link`.each_line do |line|
-          if line =~ /signal:\s+(.+)\s(.+)/
-            break "#{$1}#{$2}"
-          end
+        if `iw dev #{device} link` =~ /signal:\s+(\S+)\s(\S+)/
+          signal = "#{$1}#{$2}"
+          segment "#{icon} #{signal}"
+        else
+          segment "#{icon}"
         end
-        segment "#{icon} #{signal}"
       when /connecting/
         segment "#{icon} ..."
       else
