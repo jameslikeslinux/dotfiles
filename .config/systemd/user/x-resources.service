@@ -1,0 +1,12 @@
+[Unit]
+Description=X resources
+PartOf=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecCondition=/usr/bin/test -S ${SWAYSOCK}
+ExecStart=/usr/bin/xrdb -merge /etc/sway/Xresources
+RemainAfterExit=yes
+
+[Install]
+WantedBy=graphical-session.target
