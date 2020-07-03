@@ -10,7 +10,7 @@
 }
 
 #waybar > box {
-    padding: 2px 0 2px 0;
+    margin: 2px 0 2px 0;
 }
 
 #clock {
