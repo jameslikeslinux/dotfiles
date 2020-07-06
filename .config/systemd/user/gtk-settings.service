@@ -4,7 +4,9 @@ PartOf=graphical-session.target
 
 [Service]
 Type=oneshot
-ExecStart=/bin/sh -c '~/bin/gtk-settings'
+ExecStart=/usr/bin/gsettings set org.gnome.desktop.interface gtk-theme 'breeze-mine'
+ExecStart=/usr/bin/gsettings set org.gnome.desktop.interface icon-theme 'breeze-dark'
+ExecStart=/usr/bin/gsettings set org.gnome.desktop.interface cursor-theme 'breeze_cursors'
 RemainAfterExit=yes
 
 [Install]
