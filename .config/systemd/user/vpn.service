@@ -1,7 +1,7 @@
 [Unit]
 Description=VPN connection launcher
 PartOf=graphical-session.target
-After=kded5-networkmanagement.service
+After=plasma-networkmanagement.service
 ConditionHost=eagle
 
 [Service]

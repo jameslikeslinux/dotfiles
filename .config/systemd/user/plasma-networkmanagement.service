@@ -1,5 +1,5 @@
 [Unit]
-Description=kded5 networkmanagement module
+Description=Plasma networkmanagement module
 PartOf=graphical-session.target
 
 [Service]

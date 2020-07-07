@@ -1,9 +1,10 @@
 [Unit]
-Description=Plasma Wayland session
+Description=KDE Plasma
 PartOf=sway-session.target
 
 [Service]
 ExecStart=/usr/lib64/libexec/startplasma-waylandsession
+ExecStop=/usr/bin/qdbus org.kde.Shutdown /Shutdown logout
 
 [Install]
 WantedBy=sway-session.target
