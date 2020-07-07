@@ -4,7 +4,7 @@ BindsTo=waybar.service
 
 [Service]
 ExecCondition=/usr/bin/test -S ${SWAYSOCK}
-ExecStart=/bin/sh -c '~/bin/waybar-sway-workspaces 10'
+ExecStart=%h/bin/waybar-sway-workspaces 10
 
 [Install]
 WantedBy=waybar.service

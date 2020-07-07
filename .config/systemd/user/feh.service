@@ -5,7 +5,7 @@ PartOf=graphical-session.target
 [Service]
 Type=oneshot
 ExecCondition=/usr/bin/test ${KDEWM} = /usr/bin/xmonad
-ExecStart=/bin/sh -c 'feh --bg-scale --no-xinerama --no-fehbg ~/.wallpaper.png'
+ExecStart=/usr/bin/feh --bg-scale --no-xinerama --no-fehbg %h/.wallpaper.png
 RemainAfterExit=yes
 
 [Install]

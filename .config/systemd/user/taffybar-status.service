@@ -4,7 +4,7 @@ BindsTo=taffybar.service
 
 [Service]
 ExecCondition=/usr/bin/test ${KDEWM} = /usr/bin/xmonad
-ExecStart=/bin/sh -c '~/bin/taffybar-status'
+ExecStart=%h/bin/taffybar-status
 
 [Install]
 WantedBy=taffybar.service
