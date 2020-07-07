@@ -6,6 +6,6 @@
 # vertical splits for an effect like BSPWM
 #
 
-swaymsg --monitor -t subscribe '["window"]' | jq --unbuffered 'select(.change == "new").container.id' | while read con_id; do
-    swaymsg "[con_id=${con_id}]" split toggle
-done
+swaymsg --monitor -t subscribe '["window"]' |
+    jq --unbuffered 'select(.change == "new" and .container.type == "con").container.id' |
+    while read con_id; do swaymsg "[con_id=${con_id}]" split toggle; done
