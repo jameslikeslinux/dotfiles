@@ -1,0 +1,9 @@
+[Unit]
+Description=automatic container splitting for Sway
+PartOf=sway-session.target
+
+[Service]
+ExecStart=%h/bin/sway-split-toggler
+
+[Install]
+WantedBy=sway-session.target
