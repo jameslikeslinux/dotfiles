@@ -1,5 +1,6 @@
 [Unit]
 Description=Sway watcher
+RefuseManualStart=yes
 
 [Service]
 ExecStart=/usr/bin/swaymsg -q --monitor -t subscribe '["tick"]'
