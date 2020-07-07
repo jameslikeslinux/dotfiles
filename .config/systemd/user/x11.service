@@ -4,3 +4,4 @@ Description=X11 watcher
 [Service]
 ExecStart=/usr/bin/xprop -root -spy
 StandardOutput=null
+SuccessExitStatus=1
