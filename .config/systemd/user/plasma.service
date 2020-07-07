@@ -4,7 +4,7 @@ PartOf=sway-session.target
 
 [Service]
 ExecStart=/usr/lib64/libexec/startplasma-waylandsession
-ExecStop=/usr/bin/qdbus org.kde.Shutdown /Shutdown logout
+ExecStop=/bin/sh -c "qdbus org.kde.Shutdown /Shutdown logout && tail -f --pid=$MAINPID /dev/null"
 
 [Install]
 WantedBy=sway-session.target
