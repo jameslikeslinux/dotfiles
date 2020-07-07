@@ -3,6 +3,7 @@ Description=KDE Plasma
 PartOf=sway-session.target
 
 [Service]
+ExecCondition=/usr/bin/test ${XDG_SESSION_TYPE} = wayland
 ExecStart=/usr/lib64/libexec/startplasma-waylandsession
 ExecStop=/bin/sh -c "qdbus org.kde.Shutdown /Shutdown logout && tail -f --pid=$MAINPID /dev/null"
 
