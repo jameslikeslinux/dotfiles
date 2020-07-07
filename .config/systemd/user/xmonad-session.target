@@ -1,3 +1,0 @@
-[Unit]
-Description=session started directly by xmonad
-BindsTo=xmonad.service

@@ -2,6 +2,4 @@
 Description=Sway watcher
 
 [Service]
-Type=forking
-ExecStart=/bin/sh -c '~/bin/wm-wait sway'
-ExecReload=/bin/true
+ExecStart=/usr/bin/swaymsg -q --monitor -t subscribe '["tick"]'

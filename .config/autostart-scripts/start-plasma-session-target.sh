@@ -1,7 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 #
-# start-plasma-session-target.sh
-# Start the systemd target responsible for triggering other graphical services
+# start-graphical-session-target.sh
+# Start the systemd target that controls graphical-session.target
 #
 
 systemctl --user start plasma-session.target

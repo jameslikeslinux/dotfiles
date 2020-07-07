@@ -49,13 +49,8 @@ data PanelTimer = PanelTimer TimerId deriving Typeable
 instance ExtensionClass PanelTimer where
     initialValue = PanelTimer 0
 
-startupHook' = do
-    -- ewmh should set this at startup but doesn't
-    spawnOnce "xprop -root -f _NET_CURRENT_DESKTOP 32c -set _NET_CURRENT_DESKTOP 0"
-
-    -- Manage the rest of the startup and reloads with systemd
-    spawn "systemctl --user reload xmonad"
-    spawnOnce "systemctl --user start xmonad-session.target"
+-- ewmh should set this at startup but doesn't
+startupHook' = spawnOnce "xprop -root -f _NET_CURRENT_DESKTOP 32c -set _NET_CURRENT_DESKTOP 0"
 
 logHook' = switchTopicHook >> historyHook >> workspaceHistoryHook
 

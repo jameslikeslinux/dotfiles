@@ -1,7 +1,0 @@
-[Unit]
-Description=xmonad watcher
-
-[Service]
-Type=forking
-ExecStart=/bin/sh -c '~/bin/wm-wait xmonad'
-ExecReload=/bin/true
