@@ -62,7 +62,6 @@ def rearrange_workspace(workspace)
   master = master(workspace)
   stack = stack(workspace)
 
-  # Reflow excess master windows into stack when capacity is exceeded
   if master and windows(master).length > master_cap(workspace)
     reflow = true
   end
@@ -76,8 +75,6 @@ def rearrange_workspace(workspace)
     else
       system "swaymsg '[con_id=#{window['id']}]' move mark sway-layout-manager-previous"
     end
-
-    # Create a mark so the next window can be moved to after this one
     system "swaymsg -- '[con_id=#{window['id']}]' mark --add sway-layout-manager-previous"
   end
 end
