@@ -1,0 +1,90 @@
+#!/usr/bin/env ruby
+#
+# sway-layout-manager
+# Automatically manage Sway windows like the xmonad tall layout
+#
+
+require 'json'
+
+def tree
+  JSON.parse(`swaymsg -t get_tree`)
+end
+
+def workspaces(tree = tree())
+  tree['nodes'].map do |node|
+    if node['nodes'] and node['type'] == 'workspace'
+      [node] + workspaces(node)
+    elsif node['nodes']
+      workspaces(node)
+    else
+      []
+    end
+  end.flatten
+end
+
+def container(workspace, index)
+  if workspace['layout'] == 'splith'
+    if workspace['nodes'][index] and workspace['nodes'][index]['layout'] == 'splitv'
+      workspace['nodes'][index]
+    end
+  end
+end
+
+def master(workspace)
+  container(workspace, 0)
+end
+
+def stack(workspace)
+  container(workspace, 1)
+end
+
+def windows(workspace)
+  workspace['nodes'].map do |node|
+    if node['nodes'] and node['visible']
+      [node] + windows(node)
+    elsif node['nodes']
+      windows(node)
+    else
+      []
+    end
+  end.flatten
+end
+
+def master_cap(workspace)
+  workspace['name'] =~ /\[(\d+)\]:/ ? $1.to_i : 1
+end
+
+def rearrange_workspaces
+  workspaces.each { |workspace| rearrange_workspace(workspace) }
+end
+
+def rearrange_workspace(workspace)
+  master = master(workspace)
+  stack = stack(workspace)
+
+  # Reflow excess master windows into stack when capacity is exceeded
+  if master and windows(master).length > master_cap(workspace)
+    reflow = true
+  end
+
+  windows(workspace).each_with_index do |window, i|
+    if i == 0
+      system "swaymsg '[con_id=#{window['id']}]' splitv" if !master
+    elsif i == master_cap(workspace)
+      system "swaymsg '[con_id=#{window['id']}]' move right" if reflow or !stack
+      system "swaymsg '[con_id=#{window['id']}]' splitv" if !stack
+    else
+      system "swaymsg '[con_id=#{window['id']}]' move mark sway-layout-manager-previous"
+    end
+
+    # Create a mark so the next window can be moved to after this one
+    system "swaymsg -- '[con_id=#{window['id']}]' mark --add sway-layout-manager-previous"
+  end
+end
+
+IO.popen('swaymsg --monitor -t subscribe \'["window", "workspace"]\'').each do |line|
+  node = JSON.parse(line)
+  if ['new', 'close', 'rename'].include? node['change']
+    rearrange_workspaces
+  end
+end

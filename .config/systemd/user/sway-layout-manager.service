@@ -1,0 +1,9 @@
+[Unit]
+Description=automatic layout management for Sway
+PartOf=sway-session.target
+
+[Service]
+ExecStart=%h/bin/sway-layout-manager
+
+[Install]
+WantedBy=sway-session.target
