@@ -311,10 +311,12 @@ class BacklightStatus < StatusWidget
   def segments
     brightness = `qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl brightness`.to_i
     max_brightness = `qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl brightnessMax`.to_i
-    percentage = brightness * 100.0 / max_brightness
-    @clear_thread.exit if @clear_thread
-    @clear_thread = Thread.new { sleep 2; puts '' }
-    segment "#{fontawesome "\uf0eb"} #{percentage.round}%"
+    if max_brightness > 0
+      percentage = brightness * 100.0 / max_brightness
+      @clear_thread.exit if @clear_thread
+      @clear_thread = Thread.new { sleep 2; puts '' }
+      segment "#{fontawesome "\uf0eb"} #{percentage.round}%"
+    end
   end
 end
 
