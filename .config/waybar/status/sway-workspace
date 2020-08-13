@@ -7,9 +7,6 @@ fi
 
 FIFO="/tmp/status-${UID}/sway-workspace-${1}.fifo"
 
-# Trigger a refresh
-[[ $1 == '1' ]] && pkill -USR1 -f sway-workspaces-monitor
-
 while :; do
     if [[ -p "$FIFO" ]]; then
         read -re < "$FIFO"
