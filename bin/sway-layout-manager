@@ -298,8 +298,7 @@ class SwayWorkspace
   def ordered_windows
     master_windows = windows(master)
     stack_windows = windows(stack)
-    stray_windows = windows - master_windows - stack_windows
-    master_windows + stack_windows + stray_windows
+    master_windows + stack_windows
   end
 
   def do_layout
