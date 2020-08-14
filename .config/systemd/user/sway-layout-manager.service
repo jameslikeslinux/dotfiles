@@ -3,7 +3,7 @@ Description=automatic layout management for Sway
 PartOf=sway-session.target
 
 [Service]
-ExecStart=%h/bin/sway-layout-manager
+ExecStart=%h/bin/sway-layout-manager monitor
 
 [Install]
 WantedBy=sway-session.target

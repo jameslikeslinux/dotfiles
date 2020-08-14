@@ -219,7 +219,6 @@ main = xmonad
     }
     `additionalKeysP`
     [ ("M-0"           , windows $ W.greedyView "windows")
-    , ("M-="           , sendMessage $ IncMasterN 1)
     , ("M-S-="         , sendMessage $ IncMasterN 1)
     , ("M--"           , sendMessage $ IncMasterN (-1))
     , ("M-'"           , viewScreen def 0)

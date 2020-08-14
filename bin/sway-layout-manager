@@ -5,83 +5,394 @@
 #
 
 require 'json'
+require 'shellwords'
 
-def tree
-  JSON.parse(`swaymsg -t get_tree`)
-end
+class SwayWorkspace
+  attr_reader :name
 
-def workspaces(tree = tree())
-  tree['nodes'].map do |node|
-    if node['nodes'] and node['type'] == 'workspace'
-      [node] + workspaces(node)
-    elsif node['nodes']
-      workspaces(node)
+  def initialize(wsdata)
+    @name   = wsdata['name']
+    @layout = wsdata['layout']
+    @nodes  = wsdata['nodes']
+    @rect   = wsdata['rect']
+    @swaycmd_queue = []
+
+    # Custom attribute defaults
+    @n         = 1
+    @reflected = false
+    @flipped   = false
+
+    # Read custom attributes from name
+    read_attrs
+  end
+
+  def self.all(tree = SwayWorkspace.tree)
+    tree['nodes'].map do |node|
+      if node['nodes'] and node['type'] == 'workspace'
+        [SwayWorkspace.new(node)] + SwayWorkspace.all(node)
+      elsif node['nodes']
+        SwayWorkspace.all(node)
+      else
+        []
+      end
+    end.flatten
+  end
+
+  def self.focused
+    focused_ws_name = SwayWorkspace.focused_ws_name
+    SwayWorkspace.all.find { |ws| ws.name == focused_ws_name }
+  end
+
+  def focus
+    swaymsg(["[workspace=\"#{Regexp.escape(@name)}\"]", 'focus'])
+    commit
+  end
+
+  def layout
+    do_layout
+    commit
+  end
+
+  def inc_master_cap(n)
+    @n += n if @n + n > 0
+    write_attrs
+    do_layout
+    commit
+  end
+
+  def reflect
+    first  = container(0)
+    second = container(1)
+
+    resize_axis = flipped? ? 'height' : 'width'
+
+    if first and second
+      swaymsg(['swap', 'container', 'with', 'con_id', second['id']], first)
+      swaymsg(['resize', 'set', resize_axis, first['rect'][resize_axis], 'px'], first)
+    end
+
+    @reflected = !@reflected
+    write_attrs
+
+    commit
+  end
+
+  def flip
+    outer  = container(0)
+    first  = windows(container(0)).first
+    second = windows(container(1)).first
+
+    swaymsg(['layout', 'toggle', 'split'], outer) if outer
+    swaymsg(['layout', 'toggle', 'split'], first) if first
+    swaymsg(['layout', 'toggle', 'split'], second) if second
+
+    @flipped = !@flipped
+    write_attrs
+
+    commit
+  end
+
+  def balance
+    if flipped?
+      first_move_dir = 'up'
+      second_move_dir = 'down'
+      split_dir = 'splith'
+      resize_axis = 'height'
+    else
+      first_move_dir = 'left'
+      second_move_dir = 'right'
+      split_dir = 'splitv'
+      resize_axis = 'width'
+    end
+
+    # Rebuild master and stack containers
+    windows(container(0)).each_with_index do |window, i|
+      swaymsg(['move', first_move_dir], window)
+      swaymsg([split_dir], window) if i == 0
+    end
+
+    windows(container(1)).reverse.each_with_index do |window, i|
+      swaymsg(['move', second_move_dir], window)
+      swaymsg([split_dir], window) if i == 0
+    end
+
+    # Resize master and stack containers (in their only free direction)
+    size = @rect[resize_axis] / 2 - @rect['x'] / 2  # x accounts for gaps
+    swaymsg(['resize', 'set', resize_axis, size, 'px'])
+
+    # Window moves change focus; set it back
+    keep_focus
+
+    commit
+  end
+
+  def swap_up
+    windows = ordered_windows
+    focused_index = windows.find_index { |window| window['focused'] }
+    focused = windows[focused_index]
+    needs_relayout = false
+
+    if focused_index == 0
+      swaymsg(['mark', '--add', '_last'], windows.last)
+      swaymsg(['move', 'mark', '_last'], focused)
+
+      # Window moves change focus; set it back
+      keep_focus
+
+      # Tell the caller to fix the layout messed up by this move
+      needs_relayout = true
+    else
+      swaymsg(['swap', 'container', 'with', 'con_id', windows[focused_index - 1]['id']], focused)
+    end
+
+    commit
+
+    needs_relayout
+  end
+
+  def swap_down
+    windows = ordered_windows
+    focused_index = windows.find_index { |window| window['focused'] }
+    focused = windows[focused_index]
+    needs_relayout = false
+
+    if focused_index == windows.length - 1
+      # Move the window to the second position
+      swaymsg(['mark', '--add', '_first'], windows.first)
+      swaymsg(['move', 'mark', '_first'], focused)
+
+      # Now move it to the first
+      swaymsg(['mark', '--add', '_first'], focused)
+      swaymsg(['move', 'mark', '_first'], windows.first)
+
+      # Window moves change focus; set it back
+      keep_focus
+
+      # Tell the caller to fix the layout messed up by this move
+      needs_relayout = true
+    else
+      swaymsg(['swap', 'container', 'with', 'con_id', windows[focused_index + 1]['id']], focused)
+    end
+
+    commit
+
+    needs_relayout
+  end
+
+  def swap_master
+    swaymsg(['swap', 'container', 'with', 'con_id', windows(master).first['id']], focused_window)
+    commit
+  end
+
+  private
+
+  def self.tree
+    JSON.parse(`swaymsg -t get_tree`)
+  end
+
+  def self.focused_ws_name
+    JSON.parse(`swaymsg -t get_workspaces`).find { |ws| ws['focused'] }['name']
+  end
+
+  def swaymsg(args, window = nil)
+    args.unshift("[con_id=#{window['id']}]") if window
+    swaycmd = args.map { |arg| arg =~ /\s/ && arg !~ /^\[.*\]$/ ? "'#{arg}'" : arg }.join(' ')
+    @swaycmd_queue << swaycmd
+  end
+
+  def commit
+    cmd = ['swaymsg', '--', @swaycmd_queue.join(';')].shelljoin
+    puts "Running: #{cmd}"
+    responses = JSON.parse(`#{cmd}`)
+    responses.each_with_index do |response, i|
+      STDERR.puts "Error in command #{i + 1} of #{responses.length}: #{response['error']}" unless response['success']
+    end
+    @swaycmd_queue = []
+  end
+
+  def read_attrs
+    if @name =~ /\d+\[(\d*)(R?)(F?)\]:/
+      n = $1.to_i
+      @n = n > 0 ? n : 1
+      @reflected = $2 == 'R'
+      @flipped = $3 == 'F'
+    end
+  end
+
+  def write_attrs
+    attrs = ''
+    attrs << "#{@n}" if @n > 1
+    attrs << 'R' if @reflected
+    attrs << 'F' if @flipped
+    attrs = "[#{attrs}]" unless attrs.empty?
+
+    new_name = @name.sub(/^(\d+)(\[\S*\])?:/, "\\1#{attrs}:")
+    swaymsg ['rename', 'workspace', @name, 'to', new_name]
+    @name = new_name
+  end
+
+  def master_cap
+    @n
+  end
+
+  def reflected?
+    @reflected
+  end
+
+  def flipped?
+    @flipped
+  end
+
+  def container(index)
+    if flipped?
+      outer = 'splitv'
+      inner = 'splith'
+    else
+      outer = 'splith'
+      inner = 'splitv'
+    end
+
+    if @layout == outer
+      if @nodes[index] and @nodes[index]['layout'] == inner
+        @nodes[index]
+      end
+    end
+  end
+
+  def master
+    first  = container(0)
+    second = container(1)
+
+    if reflected? and second
+      second
+    else
+      first
+    end
+  end
+
+  def stack
+    first  = container(0)
+    second = container(1)
+
+    if reflected? and second
+      first
+    else
+      second
+    end
+  end
+
+  def windows(container = {'nodes' => @nodes})
+    if container
+      container['nodes'].map do |node|
+        if node['nodes'] and node['layout'] == 'none'
+          [node] + windows(node)
+        else
+          windows(node)
+        end
+      end.flatten
     else
       []
     end
-  end.flatten
+  end
+
+  def ordered_windows
+    master_windows = windows(master)
+    stack_windows = windows(stack)
+    stray_windows = windows - master_windows - stack_windows
+    master_windows + stack_windows + stray_windows
+  end
+
+  def do_layout
+    master = master()
+    stack = stack()
+
+    if master and windows(master).length > master_cap
+      reflow = true
+    end
+
+    split = flipped? ? 'splith' : 'splitv'
+
+    ordered_windows.each_with_index do |window, i|
+      swaymsg(['mark', '--add', '--toggle', '_moving'], window) if window['marks'].include?('_moving')
+
+      if i == 0
+        swaymsg([split], window) if !master
+      elsif i == master_cap
+        if flipped?
+          direction = reflected? ? 'up' : 'down'
+        else
+          direction = reflected? ? 'left' : 'right'
+        end
+        swaymsg(['move', direction], window) if reflow or !stack
+        swaymsg([split], window) if !stack
+      else
+        swaymsg(['move', 'mark', '_previous'], window)
+      end
+      swaymsg(['mark', '--add', '_previous'], window)
+    end
+
+    # Window moves change focus; set it back
+    keep_focus
+  end
+
+  def focused_window
+    windows.find { |window| window['focused'] }
+  end
+
+  def keep_focus
+    # This works because we don't refresh 'windows' for the lifetime of this object
+    window = focused_window
+    swaymsg(['focus'], window) if window
+  end
 end
 
-def container(workspace, index)
-  if workspace['layout'] == 'splith'
-    if workspace['nodes'][index] and workspace['nodes'][index]['layout'] == 'splitv'
-      workspace['nodes'][index]
+def monitor
+  IO.popen('swaymsg --monitor -t subscribe \'["window"]\'').each do |line|
+    node = JSON.parse(line)
+    case node['change']
+    when 'new', 'close'
+      SwayWorkspace.focused.layout
+    when 'move'
+      if node['container']['marks'].include?('_moving')
+        focused_ws = SwayWorkspace.focused
+        # There isn't an easy way to tell which workspace the window is moving
+        # from or to, so just layout all workspaces
+        SwayWorkspace.all.each(&:layout)
+        focused_ws.focus
+      end
     end
   end
 end
 
-def master(workspace)
-  container(workspace, 0)
-end
-
-def stack(workspace)
-  container(workspace, 1)
-end
-
-def windows(workspace)
-  workspace['nodes'].map do |node|
-    if node['nodes'] and node['visible']
-      [node] + windows(node)
-    elsif node['nodes']
-      windows(node)
-    else
-      []
-    end
-  end.flatten
-end
-
-def master_cap(workspace)
-  workspace['name'] =~ /\[(\d+)\]:/ ? $1.to_i : 1
-end
-
-def rearrange_workspaces
-  workspaces.each { |workspace| rearrange_workspace(workspace) }
-end
-
-def rearrange_workspace(workspace)
-  master = master(workspace)
-  stack = stack(workspace)
-
-  if master and windows(master).length > master_cap(workspace)
-    reflow = true
+case ARGV[0]
+when 'monitor'
+  monitor
+when 'inc'
+  SwayWorkspace.focused.inc_master_cap(1)
+when 'dec'
+  SwayWorkspace.focused.inc_master_cap(-1)
+when 'reflect'
+  SwayWorkspace.focused.reflect
+when 'flip'
+  SwayWorkspace.focused.flip
+when 'balance'
+  SwayWorkspace.focused.balance
+when 'swap_up'
+  SwayWorkspace.focused.swap_up and SwayWorkspace.focused.layout
+when 'swap_down'
+  SwayWorkspace.focused.swap_down and SwayWorkspace.focused.layout
+when 'swap_master'
+  SwayWorkspace.focused.swap_master
+when 'move'
+  if ARGV[1]
+    system 'swaymsg -- mark --add --toggle _moving'
+    move_cmd = "move workspace number '#{ARGV[1]}'"
+    system ['swaymsg', '--', move_cmd].shelljoin
+  else
+    STDERR.puts "Usage: #{$0} move WS"
+    exit 1
   end
-
-  windows(workspace).each_with_index do |window, i|
-    if i == 0
-      system "swaymsg '[con_id=#{window['id']}]' splitv" if !master
-    elsif i == master_cap(workspace)
-      system "swaymsg '[con_id=#{window['id']}]' move right" if reflow or !stack
-      system "swaymsg '[con_id=#{window['id']}]' splitv" if !stack
-    else
-      system "swaymsg '[con_id=#{window['id']}]' move mark sway-layout-manager-previous"
-    end
-    system "swaymsg -- '[con_id=#{window['id']}]' mark --add sway-layout-manager-previous"
-  end
-end
-
-IO.popen('swaymsg --monitor -t subscribe \'["window", "workspace"]\'').each do |line|
-  node = JSON.parse(line)
-  if ['new', 'close', 'rename'].include? node['change']
-    rearrange_workspaces
-  end
+else
+  STDERR.puts "Usage: #{$0} [monitor|inc|dec|reflect|flip|balance|swap_up|swap_down|swap_master|move]"
+  exit 1
 end

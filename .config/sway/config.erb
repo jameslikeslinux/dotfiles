@@ -27,15 +27,14 @@ bindsym $mod+l focus right
 bindsym $mod+j focus down
 bindsym $mod+k focus up
 
-bindsym $mod+Shift+h move left
-bindsym $mod+Shift+l move right
-bindsym $mod+Shift+j move down
-bindsym $mod+Shift+k move up
-
-bindsym $mod+less resize shrink width 3ppt
-bindsym $mod+greater resize grow width 3ppt
-bindsym $mod+minus resize shrink height 3ppt
-bindsym $mod+plus resize grow height 3ppt
+bindsym $mod+u exec sway-layout-manager swap_up
+bindsym $mod+d exec sway-layout-manager swap_down
+bindsym $mod+Return exec sway-layout-manager swap_master
+bindsym $mod+Plus exec sway-layout-manager inc
+bindsym $mod+Minus exec sway-layout-manager dec
+bindsym $mod+r exec sway-layout-manager reflect
+bindsym $mod+Shift+r exec sway-layout-manager flip
+bindsym $mod+Equal exec sway-layout-manager balance
 
 floating_modifier $mod normal
 
