@@ -298,7 +298,8 @@ class SwayWorkspace
   def ordered_windows
     master_windows = windows(master)
     stack_windows = windows(stack)
-    master_windows + stack_windows
+    stray_windows = windows - master_windows - stack_windows
+    master_windows + stack_windows + stray_windows
   end
 
   def do_layout
@@ -382,6 +383,8 @@ when 'swap_down'
   SwayWorkspace.focused.swap_down and SwayWorkspace.focused.layout
 when 'swap_master'
   SwayWorkspace.focused.swap_master
+when 'refresh'
+  SwayWorkspace.focused.layout
 when 'move'
   if ARGV[1]
     system 'swaymsg -- mark --add --toggle _moving'
@@ -392,6 +395,6 @@ when 'move'
     exit 1
   end
 else
-  STDERR.puts "Usage: #{$0} [monitor|inc|dec|reflect|flip|balance|swap_up|swap_down|swap_master|move]"
+  STDERR.puts "Usage: #{$0} [monitor|inc|dec|reflect|flip|balance|swap_up|swap_down|swap_master|refresh|move]"
   exit 1
 end
