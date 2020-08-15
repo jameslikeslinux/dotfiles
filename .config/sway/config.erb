@@ -16,26 +16,16 @@ default_floating_border pixel 3
 # Keybindings
 set $mod Mod4
 bindsym $mod+Shift+Return exec urxvt
-bindsym $mod+f fullscreen
-bindsym $mod+x kill
-bindsym $mod+p exec rofi -show drun -dpi <%= (96 * scaling_ratio).round %>
-bindsym $mod+q reload
-bindsym $mod+Shift+q exec swaynag -t warning -m '' -b 'Yes, exit sway' 'swaymsg exit'
+bindsym $mod+f            fullscreen
+bindsym $mod+x            kill
+bindsym $mod+p            exec rofi -show drun -dpi <%= (96 * scaling_ratio).round %>
+bindsym $mod+q            reload
+bindsym $mod+Shift+q      exec swaynag -t warning -m '' -b 'Yes, exit sway' 'swaymsg exit'
 
 bindsym $mod+h focus left
 bindsym $mod+l focus right
 bindsym $mod+j focus down
 bindsym $mod+k focus up
-
-bindsym $mod+u exec sway-layout-manager swap_up
-bindsym $mod+d exec sway-layout-manager swap_down
-bindsym $mod+Return exec sway-layout-manager swap_master
-bindsym $mod+Plus exec sway-layout-manager inc
-bindsym $mod+Minus exec sway-layout-manager dec
-bindsym $mod+r exec sway-layout-manager reflect
-bindsym $mod+Shift+r exec sway-layout-manager flip
-bindsym $mod+Equal exec sway-layout-manager balance
-bindsym $mod+Ctrl+l exec sway-layout-manager refresh
 
 floating_modifier $mod normal
 
@@ -44,7 +34,7 @@ set $ws1 '1: web'
 set $ws2 '2: ops'
 set $ws3 '3: dev'
 set $ws4 '4: music'
-set $ws5 '5: mail'
+set $ws5 '5[H]: mail'
 set $ws6 '6: six'
 set $ws7 '7: seven'
 set $ws8 '8: eight'
@@ -72,6 +62,22 @@ bindsym $mod+Shift+7 exec sway-layout-manager move $ws7
 bindsym $mod+Shift+8 exec sway-layout-manager move $ws8
 bindsym $mod+Shift+9 exec sway-layout-manager move $ws9
 bindsym $mod+Shift+0 exec sway-layout-manager move $ws10
+
+bindsym $mod+Plus      exec sway-layout-manager inc
+bindsym $mod+Minus     exec sway-layout-manager dec
+bindsym $mod+Tab       exec sway-layout-manager toggle_halved
+bindsym $mod+r         exec sway-layout-manager reflect
+bindsym $mod+Shift+r   exec sway-layout-manager flip
+bindsym $mod+Equal     exec sway-layout-manager balance
+bindsym $mod+u         exec sway-layout-manager swap_up
+bindsym $mod+d         exec sway-layout-manager swap_down
+bindsym $mod+Return    exec sway-layout-manager swap_master
+bindsym $mod+Shift+h   exec sway-layout-manager shrink_master
+bindsym $mod+Shift+l   exec sway-layout-manager grow_master
+bindsym $mod+Shift+j   exec sway-layout-manager shrink_child
+bindsym $mod+Shift+k   exec sway-layout-manager grow_child
+bindsym $mod+Ctrl+l    exec sway-layout-manager refresh
+bindsym $mod+BackSpace exec sway-layout-manager reset $ws1 $ws2 $ws3 $ws4 $ws5 $ws6 $ws7 $ws8 $ws9 $ws10
 
 # Initialize session
 exec '~/bin/reset-systemd-environment && systemctl --user start sway-session.target'

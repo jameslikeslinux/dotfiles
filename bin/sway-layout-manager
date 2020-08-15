@@ -17,11 +17,6 @@ class SwayWorkspace
     @rect   = wsdata['rect']
     @swaycmd_queue = []
 
-    # Custom attribute defaults
-    @n         = 1
-    @reflected = false
-    @flipped   = false
-
     # Read custom attributes from name
     read_attrs
   end
@@ -43,20 +38,92 @@ class SwayWorkspace
     SwayWorkspace.all.find { |ws| ws.name == focused_ws_name }
   end
 
+  def self.parse_attrs(name)
+    if name =~ /\d+\[(\d*)(H?)(R?)(F?)\]:/
+      n = $1.to_i
+      n = n > 0 ? n : 1
+      halved = $2 == 'H'
+      reflected = $3 == 'R'
+      flipped = $4 == 'F'
+    else
+      n = 1
+      halved = false
+      reflected = false
+      flipped = false
+    end
+    [n, halved, reflected, flipped]
+  end
+
+  def self.reset_focused(default_names)
+    focused_ws = SwayWorkspace.focused
+    focused_ws_num = focused_ws.name.sub(/^(\d+).*/, '\1').to_i
+    (want_n, want_halved, want_reflected, want_flipped) = SwayWorkspace.parse_attrs(default_names[focused_ws_num - 1])
+    puts "n: #{want_n}, h: #{want_halved}, r: #{want_reflected}, f: #{want_flipped}"
+
+    if (focused_ws.flipped? and !want_flipped) or (want_flipped and !focused_ws.flipped?)
+      focused_ws.flip
+      focused_ws = SwayWorkspace.focused
+    end
+
+    if (focused_ws.reflected? and !want_reflected) or (want_reflected and !focused_ws.reflected?)
+      focused_ws.reflect
+      focused_ws = SwayWorkspace.focused
+    end
+
+    if focused_ws.master_cap != want_n
+      focused_ws.set_master_cap(want_n)
+      focused_ws = SwayWorkspace.focused
+    end
+
+    if (focused_ws.halved? and !want_halved) or (want_halved and !focused_ws.halved?)
+      focused_ws.toggle_halved
+      focused_ws = SwayWorkspace.focused
+    end
+
+    focused_ws.balance
+  end
+
+  def master_cap
+    @n
+  end
+
+  def halved?
+    @halved
+  end
+
+  def reflected?
+    @reflected
+  end
+
+  def flipped?
+    @flipped
+  end
+
   def focus
     swaymsg(["[workspace=\"#{Regexp.escape(@name)}\"]", 'focus'])
     commit
   end
 
-  def layout
-    do_layout
+  def refresh
+    layout
+    commit
+  end
+
+  def set_master_cap(n)
+    @n = n if n > 0
+    write_attrs
+    layout
     commit
   end
 
   def inc_master_cap(n)
-    @n += n if @n + n > 0
+    set_master_cap(@n + n)
+  end
+
+  def toggle_halved
+    @halved = !@halved
     write_attrs
-    do_layout
+    reset_master_size
     commit
   end
 
@@ -86,6 +153,18 @@ class SwayWorkspace
     swaymsg(['layout', 'toggle', 'split'], first) if first
     swaymsg(['layout', 'toggle', 'split'], second) if second
 
+    if first
+      if flipped?
+        source_size_axis = 'height'
+        target_size_axis = 'width'
+      else
+        source_size_axis = 'width'
+        target_size_axis = 'height'
+      end
+      source_size_ratio = first['rect'][source_size_axis].to_f / @rect[source_size_axis]
+      swaymsg(['resize', 'set', target_size_axis, (@rect[target_size_axis] * source_size_ratio).round, 'px'], first)
+    end
+
     @flipped = !@flipped
     write_attrs
 
@@ -97,12 +176,10 @@ class SwayWorkspace
       first_move_dir = 'up'
       second_move_dir = 'down'
       split_dir = 'splith'
-      resize_axis = 'height'
     else
       first_move_dir = 'left'
       second_move_dir = 'right'
       split_dir = 'splitv'
-      resize_axis = 'width'
     end
 
     # Rebuild master and stack containers
@@ -116,9 +193,7 @@ class SwayWorkspace
       swaymsg([split_dir], window) if i == 0
     end
 
-    # Resize master and stack containers (in their only free direction)
-    size = @rect[resize_axis] / 2 - @rect['x'] / 2  # x accounts for gaps
-    swaymsg(['resize', 'set', resize_axis, size, 'px'])
+    reset_master_size
 
     # Window moves change focus; set it back
     keep_focus
@@ -130,7 +205,7 @@ class SwayWorkspace
     windows = ordered_windows
     focused_index = windows.find_index { |window| window['focused'] }
     focused = windows[focused_index]
-    needs_relayout = false
+    needs_refresh = false
 
     if focused_index == 0
       swaymsg(['mark', '--add', '_last'], windows.last)
@@ -140,24 +215,24 @@ class SwayWorkspace
       keep_focus
 
       # Tell the caller to fix the layout messed up by this move
-      needs_relayout = true
+      needs_refresh = true
     else
       swaymsg(['swap', 'container', 'with', 'con_id', windows[focused_index - 1]['id']], focused)
     end
 
     commit
 
-    needs_relayout
+    needs_refresh
   end
 
   def swap_down
     windows = ordered_windows
     focused_index = windows.find_index { |window| window['focused'] }
     focused = windows[focused_index]
-    needs_relayout = false
+    needs_refresh = false
 
     if focused_index == windows.length - 1
-      # Move the window to the second position
+      # Move the window to after the first
       swaymsg(['mark', '--add', '_first'], windows.first)
       swaymsg(['move', 'mark', '_first'], focused)
 
@@ -169,18 +244,33 @@ class SwayWorkspace
       keep_focus
 
       # Tell the caller to fix the layout messed up by this move
-      needs_relayout = true
+      needs_refresh = true
     else
       swaymsg(['swap', 'container', 'with', 'con_id', windows[focused_index + 1]['id']], focused)
     end
 
     commit
 
-    needs_relayout
+    needs_refresh
   end
 
   def swap_master
     swaymsg(['swap', 'container', 'with', 'con_id', windows(master).first['id']], focused_window)
+    commit
+  end
+
+  def resize_master(change_ppt)
+    change = change_ppt > 0 ? 'grow' : 'shrink'
+    resize_axis = flipped? ? 'height' : 'width'
+    master_window = windows(master).first
+    swaymsg(['resize', change, resize_axis, change_ppt.abs, 'ppt'], master_window) if master_window
+    commit
+  end
+
+  def resize_child(change_ppt)
+    change = change_ppt > 0 ? 'grow' : 'shrink'
+    resize_axis = flipped? ? 'width' : 'height'
+    swaymsg(['resize', change, resize_axis, change_ppt.abs, 'ppt'])
     commit
   end
 
@@ -211,17 +301,13 @@ class SwayWorkspace
   end
 
   def read_attrs
-    if @name =~ /\d+\[(\d*)(R?)(F?)\]:/
-      n = $1.to_i
-      @n = n > 0 ? n : 1
-      @reflected = $2 == 'R'
-      @flipped = $3 == 'F'
-    end
+    (@n, @halved, @reflected, @flipped) = SwayWorkspace.parse_attrs(@name)
   end
 
   def write_attrs
     attrs = ''
     attrs << "#{@n}" if @n > 1
+    attrs << 'H' if @halved
     attrs << 'R' if @reflected
     attrs << 'F' if @flipped
     attrs = "[#{attrs}]" unless attrs.empty?
@@ -229,18 +315,6 @@ class SwayWorkspace
     new_name = @name.sub(/^(\d+)(\[\S*\])?:/, "\\1#{attrs}:")
     swaymsg ['rename', 'workspace', @name, 'to', new_name]
     @name = new_name
-  end
-
-  def master_cap
-    @n
-  end
-
-  def reflected?
-    @reflected
-  end
-
-  def flipped?
-    @flipped
   end
 
   def container(index)
@@ -302,7 +376,7 @@ class SwayWorkspace
     master_windows + stack_windows + stray_windows
   end
 
-  def do_layout
+  def layout
     master = master()
     stack = stack()
 
@@ -325,6 +399,7 @@ class SwayWorkspace
         end
         swaymsg(['move', direction], window) if reflow or !stack
         swaymsg([split], window) if !stack
+        reset_master_size if !stack
       else
         swaymsg(['move', 'mark', '_previous'], window)
       end
@@ -333,6 +408,14 @@ class SwayWorkspace
 
     # Window moves change focus; set it back
     keep_focus
+  end
+
+  def reset_master_size
+    resize_axis = flipped? ? 'height' : 'width'
+    ratio = halved? ? 0.5 : 0.605
+    size = @rect[resize_axis] * ratio - @rect['x'] / 2  # x accounts for gaps
+    master_window = windows(master).first
+    swaymsg(['resize', 'set', resize_axis, size.round, 'px'], master_window) if master_window
   end
 
   def focused_window
@@ -351,13 +434,13 @@ def monitor
     node = JSON.parse(line)
     case node['change']
     when 'new', 'close'
-      SwayWorkspace.focused.layout
+      SwayWorkspace.focused.refresh
     when 'move'
       if node['container']['marks'].include?('_moving')
         focused_ws = SwayWorkspace.focused
         # There isn't an easy way to tell which workspace the window is moving
         # from or to, so just layout all workspaces
-        SwayWorkspace.all.each(&:layout)
+        SwayWorkspace.all.each(&:refresh)
         focused_ws.focus
       end
     end
@@ -371,6 +454,8 @@ when 'inc'
   SwayWorkspace.focused.inc_master_cap(1)
 when 'dec'
   SwayWorkspace.focused.inc_master_cap(-1)
+when 'toggle_halved'
+  SwayWorkspace.focused.toggle_halved
 when 'reflect'
   SwayWorkspace.focused.reflect
 when 'flip'
@@ -378,23 +463,33 @@ when 'flip'
 when 'balance'
   SwayWorkspace.focused.balance
 when 'swap_up'
-  SwayWorkspace.focused.swap_up and SwayWorkspace.focused.layout
+  SwayWorkspace.focused.swap_up and SwayWorkspace.focused.refresh
 when 'swap_down'
-  SwayWorkspace.focused.swap_down and SwayWorkspace.focused.layout
+  SwayWorkspace.focused.swap_down and SwayWorkspace.focused.refresh
 when 'swap_master'
   SwayWorkspace.focused.swap_master
+when 'shrink_master'
+  SwayWorkspace.focused.resize_master(-3)
+when 'grow_master'
+  SwayWorkspace.focused.resize_master(3)
+when 'shrink_child'
+  SwayWorkspace.focused.resize_child(-3)
+when 'grow_child'
+  SwayWorkspace.focused.resize_child(3)
 when 'refresh'
-  SwayWorkspace.focused.layout
+  SwayWorkspace.focused.refresh
+when 'reset'
+  ARGV.shift
+  SwayWorkspace.reset_focused(ARGV)
 when 'move'
   if ARGV[1]
-    system 'swaymsg -- mark --add --toggle _moving'
-    move_cmd = "move workspace number '#{ARGV[1]}'"
+    move_cmd = "mark --add --toggle _moving; move workspace number '#{ARGV[1]}'"
     system ['swaymsg', '--', move_cmd].shelljoin
   else
     STDERR.puts "Usage: #{$0} move WS"
     exit 1
   end
 else
-  STDERR.puts "Usage: #{$0} [monitor|inc|dec|reflect|flip|balance|swap_up|swap_down|swap_master|refresh|move]"
+  STDERR.puts "Usage: #{$0} COMMAND"
   exit 1
 end
