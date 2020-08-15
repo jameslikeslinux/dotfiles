@@ -99,7 +99,7 @@ class SwayWorkspace
   end
 
   def focus
-    swaymsg(["[workspace=\"#{Regexp.escape(@name)}\"]", 'focus'])
+    swaymsg(['workspace', @name])
     commit
   end
 
