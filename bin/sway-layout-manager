@@ -78,13 +78,13 @@ class SwayWorkspace
       focused_ws = SwayWorkspace.focused
     end
 
-    if focused_ws.master_cap != want_n
-      focused_ws.set_master_cap(want_n)
+    if (focused_ws.halved? and !want_halved) or (want_halved and !focused_ws.halved?)
+      focused_ws.toggle_halved
       focused_ws = SwayWorkspace.focused
     end
 
-    if (focused_ws.halved? and !want_halved) or (want_halved and !focused_ws.halved?)
-      focused_ws.toggle_halved
+    if focused_ws.master_cap != want_n
+      focused_ws.set_master_cap(want_n)
       focused_ws = SwayWorkspace.focused
     end
 
