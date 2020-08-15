@@ -13,10 +13,10 @@ gaps inner <%= (13 * scaling_ratio).round %>
 default_border pixel 3
 default_floating_border pixel 3
 
-client.focused          <%= dark[0x08].web %> <%= dark[0x08].web %> <%= dark[0x01].web %> <%= dark[0x08].web %> <%= dark[0x08].web %>
-client.focused_inactive <%= dark[0x03].web %> <%= dark[0x03].web %> <%= dark[0x01].web %> <%= dark[0x03].web %> <%= dark[0x03].web %>
-client.unfocused        <%= dark[0x03].web %> <%= dark[0x03].web %> <%= dark[0x01].web %> <%= dark[0x03].web %> <%= dark[0x03].web %>
-client.urgent           <%= dark[0x0A].web %> <%= dark[0x0A].web %> <%= dark[0x01].web %> <%= dark[0x0A].web %> <%= dark[0x0A].web %>
+client.focused          '<%= dark[0x08].web %>' '<%= dark[0x08].web %>' '<%= dark[0x01].web %>' '<%= dark[0x08].web %>' '<%= dark[0x08].web %>'
+client.focused_inactive '<%= dark[0x03].web %>' '<%= dark[0x03].web %>' '<%= dark[0x01].web %>' '<%= dark[0x03].web %>' '<%= dark[0x03].web %>'
+client.unfocused        '<%= dark[0x03].web %>' '<%= dark[0x03].web %>' '<%= dark[0x01].web %>' '<%= dark[0x03].web %>' '<%= dark[0x03].web %>'
+client.urgent           '<%= dark[0x0A].web %>' '<%= dark[0x0A].web %>' '<%= dark[0x01].web %>' '<%= dark[0x0A].web %>' '<%= dark[0x0A].web %>'
 
 # Keybindings
 set $mod Mod4
@@ -90,3 +90,5 @@ bindsym $mod+BackSpace exec sway-layout-manager reset $ws1 $ws2 $ws3 $ws4 $ws5 $
 
 # Initialize session
 exec '~/bin/reset-systemd-environment && systemctl --user start sway-session.target'
+
+# vim: filetype=conf
