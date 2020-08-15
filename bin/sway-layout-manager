@@ -38,6 +38,15 @@ class SwayWorkspace
     SwayWorkspace.all.find { |ws| ws.name == focused_ws_name }
   end
 
+  def self.exec_swaymsg(cmd)
+    shellcmd = ['swaymsg', '--', cmd].shelljoin
+    puts "Running: #{shellcmd}"
+    responses = JSON.parse(`#{shellcmd}`)
+    responses.each_with_index do |response, i|
+      STDERR.puts "Error in command #{i + 1} of #{responses.length}: #{response['error']}" unless response['success']
+    end
+  end
+
   def self.parse_attrs(name)
     if name =~ /\d+\[(\d*)(H?)(R?)(F?)\]:/
       n = $1.to_i
@@ -325,12 +334,7 @@ class SwayWorkspace
 
   # Execute the queued sway(5) commands
   def commit
-    cmd = ['swaymsg', '--', @swaycmd_queue.join(';')].shelljoin
-    puts "Running: #{cmd}"
-    responses = JSON.parse(`#{cmd}`)
-    responses.each_with_index do |response, i|
-      STDERR.puts "Error in command #{i + 1} of #{responses.length}: #{response['error']}" unless response['success']
-    end
+    SwayWorkspace.exec_swaymsg(@swaycmd_queue.join(';'))
     @swaycmd_queue = []
   end
 
@@ -475,6 +479,8 @@ class SwayWorkspace
 end
 
 def monitor
+  last_focused = nil
+
   IO.popen('swaymsg --monitor -t subscribe \'["window"]\'').each do |line|
     node = JSON.parse(line)
     case node['change']
@@ -492,6 +498,9 @@ def monitor
         # current focused workspace, but might it flicker.
         focused_ws.focus
       end
+    when 'focus'
+      SwayWorkspace.exec_swaymsg "[con_id=#{last_focused}] mark --add _last_focused" if last_focused
+      last_focused = node['container']['id']
     end
   end
 end
@@ -536,8 +545,7 @@ when 'reset'
   SwayWorkspace.reset_focused(ARGV)
 when 'move'
   if ARGV[1]
-    move_cmd = "mark --add --toggle _moving; move workspace number '#{ARGV[1]}'"
-    system ['swaymsg', '--', move_cmd].shelljoin
+    SwayWorkspace.exec_swaymsg "mark --add --toggle _moving; move workspace number '#{ARGV[1]}'"
   else
     STDERR.puts "Usage: #{$0} move WS"
     exit 1
