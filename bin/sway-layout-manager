@@ -58,7 +58,6 @@ class SwayWorkspace
     focused_ws = SwayWorkspace.focused
     focused_ws_num = focused_ws.name.sub(/^(\d+).*/, '\1').to_i
     (want_n, want_halved, want_reflected, want_flipped) = SwayWorkspace.parse_attrs(default_names[focused_ws_num - 1])
-    puts "n: #{want_n}, h: #{want_halved}, r: #{want_reflected}, f: #{want_flipped}"
 
     if (focused_ws.flipped? and !want_flipped) or (want_flipped and !focused_ws.flipped?)
       focused_ws.flip
@@ -153,6 +152,7 @@ class SwayWorkspace
     swaymsg(['layout', 'toggle', 'split'], first) if first
     swaymsg(['layout', 'toggle', 'split'], second) if second
 
+    # Retain ratio of master to stack size
     if first
       if flipped?
         source_size_axis = 'height'
@@ -284,12 +284,14 @@ class SwayWorkspace
     JSON.parse(`swaymsg -t get_workspaces`).find { |ws| ws['focused'] }['name']
   end
 
+  # Queue a sway(5) command to be batched and executed later
   def swaymsg(args, window = nil)
     args.unshift("[con_id=#{window['id']}]") if window
     swaycmd = args.map { |arg| arg =~ /\s/ && arg !~ /^\[.*\]$/ ? "'#{arg}'" : arg }.join(' ')
     @swaycmd_queue << swaycmd
   end
 
+  # Execute the queued sway(5) commands
   def commit
     cmd = ['swaymsg', '--', @swaycmd_queue.join(';')].shelljoin
     puts "Running: #{cmd}"
@@ -317,6 +319,8 @@ class SwayWorkspace
     @name = new_name
   end
 
+  # Return the master or stack container without caring whether it happens to
+  # be first or second under the current reflection setting
   def container(index)
     if flipped?
       outer = 'splitv'
@@ -333,6 +337,8 @@ class SwayWorkspace
     end
   end
 
+  # Like `container` above, but now we care about getting the actual master
+  # container, even if the workspace is reflected
   def master
     first  = container(0)
     second = container(1)
@@ -344,6 +350,7 @@ class SwayWorkspace
     end
   end
 
+  # Same as `master` above
   def stack
     first  = container(0)
     second = container(1)
@@ -369,6 +376,9 @@ class SwayWorkspace
     end
   end
 
+  # Return master windows followed by stack windows, even if the master comes
+  # after the stack under the current reflection setting.  This ensures the
+  # layout algorithm manages the master windows first.
   def ordered_windows
     master_windows = windows(master)
     stack_windows = windows(stack)
@@ -376,6 +386,9 @@ class SwayWorkspace
     master_windows + stack_windows + stray_windows
   end
 
+  # The main layout algorithm.  This works by managing every window's position,
+  # moving each after the last, and generating new splits as needed to maintain
+  # one master container and one stack container.
   def layout
     master = master()
     stack = stack()
@@ -438,9 +451,13 @@ def monitor
     when 'move'
       if node['container']['marks'].include?('_moving')
         focused_ws = SwayWorkspace.focused
+
         # There isn't an easy way to tell which workspace the window is moving
         # from or to, so just layout all workspaces
         SwayWorkspace.all.each(&:refresh)
+
+        # Some moves seem to steal focus, but not all.  This retains the
+        # current focused workspace, but might it flicker.
         focused_ws.focus
       end
     end
