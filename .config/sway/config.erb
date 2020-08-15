@@ -27,10 +27,12 @@ bindsym $mod+p            exec rofi -show drun -dpi <%= (96 * scaling_ratio).rou
 bindsym $mod+q            reload
 bindsym $mod+Shift+q      exec swaynag -t warning -m '' -b 'Yes, exit sway' 'swaymsg exit'
 
-bindsym $mod+h focus left
-bindsym $mod+l focus right
-bindsym $mod+j focus down
-bindsym $mod+k focus up
+bindsym $mod+h         focus left
+bindsym $mod+l         focus right
+bindsym $mod+j         focus down
+bindsym $mod+k         focus up
+bindsym Mod1+Tab       exec sway-layout-manager focus_next
+bindsym Mod1+Shift+Tab exec sway-layout-manager focus_prev
 
 floating_modifier $mod normal
 
@@ -56,6 +58,7 @@ bindsym $mod+7 workspace number $ws7
 bindsym $mod+8 workspace number $ws8
 bindsym $mod+9 workspace number $ws9
 bindsym $mod+0 workspace number $ws10
+bindsym $mod+a workspace back_and_forth
 
 bindsym $mod+Shift+1 exec sway-layout-manager move $ws1
 bindsym $mod+Shift+2 exec sway-layout-manager move $ws2

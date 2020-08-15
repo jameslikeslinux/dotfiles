@@ -274,6 +274,38 @@ class SwayWorkspace
     commit
   end
 
+  def focus_next_window
+    window = focused_window
+    master_windows = windows(master)
+    stack_windows  = windows(stack)
+
+    if window == master_windows.last and stack_windows.first
+      swaymsg(['focus'], stack_windows.first)
+    elsif window == stack_windows.last and master_windows.first
+      swaymsg(['focus'], master_windows.first)
+    else
+      swaymsg(['focus', 'next'])
+    end
+
+    commit
+  end
+
+  def focus_prev_window
+    window = focused_window
+    master_windows = windows(master)
+    stack_windows  = windows(stack)
+
+    if window == master_windows.first and stack_windows.last
+      swaymsg(['focus'], stack_windows.last)
+    elsif window == stack_windows.first and master_windows.last
+      swaymsg(['focus'], master_windows.last)
+    else
+      swaymsg(['focus', 'prev'])
+    end
+
+    commit
+  end
+
   private
 
   def self.tree
@@ -493,6 +525,10 @@ when 'shrink_child'
   SwayWorkspace.focused.resize_child(-3)
 when 'grow_child'
   SwayWorkspace.focused.resize_child(3)
+when 'focus_next'
+  SwayWorkspace.focused.focus_next_window
+when 'focus_prev'
+  SwayWorkspace.focused.focus_prev_window
 when 'refresh'
   SwayWorkspace.focused.refresh
 when 'reset'
