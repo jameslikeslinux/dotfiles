@@ -1,9 +1,12 @@
 <% require 'colorscheme'
 dark = ColorScheme.dark
-text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1 -%>
+gui_scaling_factor =  @facts['scaling'] ? @facts['scaling']['gui'] : 1
+text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1
+scaling_ratio = text_scaling_factor / gui_scaling_factor 
+-%>
 env:
   TERM: 'alacritty-powerline'
-  WINIT_X11_SCALE_FACTOR: '<%= text_scaling_factor %>'
+  WINIT_X11_SCALE_FACTOR: '<%= gui_scaling_factor %>'
 
 window:
   padding:
@@ -11,7 +14,7 @@ window:
     y: 2
 
 font:
-  size: 9
+  size: <%= (9 * scaling_ratio).round %>
 
 colors:
   primary:
@@ -54,3 +57,5 @@ key_bindings:
   - { key: Add,      mods: Shift|Control|Alt, action: IncreaseFontSize }
   - { key: Subtract, mods: Control|Alt,       action: DecreaseFontSize }
   - { key: Key0,     mods: Control|Alt,       action: ResetFontSize    }
+
+# vim: filetype=yaml
