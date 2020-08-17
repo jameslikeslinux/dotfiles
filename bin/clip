@@ -1,0 +1,12 @@
+#!/bin/zsh
+#
+# Generic clipboard wrapper
+#
+
+if [[ $OSTYPE == 'cygwin' ]]; then
+    exec putclip
+elif [[ $XDG_SESSION_TYPE == 'wayland' ]]; then
+    exec wl-copy
+else
+    exec xsel -i --clipboard
+fi
