@@ -51,7 +51,7 @@ bind-key -T root TripleClick1Pane if-shell -Ft{mouse} '#{alternate_on}' 'send-ke
 set -s set-clipboard on
 set -s terminal-overrides 'rxvt-unicode*:Ms=\E]52;%p1%s;%p2%s\007,tmux*:Ms=\E]52;%p1%s;%p2%s\007'
 
-# Ensure selections go to PRIMARY on alacritty
+# Alacritty uses system clipboard by default; force primary clipboard
 set -sa terminal-overrides ',alacritty*:Ms=\E]52;p;%p2%s\007'
 
 # Enable real truecolor when the TERM indicates support
@@ -84,6 +84,7 @@ run-shell ~/.tmux/plugins/tmux-pain-control/pain_control.tmux
 <% if @facts['osfamily'] == 'windows' -%>
 set -g @override_copy_command 'putclip'
 <% end -%>
+set -g @yank_with_mouse off
 run-shell ~/.tmux/plugins/tmux-yank/yank.tmux
 
 # Really cool enhanced search (with a bunch of pre-defined regexes)
