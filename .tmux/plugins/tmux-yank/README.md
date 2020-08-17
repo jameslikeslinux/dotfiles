@@ -76,6 +76,8 @@ without `reattach-to-user-namespace`. It doesn't hurt to have it installed.
 -   OS X 10.10: Yosemite – *not required*
 -   OS X 10.11: El Capitan – *not required*
 -   macOS 10.12: Sierra – *required*
+-   macOS 10.14: Mojave - *required*
+-   macOS 10.15: Catalina - *not required*
 
 The easiest way to use `reattach-to-user-namespace` with `tmux` is use to
 use the [`tmux-sensible`](https://github.com/tmux-plugins/tmux-sensible)
@@ -118,7 +120,8 @@ $ sudo port install tmux-pasteboard
 
 ### Linux
 
--   `xsel` (recommended) or `xclip`.
+-   `xsel` (recommended) or `xclip` (for X).
+-   `wl-copy` from [wl-clipboard](https://github.com/bugaevc/wl-clipboard) (for Wayland)
 
 If you have `tmux` 1.5 or newer and are using `xterm`, the <kbd>y</kbd> in
 `copy-mode` and mouse selection will work without `tmux-yank`. See the
@@ -209,13 +212,48 @@ You can change this by setting `@yank_selection`:
 set -g @yank_selection 'primary' # or 'secondary' or 'clipboard'
 ```
 
+With mouse support turned on (see below) the default clipboard for mouse
+selections is `primary`.
+
+You can change this by setting `@yank_selection_mouse`:
+
+``` tmux
+# ~/.tmux.conf
+
+set -g @yank_selection_mouse 'clipboard' # or 'primary' or 'secondary'
+```
+
+### Controlling Yank Behavior
+
+By default, `tmux-yank` will exit copy mode after yanking text. If you wish to
+remain in copy mode, you can set `@yank_action`:
+
+``` tmux
+# ~/.tmux.conf
+
+set -g @yank_action 'copy-pipe' # or 'copy-pipe-and-cancel' for the default
+```
+
 ### Mouse Support
 
-When making a selection using `tmux` with `mode-mouse on` or
-`mode-mouse copy-mode`, you cannot rely on the default 'release mouse after
-selection to copy' behavior.
+`tmux-yank` has mouse support enabled by default. It will only work if `tmux`'s
+built-in mouse support is also enabled (with `mouse on` since `tmux` 2.1, or
+`mode-mouse on` in older versions).
 
-Instead, press <kbd>y</kbd> before releasing mouse.
+To yank with the mouse, click and drag with the primary button to begin
+selection, and release to yank.
+
+If you would prefer to disable this behavior, or provide your own bindings for
+the `MouseDragEnd1Pane` event, you can do so with:
+
+``` tmux
+# ~/.tmux.conf
+
+set -g @yank_with_mouse off # or 'on'
+```
+
+If you want to remain in copy mode after making a mouse selection, set
+`@yank_action` as described above.
 
 ### vi mode support
 
