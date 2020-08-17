@@ -40,3 +40,6 @@ export QT_QPA_PLATFORMTHEME=kde
 
 # To find my custom ruby libraries
 export RUBYLIB="${HOME}/lib/ruby"
+
+# XXX: Temporary.
+export PAN_MESA_DEBUG=gl3
