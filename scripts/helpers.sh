@@ -1,4 +1,5 @@
 #!bash
+# shellcheck disable=SC2239
 
 yank_line="y"
 yank_line_option="@yank_line"
@@ -20,6 +21,15 @@ yank_wo_newline_option="@copy_mode_yank_wo_newline"
 
 yank_selection_default="clipboard"
 yank_selection_option="@yank_selection"
+
+yank_selection_mouse_default="primary"
+yank_selection_mouse_option="@yank_selection_mouse"
+
+yank_with_mouse_default="on"
+yank_with_mouse_option="@yank_with_mouse"
+
+yank_action_default="copy-pipe-and-cancel"
+yank_action_option="@yank_action"
 
 shell_mode_default="emacs"
 shell_mode_option="@shell_mode"
@@ -71,6 +81,18 @@ yank_selection() {
     get_tmux_option "$yank_selection_option" "$yank_selection_default"
 }
 
+yank_selection_mouse() {
+    get_tmux_option "$yank_selection_mouse_option" "$yank_selection_mouse_default"
+}
+
+yank_with_mouse() {
+    get_tmux_option "$yank_with_mouse_option" "$yank_with_mouse_default"
+}
+
+yank_action() {
+    get_tmux_option "$yank_action_option" "$yank_action_default"
+}
+
 shell_mode() {
     get_tmux_option "$shell_mode_option" "$shell_mode_default"
 }
@@ -114,6 +136,7 @@ command_exists() {
 }
 
 clipboard_copy_command() {
+    local mouse="${1:-false}"
     # installing reattach-to-user-namespace is recommended on OS X
     if [ -n "$(override_copy_command)" ]; then
         override_copy_command
@@ -124,15 +147,25 @@ clipboard_copy_command() {
             echo "pbcopy"
         fi
     elif command_exists "clip.exe"; then # WSL clipboard command
-        echo "clip.exe"
-    elif command_exists "xclip"; then
-        local xclip_selection
-        xclip_selection="$(yank_selection)"
-        echo "xclip -selection $xclip_selection"
+        echo "cat | clip.exe"
+    elif command_exists "wl-copy"; then # wl-clipboard: Wayland clipboard utilities
+        echo "wl-copy"
     elif command_exists "xsel"; then
         local xsel_selection
-        xsel_selection="$(yank_selection)"
+        if [[ $mouse == "true" ]]; then
+            xsel_selection="$(yank_selection_mouse)"
+        else
+            xsel_selection="$(yank_selection)"
+        fi
         echo "xsel -i --$xsel_selection"
+    elif command_exists "xclip"; then
+        local xclip_selection
+        if [[ $mouse == "true" ]]; then
+            xclip_selection="$(yank_selection_mouse)"
+        else
+            xclip_selection="$(yank_selection)"
+        fi
+        echo "xclip -selection $xclip_selection"
     elif command_exists "putclip"; then # cygwin clipboard command
         echo "putclip"
     elif [ -n "$(custom_copy_command)" ]; then
@@ -141,30 +174,34 @@ clipboard_copy_command() {
 }
 
 # Cache the TMUX version for speed.
-tmux_version="$(tmux -V | cut -d ' ' -f 2)"
+tmux_version="$(tmux -V | cut -d ' ' -f 2 | sed 's/next-//')"
 
 tmux_is_at_least() {
-    if [[ $tmux_version == "$1" || $tmux_version == "master" ]]
-    then
+    if [[ $tmux_version == "$1" ]] || [[ $tmux_version == master ]]; then
         return 0
     fi
 
-    local IFS=.
-    local i tver=($tmux_version) wver=($1)
+    local i
+    local -a current_version wanted_version
+    IFS='.' read -ra current_version <<<"$tmux_version"
+    IFS='.' read -ra wanted_version <<<"$1"
 
-    # fill empty fields in tver with zeros
-    for ((i=${#tver[@]}; i<${#wver[@]}; i++)); do
-        tver[i]=0
+    # fill empty fields in current_version with zeros
+    for ((i = ${#current_version[@]}; i < ${#wanted_version[@]}; i++)); do
+        current_version[i]=0
     done
 
-    # fill empty fields in wver with zeros
-    for ((i=${#wver[@]}; i<${#tver[@]}; i++)); do
-        wver[i]=0
+    # fill empty fields in wanted_version with zeros
+    for ((i = ${#wanted_version[@]}; i < ${#current_version[@]}; i++)); do
+        wanted_version[i]=0
     done
 
-    for ((i=0; i<${#tver[@]}; i++)); do
-        if ((10#${tver[i]} < 10#${wver[i]})); then
+    for ((i = 0; i < ${#current_version[@]}; i++)); do
+        if ((10#${current_version[i]} < 10#${wanted_version[i]})); then
             return 1
+        fi
+        if ((10#${current_version[i]} > 10#${wanted_version[i]})); then
+            return 0
         fi
     done
     return 0
