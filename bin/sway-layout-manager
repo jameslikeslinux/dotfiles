@@ -378,24 +378,14 @@ class SwayWorkspace
   def master
     first  = container(0)
     second = container(1)
-
-    if reflected? and second
-      second
-    else
-      first
-    end
+    reflected? && second ? second : first
   end
 
   # Same as `master` above
   def stack
     first  = container(0)
     second = container(1)
-
-    if reflected? and second
-      first
-    else
-      second
-    end
+    reflected? && second ? first : second
   end
 
   def windows(container = {'nodes' => @nodes})
