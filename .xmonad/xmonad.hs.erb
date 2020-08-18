@@ -143,7 +143,7 @@ topicConfig = def
 <% end -%>
         , ("ops"    , (ask >>= spawn . terminal . config))
         , ("dev"    , (ask >>= spawn . terminal . config))
-        , ("music"  , spawn "chromium --app=https://play.google.com/music/listen")
+        , ("music"  , spawn "chromium --app=https://music.youtube.com/")
         , ("mail"   , spawn "firefox --new-window https://mail.google.com/mail/u/0/#inbox --new-window https://mail.google.com/mail/u/1/#inbox")
 <% if @facts['hostname'] == 'eagle' -%>
         , ("chat"   , spawn "firefox --new-window teams.webex.com")
