@@ -3,7 +3,6 @@ dark = ColorScheme.dark.colors_by_base
 gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
 text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1
 -%>
-
 import XMonad
 import XMonad.Core
 import qualified XMonad.StackSet as W
@@ -59,9 +58,9 @@ isOverlayWindow :: Query Bool
 isOverlayWindow = do
     isNotification      <- isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_NOTIFICATION"
     floatingVideoWindow <- className =? "zoom" <&&> title =? "zoom_linux_float_video_window"
-    sharingWindowFrame  <- className =? "zoom" <&&> title =? "cpt_frame_window"
     sharingToolbar      <- className =? "zoom" <&&> title =? "as_toolbar"
-    return $ isNotification || floatingVideoWindow || sharingWindowFrame || sharingToolbar
+    sharingWindowFrame  <- title =? "cpt_frame_window"
+    return $ isNotification || floatingVideoWindow || sharingToolbar || sharingWindowFrame
 
 raiseOverlays = allWindowsByType isOverlayWindow >>= mapM_ raiseWindow'
 
