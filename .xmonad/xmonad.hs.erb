@@ -62,33 +62,34 @@ isOverlayWindow = do
     sharingWindowFrame  <- title =? "cpt_frame_window"
     return $ isNotification || floatingVideoWindow || sharingToolbar || sharingWindowFrame
 
-raiseOverlays = allWindowsByType isOverlayWindow >>= mapM_ raiseWindow'
-
-sendToBottom :: Window -> X ()
-sendToBottom window = withDisplay $ \display ->
-    io $ lowerWindow display window
-
-raiseWindow' :: Window -> X ()
-raiseWindow' window = withDisplay $ \display ->
-    io $ raiseWindow display window
-
 allWindowsByType :: Query Bool -> X [Window]
 allWindowsByType query = withDisplay $ \display -> do
     (_, _, windows) <- asks theRoot >>= io . queryTree display
     filterM (runQuery query) windows
 
-sendToJustAboveDesktop :: Window -> X ()
-sendToJustAboveDesktop window = do
-    sendToBottom window
-    allWindowsByType isDesktop >>= mapM_ sendToBottom
-
 doWindowAction :: (Window -> X ()) -> ManageHook
 doWindowAction action = ask >>= liftX . action >> idHook
+
+raiseWindow' :: Window -> X ()
+raiseWindow' window = withDisplay $ \display ->
+    io $ raiseWindow display window
+
+raiseOverlays :: X ()
+raiseOverlays = allWindowsByType isOverlayWindow >>= mapM_ raiseWindow'
 
 raisePanelTemporarily :: X ()
 raisePanelTemporarily = do
     allWindowsByType isDock >>= mapM_ raiseWindow'
     startTimer 2 >>= XS.put . PanelTimer
+
+sendToBottom :: Window -> X ()
+sendToBottom window = withDisplay $ \display ->
+    io $ lowerWindow display window
+
+sendToJustAboveDesktop :: Window -> X ()
+sendToJustAboveDesktop window = do
+    sendToBottom window
+    allWindowsByType isDesktop >>= mapM_ sendToBottom
 
 topicConfig :: TopicConfig
 topicConfig = def
