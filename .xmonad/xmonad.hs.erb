@@ -3,7 +3,6 @@ dark = ColorScheme.dark.colors_by_base
 gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
 text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1
 -%>
-{-# LANGUAGE FlexibleInstances, MultiParamTypeClasses #-}
 
 import XMonad
 import XMonad.Core
@@ -52,21 +51,19 @@ data PanelTimer = PanelTimer TimerId deriving Typeable
 instance ExtensionClass PanelTimer where
     initialValue = PanelTimer 0
 
--- Custom layout to show overlay type windows on top
-data OverlayWindows a = OverlayWindows () deriving (Show, Read)
-instance LayoutModifier OverlayWindows a where
-    hook (OverlayWindows a) = allWindowsByType isOverlayWindow >>= mapM_ raiseWindow'
-
-isDesktop      = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DESKTOP"
-isDock         = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DOCK"
-isOSD          = isInProperty "_NET_WM_WINDOW_TYPE" "_KDE_NET_WM_WINDOW_TYPE_ON_SCREEN_DISPLAY"
+isDesktop = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DESKTOP"
+isDock    = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DOCK"
+isOSD     = isInProperty "_NET_WM_WINDOW_TYPE" "_KDE_NET_WM_WINDOW_TYPE_ON_SCREEN_DISPLAY"
 
 isOverlayWindow :: Query Bool
 isOverlayWindow = do
     isNotification      <- isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_NOTIFICATION"
-    floatingVideoWindow <- title =? "zoom_linux_float_video_window"
-    sharingToolbar      <- title =? "as_toolbar"
-    return $ isNotification || floatingVideoWindow || sharingToolbar
+    floatingVideoWindow <- className =? "zoom" <&&> title =? "zoom_linux_float_video_window"
+    sharingWindowFrame  <- className =? "zoom" <&&> title =? "cpt_frame_window"
+    sharingToolbar      <- className =? "zoom" <&&> title =? "as_toolbar"
+    return $ isNotification || floatingVideoWindow || sharingWindowFrame || sharingToolbar
+
+raiseOverlays = allWindowsByType isOverlayWindow >>= mapM_ raiseWindow'
 
 sendToBottom :: Window -> X ()
 sendToBottom window = withDisplay $ \display ->
@@ -169,10 +166,13 @@ reflectWith swapFn = do
 -- ewmh should set this at startup but doesn't
 startupHook' = spawnOnce "xprop -root -f _NET_CURRENT_DESKTOP 32c -set _NET_CURRENT_DESKTOP 0"
 
-logHook' = switchTopicHook >> historyHook >> workspaceHistoryHook
+logHook' = do
+    switchTopicHook
+    historyHook
+    workspaceHistoryHook
+    raiseOverlays
 
 layoutHook' = id
-    . ModifiedLayout (OverlayWindows ())
     . onWorkspace "windows" (noBorders Full)
     . mkToggle (single NBFULL)
     . avoidStruts
