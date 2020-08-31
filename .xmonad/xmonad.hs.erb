@@ -3,6 +3,8 @@ dark = ColorScheme.dark.colors_by_base
 gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
 text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1
 -%>
+{-# LANGUAGE FlexibleInstances, MultiParamTypeClasses #-}
+
 import XMonad
 import XMonad.Core
 import qualified XMonad.StackSet as W
@@ -18,6 +20,7 @@ import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.WorkspaceHistory
+import XMonad.Layout.LayoutModifier
 import XMonad.Layout.Maximize
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
@@ -49,12 +52,18 @@ data PanelTimer = PanelTimer TimerId deriving Typeable
 instance ExtensionClass PanelTimer where
     initialValue = PanelTimer 0
 
+-- Custom layout to show overlay type windows on top
+data OverlayWindows a = OverlayWindows () deriving (Show, Read)
+instance LayoutModifier OverlayWindows a where
+    hook (OverlayWindows a) = allWindowsByType isOverlayWindow >>= mapM_ raiseWindow'
+
 -- ewmh should set this at startup but doesn't
 startupHook' = spawnOnce "xprop -root -f _NET_CURRENT_DESKTOP 32c -set _NET_CURRENT_DESKTOP 0"
 
 logHook' = switchTopicHook >> historyHook >> workspaceHistoryHook
 
 layoutHook' = id
+    . ModifiedLayout (OverlayWindows ())
     . onWorkspace "windows" (noBorders Full)
     . mkToggle (single NBFULL)
     . avoidStruts
@@ -76,7 +85,14 @@ layoutHook' = id
 isDesktop      = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DESKTOP"
 isDock         = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DOCK"
 isOSD          = isInProperty "_NET_WM_WINDOW_TYPE" "_KDE_NET_WM_WINDOW_TYPE_ON_SCREEN_DISPLAY"
-isNotification = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_NOTIFICATION"
+
+isOverlayWindow :: Query Bool
+isOverlayWindow = do
+    isNotification      <- isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_NOTIFICATION"
+    floatingVideoWindow <- title =? "zoom_linux_float_video_window"
+    sharingWindowFrame  <- title =? "cpt_frame_window"
+    sharingToolbar      <- title =? "as_toolbar"
+    return $ isNotification || floatingVideoWindow || sharingWindowFrame || sharingToolbar
 
 sendToBottom :: Window -> X ()
 sendToBottom window = withDisplay $ \display ->
@@ -99,12 +115,6 @@ sendToJustAboveDesktop window = do
 doWindowAction :: (Window -> X ()) -> ManageHook
 doWindowAction action = ask >>= liftX . action >> idHook
 
-raiseAllNotifications :: X ()
-raiseAllNotifications = allWindowsByType isNotification >>= mapM_ raiseWindow'
-
-raiseAllNotificationsHook :: ManageHook
-raiseAllNotificationsHook = liftX raiseAllNotifications >> idHook
-
 raisePanelTemporarily :: X ()
 raisePanelTemporarily = do
     allWindowsByType isDock >>= mapM_ raiseWindow'
@@ -120,7 +130,7 @@ manageHook' = composeOne
     , isDialog                      -?> doFloat
     , transience                    --- move to parent window
     , pure True                     -?> insertPosition Below Newer
-    ] <+> raiseAllNotificationsHook
+    ]
 
 -- Based on https://stackoverflow.com/questions/11045239/can-xmonads-loghook-be-run-at-set-intervals-rather-than-in-merely-response-to/14297833
 handleEventHook' event = do
