@@ -65,9 +65,8 @@ isOverlayWindow :: Query Bool
 isOverlayWindow = do
     isNotification      <- isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_NOTIFICATION"
     floatingVideoWindow <- title =? "zoom_linux_float_video_window"
-    sharingWindowFrame  <- title =? "cpt_frame_window"
     sharingToolbar      <- title =? "as_toolbar"
-    return $ isNotification || floatingVideoWindow || sharingWindowFrame || sharingToolbar
+    return $ isNotification || floatingVideoWindow || sharingToolbar
 
 sendToBottom :: Window -> X ()
 sendToBottom window = withDisplay $ \display ->
