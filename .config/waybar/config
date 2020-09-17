@@ -15,6 +15,11 @@
     ],
     "modules-right": [
         "custom/load",
+        "custom/power",
+        "custom/network",
+        "custom/audio",
+        "custom/backlight",
+        "custom/vpn",
         "clock"
     ],
     "custom/sway-workspace-1": {
@@ -74,6 +79,26 @@
     },
     "custom/load": {
         "exec": "$HOME/.config/waybar/status/widget load",
+        "tooltip": false
+    },
+    "custom/power": {
+        "exec": "$HOME/.config/waybar/status/widget power",
+        "tooltip": false
+    },
+    "custom/network": {
+        "exec": "$HOME/.config/waybar/status/widget network",
+        "tooltip": false
+    },
+    "custom/audio": {
+        "exec": "$HOME/.config/waybar/status/widget audio",
+        "tooltip": false
+    },
+    "custom/backlight": {
+        "exec": "$HOME/.config/waybar/status/widget backlight",
+        "tooltip": false
+    },
+    "custom/vpn": {
+        "exec": "$HOME/.config/waybar/status/widget vpn",
         "tooltip": false
     },
     "clock": {
