@@ -540,6 +540,14 @@ when 'move'
     STDERR.puts "Usage: #{$0} move WS"
     exit 1
   end
+when 'view'
+  if ARGV[1]
+    # Placeholder for "greedy view" implementation
+    SwayWorkspace.exec_swaymsg "workspace number '#{ARGV[1]}'"
+  else
+    STDERR.puts "Usage: #{$0} view WS"
+    exit 1
+  end
 else
   STDERR.puts "Usage: #{$0} COMMAND"
   exit 1
