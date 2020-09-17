@@ -1,0 +1,14 @@
+#!/usr/bin/env zsh
+#
+# sway-greedy-view
+#
+# Select a workspace by bringing it to the current monitor the way Xmonad does
+#
+
+if [[ $# != 1 ]]; then
+    print "Usage: ${0} WS" >&2
+    exit 1
+fi
+
+# Placeholder implementation
+exec swaymsg workspace number "$1"
