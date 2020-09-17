@@ -19,43 +19,56 @@
     ],
     "custom/sway-workspace-1": {
         "exec": "$HOME/.config/waybar/status/sway-workspace 1",
+        "tooltip": false
     },
     "custom/sway-workspace-2": {
         "exec": "$HOME/.config/waybar/status/sway-workspace 2",
+        "tooltip": false
     },
     "custom/sway-workspace-3": {
         "exec": "$HOME/.config/waybar/status/sway-workspace 3",
+        "tooltip": false
     },
     "custom/sway-workspace-4": {
         "exec": "$HOME/.config/waybar/status/sway-workspace 4",
+        "tooltip": false
     },
     "custom/sway-workspace-5": {
         "exec": "$HOME/.config/waybar/status/sway-workspace 5",
+        "tooltip": false
     },
     "custom/sway-workspace-6": {
         "exec": "$HOME/.config/waybar/status/sway-workspace 6",
+        "tooltip": false
     },
     "custom/sway-workspace-7": {
         "exec": "$HOME/.config/waybar/status/sway-workspace 7",
+        "tooltip": false
     },
     "custom/sway-workspace-8": {
         "exec": "$HOME/.config/waybar/status/sway-workspace 8",
+        "tooltip": false
     },
     "custom/sway-workspace-9": {
         "exec": "$HOME/.config/waybar/status/sway-workspace 9",
+        "tooltip": false
     },
     "custom/sway-workspace-10": {
         "exec": "$HOME/.config/waybar/status/sway-workspace 10",
+        "tooltip": false
     },
     "sway/window": {
         "format": " {}",
-        "max-length": 100
+        "max-length": 100,
+        "tooltip": false
     },
     "custom/load": {
-        "exec": "$HOME/.config/waybar/status/widget load"
+        "exec": "$HOME/.config/waybar/status/widget load",
+        "tooltip": false
     },
     "clock": {
         "interval": 1,
-        "format": "<span bgcolor='#282828' fgcolor='#383838'></span> {:%a %b %_d %r} "
+        "format": "<span bgcolor='#282828' fgcolor='#383838'></span> {:%a %b %_d %r} ",
+        "tooltip": false
     }
 }
