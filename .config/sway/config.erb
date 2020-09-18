@@ -65,18 +65,18 @@ set $ws9 '9: nine'
 set $ws10 '10: ten'
 
 # Set default workspace names
-bindsym $mod+1 workspace number $ws1
-bindsym $mod+2 workspace number $ws2
-bindsym $mod+3 workspace number $ws3
-bindsym $mod+4 workspace number $ws4
-bindsym $mod+5 workspace number $ws5
-bindsym $mod+6 workspace number $ws6
-bindsym $mod+7 workspace number $ws7
-bindsym $mod+8 workspace number $ws8
-bindsym $mod+9 workspace number $ws9
-bindsym $mod+0 workspace number $ws10
+bindsym $mod+Mod1+1 workspace number $ws1
+bindsym $mod+Mod1+2 workspace number $ws2
+bindsym $mod+Mod1+3 workspace number $ws3
+bindsym $mod+Mod1+4 workspace number $ws4
+bindsym $mod+Mod1+5 workspace number $ws5
+bindsym $mod+Mod1+6 workspace number $ws6
+bindsym $mod+Mod1+7 workspace number $ws7
+bindsym $mod+Mod1+8 workspace number $ws8
+bindsym $mod+Mod1+9 workspace number $ws9
+bindsym $mod+Mod1+0 workspace number $ws10
 
-# Override workspace switching to use greedy view algorithm
+# Prefer greedy view algorithm to switch workspaces
 bindsym $mod+1 exec sway-greedy-view $ws1
 bindsym $mod+2 exec sway-greedy-view $ws2
 bindsym $mod+3 exec sway-greedy-view $ws3
@@ -87,6 +87,7 @@ bindsym $mod+7 exec sway-greedy-view $ws7
 bindsym $mod+8 exec sway-greedy-view $ws8
 bindsym $mod+9 exec sway-greedy-view $ws9
 bindsym $mod+0 exec sway-greedy-view $ws10
+
 bindsym $mod+a workspace back_and_forth
 
 bindsym $mod+Shift+1 exec sway-layout-manager move $ws1
