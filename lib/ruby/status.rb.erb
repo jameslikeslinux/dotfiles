@@ -321,8 +321,8 @@ class BacklightStatus < StatusWidget
 end
 
 class ScreensaverStatus < StatusWidget
-  def initialize
-    super('screensaver', 30)
+  def initialize(name = 'screensaver', timeout = 30)
+    super(name, timeout)
   end
 
   private
@@ -340,11 +340,22 @@ class ScreensaverStatus < StatusWidget
 
   def segments
     if File.exist?(File.join(ENV['XDG_RUNTIME_DIR'], 'screensaver.inhibit'))
-      system 'qdbus org.freedesktop.ScreenSaver /org/freedesktop/ScreenSaver org.freedesktop.ScreenSaver.SimulateUserActivity'
+      if ENV['SWAYSOCK']
+        system 'swaymsg -- exec kdialog --title "Sway Idle Inhibitor" --msgbox "This hidden box keeps Sway active"'
+      else
+        system 'qdbus org.freedesktop.ScreenSaver /org/freedesktop/ScreenSaver org.freedesktop.ScreenSaver.SimulateUserActivity'
+      end
       segment fontawesome "\uf108"
     else
+      system 'swaymsg [title="Sway Idle Inhibitor"] kill' if ENV['SWAYSOCK']
       ''
     end
+  end
+end
+
+class SwayidleStatus < ScreensaverStatus
+  def initialize
+    super('swayidle', nil)
   end
 end
 

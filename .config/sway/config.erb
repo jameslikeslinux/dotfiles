@@ -36,6 +36,7 @@ bindsym Mod1+Tab       exec sway-layout-manager focus_next
 bindsym Mod1+Shift+Tab exec sway-layout-manager focus_prev
 bindsym $mod+semicolon [con_mark="_last_focused"] focus
 
+bindsym $mod+s                exec ~/.xmonad/scripts/screensaver toggle
 bindsym XF86AudioMicMute      exec ~/.xmonad/scripts/volume toggle-mute
 bindsym XF86AudioMute         exec ~/.xmonad/scripts/volume toggle-mute
 bindsym XF86AudioLowerVolume  exec ~/.xmonad/scripts/volume -1dB
@@ -95,6 +96,9 @@ bindsym $mod+Shift+j   exec sway-layout-manager shrink_child
 bindsym $mod+Shift+k   exec sway-layout-manager grow_child
 bindsym $mod+Ctrl+l    exec sway-layout-manager refresh
 bindsym $mod+BackSpace exec sway-layout-manager reset $ws1 $ws2 $ws3 $ws4 $ws5 $ws6 $ws7 $ws8 $ws9 $ws10
+
+# Windows
+for_window [title="Sway Idle Inhibitor"] move workspace idler, inhibit_idle open
 
 # Initialize session
 exec '~/bin/reset-systemd-environment && systemctl --user start sway-session.target'

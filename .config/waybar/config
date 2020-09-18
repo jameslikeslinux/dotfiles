@@ -19,6 +19,7 @@
         "custom/network",
         "custom/audio",
         "custom/backlight",
+        "custom/swayidle",
         "custom/vpn",
         "clock"
     ],
@@ -95,6 +96,10 @@
     },
     "custom/backlight": {
         "exec": "$HOME/.config/waybar/status/widget backlight",
+        "tooltip": false
+    },
+    "custom/swayidle": {
+        "exec": "$HOME/.config/waybar/status/widget swayidle",
         "tooltip": false
     },
     "custom/vpn": {
