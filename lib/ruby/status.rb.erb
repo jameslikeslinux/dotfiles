@@ -341,13 +341,13 @@ class ScreensaverStatus < StatusWidget
   def segments
     if File.exist?(File.join(ENV['XDG_RUNTIME_DIR'], 'screensaver.inhibit'))
       if ENV['SWAYSOCK']
-        system 'swaymsg -- exec kdialog --title "Sway Idle Inhibitor" --msgbox "This hidden box keeps Sway active"'
+        system 'swaymsg \'exec kdialog --title "Sway Idle Inhibitor" --msgbox "This hidden box keeps Sway active"\''
       else
         system 'qdbus org.freedesktop.ScreenSaver /org/freedesktop/ScreenSaver org.freedesktop.ScreenSaver.SimulateUserActivity'
       end
       segment fontawesome "\uf108"
     else
-      system 'swaymsg [title="Sway Idle Inhibitor"] kill' if ENV['SWAYSOCK']
+      system 'swaymsg \'[title="Sway Idle Inhibitor"] kill\'' if ENV['SWAYSOCK']
       ''
     end
   end
