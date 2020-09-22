@@ -270,7 +270,8 @@ class AudioStatus < StatusWidget
     end
 
     if description =~ /Built-in Audio (Analog|Stereo)/ or
-       description == 'Dell AC511 USB SoundBar Analog Stereo'
+       description == 'Dell AC511 USB SoundBar Analog Stereo' or
+       description == 'DROP Panda Analog Stereo'
       icon = if mute == 'yes'
                fontawesome "\uf6a9"
              elsif port == 'analog-output-headphones'

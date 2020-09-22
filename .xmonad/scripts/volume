@@ -14,7 +14,8 @@ pactl list sinks | awk -v default_sink="$default_sink" '
 
 if [[ $description == 'Built-in Audio Analog'* ||
       $description == 'Built-in Audio Stereo' ||
-      $description == 'Dell AC511 USB SoundBar Analog Stereo' ]]; then
+      $description == 'Dell AC511 USB SoundBar Analog Stereo' ||
+      $description == 'DROP Panda Analog Stereo' ]]; then
     if [[ $1 == 'toggle-mute' ]]; then
         pactl set-sink-mute "$default_sink" toggle
     else
