@@ -280,7 +280,7 @@ class AudioStatus < StatusWidget
                fontawesome "\uf028"
              end
 
-      segment "#{icon} #{volume.to_f.round}dB"
+      segment "#{icon} #{(volume.to_f * 2).round / 2.0}dB"
     else
       ''
     end
