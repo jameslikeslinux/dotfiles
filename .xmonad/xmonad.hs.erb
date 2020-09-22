@@ -290,8 +290,8 @@ main = xmonad
 <% end -%>
     , ("<XF86AudioMicMute>"      , spawn "~/.xmonad/scripts/mic toggle-mute")
     , ("<XF86AudioMute>"         , raisePanelTemporarily >> spawn "~/.xmonad/scripts/volume toggle-mute")
-    , ("<XF86AudioLowerVolume>"  , raisePanelTemporarily >> spawn "~/.xmonad/scripts/volume -1dB")
-    , ("<XF86AudioRaiseVolume>"  , raisePanelTemporarily >> spawn "~/.xmonad/scripts/volume +1dB")
+    , ("<XF86AudioLowerVolume>"  , raisePanelTemporarily >> spawn "~/.xmonad/scripts/volume -0.5dB")
+    , ("<XF86AudioRaiseVolume>"  , raisePanelTemporarily >> spawn "~/.xmonad/scripts/volume +0.5dB")
     , ("<XF86MonBrightnessDown>" , raisePanelTemporarily >> spawn "~/.xmonad/scripts/brightness decrease")
     , ("<XF86MonBrightnessUp>"   , raisePanelTemporarily >> spawn "~/.xmonad/scripts/brightness increase")
     ]
