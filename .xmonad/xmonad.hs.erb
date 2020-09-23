@@ -270,7 +270,6 @@ main = xmonad
     , ("M-S-q"         , spawn "qdbus org.kde.ksmserver /KSMServer logout 1 0 1")
     , ("M-s"           , raisePanelTemporarily >> spawn "~/.xmonad/scripts/screensaver toggle")
     , ("M-<Escape>"    , unGrab >> spawn "~/.xmonad/scripts/screensaver reset; loginctl lock-session")
-    , ("M-<Space>"     , spawn "qdbus 'org.mpris.MediaPlayer2.chromium.instance*' | while read service; do qdbus \"$service\" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause; done")
     , ("M-<Tab>"       , sendMessage NextLayout)
     , ("M-<Backspace>" , setLayout $ Layout layoutHook')
     , ("M1-<Tab>"      , windows W.focusDown)
@@ -288,6 +287,8 @@ main = xmonad
     , ("M-<Left>"      , spawn "~/bin/switch-input falcon")
     , ("M-<Right>"     , spawn "~/bin/switch-input hawk")
 <% end -%>
+    , ("M-<Space>"               , spawn "~/.xmonad/scripts/play-pause")
+    , ("<XF86AudioPlay>"         , spawn "~/.xmonad/scripts/play-pause")
     , ("<XF86AudioMicMute>"      , spawn "~/.xmonad/scripts/mic toggle-mute")
     , ("<XF86AudioMute>"         , raisePanelTemporarily >> spawn "~/.xmonad/scripts/volume toggle-mute")
     , ("<XF86AudioLowerVolume>"  , raisePanelTemporarily >> spawn "~/.xmonad/scripts/volume -0.5dB")

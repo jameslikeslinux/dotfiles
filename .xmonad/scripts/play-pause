@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+
+qdbus 'org.mpris.MediaPlayer2.chromium.instance*' | while read service
+    do qdbus "$service" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
+done
