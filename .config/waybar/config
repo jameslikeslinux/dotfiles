@@ -92,6 +92,8 @@
     },
     "custom/audio": {
         "exec": "$HOME/.config/waybar/status/widget audio",
+        "on-scroll-up": "$HOME/.xmonad/scripts/volume +0.5dB",
+        "on-scroll-down": "$HOME/.xmonad/scripts/volume -0.5dB",
         "tooltip": false
     },
     "custom/backlight": {
