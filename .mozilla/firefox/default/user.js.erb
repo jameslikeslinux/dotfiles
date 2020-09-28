@@ -13,6 +13,7 @@ user_pref("dom.ipc.processCount", <%= [@memorysize_mb.to_i >> 11, 4].max %>);
 user_pref("extensions.pocket.enabled", false);
 user_pref("extensions.webextensions.restrictedDomains", "");
 user_pref("general.smoothScroll", false);
+user_pref("geo.provider.network.url", "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%");
 user_pref("mousewheel.default.delta_multiplier_x", 300);
 user_pref("mozilla.widget.use-argb-visuals", false);
 user_pref("network.negotiate-auth.trusted-uris", "umd.edu");
