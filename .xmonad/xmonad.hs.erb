@@ -105,7 +105,7 @@ topicConfig = def
         , ("music"  , spawn "chromium --app=https://music.youtube.com/")
         , ("mail"   , spawn "firefox --new-window https://mail.google.com/mail/u/0/#inbox --new-window https://mail.google.com/mail/u/1/#inbox")
 <% if @facts['hostname'] == 'eagle' -%>
-        , ("chat"   , spawn "firefox --new-window teams.webex.com")
+        , ("chat"   , spawn "firefox --new-window web.webex.com")
 <% end -%>
 <% libvirtd_connect_str = @facts['hostname'] == 'eagle' ? 'qemu:///system' : 'qemu+ssh://root@eagle/system' -%>
         , ("windows", spawn "GDK_DPI_SCALE=<%= gui_scaling_factor %> GDK_SCALE=1 virt-viewer --full-screen --connect=<%= libvirtd_connect_str %> --wait --reconnect osprey")
