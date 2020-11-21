@@ -282,10 +282,10 @@ main = xmonad
     , ("M-`"           , spawn "~/.xmonad/scripts/toggle-dpms")
 <% if @facts['hostname'] == 'falcon' -%>
     , ("M-b"           , rofi >>= \cmd -> spawn $ "env ROFI='" ++ cmd ++ "' ~/bin/brightness")
-    , ("M-<Up>"        , spawn "~/bin/switch-input pc")
-    , ("M-<Down>"      , spawn "~/bin/switch-input tv")
-    , ("M-<Left>"      , spawn "~/bin/switch-input falcon")
-    , ("M-<Right>"     , spawn "~/bin/switch-input hawk")
+    , ("M-<Up>"        , spawn "~/bin/switch-input hawk")
+    , ("M-<Down>"      , spawn "~/bin/switch-input falcon")
+    , ("M-<Left>"      , spawn "~/bin/switch-input kite")
+    , ("M-<Right>"     , spawn "~/bin/switch-input falcon")
 <% end -%>
     , ("M-<Space>"               , spawn "~/.xmonad/scripts/play-pause")
     , ("<XF86AudioPlay>"         , spawn "~/.xmonad/scripts/play-pause")
