@@ -1,5 +1,7 @@
 {
-    "output": "eDP-1",
+<% if @facts['primary_output'] -%>
+    "output": "<%= @facts['primary_output'] %>",
+<% end -%>
     "modules-left": [
         "custom/sway-workspace-1",
         "custom/sway-workspace-2",
