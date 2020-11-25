@@ -124,6 +124,16 @@ compdef glue=ssh
 alias j='ssh -J stowe.umd.edu'
 compdef j=ssh
 
+# systemd aliases
+alias sc='systemctl'
+alias scu='systemctl --user'
+alias jc='journalctl'
+alias jce='journalctl -e'
+alias jcf='journalctl -f'
+alias jcu='journalctl --user'
+alias jcue='journalctl --user -e'
+alias jcuf='journalctl --user -f'
+
 # Easy way to switch to project
 p() { cd "${HOME}/projects/${1}" && ls }
 compdef "_files -W ${HOME}/projects" p
