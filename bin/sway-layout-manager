@@ -7,26 +7,39 @@
 require 'json'
 require 'shellwords'
 
+class SwayOutput
+  attr_reader :rect
+  def initialize(node)
+    @rect = node['rect']
+  end
+end
+
 class SwayWorkspace
   attr_reader :name
 
-  def initialize(wsdata)
-    @name   = wsdata['name']
-    @layout = wsdata['layout']
-    @nodes  = wsdata['nodes']
-    @rect   = wsdata['rect']
+  def initialize(node, output)
+    @output = output
+    @name   = node['name']
+    @layout = node['layout']
+    @nodes  = node['nodes']
+    @rect   = node['rect']
     @swaycmd_queue = []
 
     # Read custom attributes from name
     read_attrs
   end
 
-  def self.all(tree = SwayWorkspace.tree)
+  def self.all(tree = SwayWorkspace.tree, current_output = nil)
     tree['nodes'].map do |node|
-      if node['nodes'] and node['type'] == 'workspace'
-        [SwayWorkspace.new(node)] + SwayWorkspace.all(node)
-      elsif node['nodes']
-        SwayWorkspace.all(node)
+      if node['nodes']
+        case node['type']
+        when 'output'
+          SwayWorkspace.all(node, SwayOutput.new(node))
+        when 'workspace'
+          [SwayWorkspace.new(node, current_output)] + SwayWorkspace.all(node, current_output)
+        else
+          SwayWorkspace.all(node, current_output)
+        end
       else
         []
       end
@@ -452,7 +465,8 @@ class SwayWorkspace
   def reset_master_size
     resize_axis = flipped? ? 'height' : 'width'
     ratio = halved? ? 0.5 : 0.605
-    size = @rect[resize_axis] * ratio - @rect['x'] / 2  # x accounts for gaps
+    gaps = (@output.rect['width'] - @rect['width']) / 2
+    size = @rect[resize_axis] * ratio - gaps / 2
     master_window = windows(master).first
     swaymsg(['resize', 'set', resize_axis, size.round, 'px'], master_window) if master_window
   end
