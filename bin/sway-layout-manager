@@ -194,25 +194,28 @@ class SwayWorkspace
   end
 
   def balance
-    if flipped?
-      first_move_dir = 'up'
-      second_move_dir = 'down'
-      split_dir = 'splith'
-    else
-      first_move_dir = 'left'
-      second_move_dir = 'right'
-      split_dir = 'splitv'
-    end
-
     # Rebuild master and stack containers
-    windows(container(0)).each_with_index do |window, i|
-      swaymsg(['move', first_move_dir], window)
-      swaymsg([split_dir], window) if i == 0
-    end
+    if flipped?
+      windows(container(0)).each_with_index do |window, i|
+        swaymsg(['move', 'up'], window)
+        swaymsg(['splith'], window) if i == 0
+      end
 
-    windows(container(1)).reverse.each_with_index do |window, i|
-      swaymsg(['move', second_move_dir], window)
-      swaymsg([split_dir], window) if i == 0
+      windows(container(1)).reverse.each_with_index do |window, i|
+        swaymsg(['move', 'down'], window)
+        swaymsg(['splith'], window) if i == 0
+      end
+    else
+      windows(container(0)).reverse.each_with_index do |window, i|
+        swaymsg(['move', 'left'], window)
+        swaymsg(['move', 'right'], window)
+        swaymsg(['splitv'], window) if i == 0
+      end
+
+      windows(container(1)).reverse.each_with_index do |window, i|
+        swaymsg(['move', 'right'], window)
+        swaymsg(['splitv'], window) if i == 0
+      end
     end
 
     reset_master_size
