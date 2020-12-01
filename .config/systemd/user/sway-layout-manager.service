@@ -4,6 +4,7 @@ PartOf=sway-session.target
 
 [Service]
 ExecStart=%h/bin/sway-layout-manager monitor
+Restart=on-failure
 
 [Install]
 WantedBy=sway-session.target
