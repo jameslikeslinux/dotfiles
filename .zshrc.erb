@@ -107,7 +107,7 @@ if [[ -x $(whence dircolors) ]]; then
 fi
 
 # Aliases
-ls --help 2>&1 | grep -- '--color' > /dev/null && alias ls='ls --color'
+ls --help 2>&1 | grep -- '--color=auto' > /dev/null && alias ls='ls --color=auto'
 alias vi="$EDITOR"
 unalias cp 2>/dev/null
 alias mv='mv -f'
