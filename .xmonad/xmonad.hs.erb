@@ -104,7 +104,7 @@ topicConfig = def
         , ("dev"    , (ask >>= spawn . terminal . config))
         , ("music"  , spawn "chromium --app=https://music.youtube.com/")
         , ("mail"   , spawn "firefox --new-window https://mail.google.com/mail/u/0/#inbox --new-window https://mail.google.com/mail/u/1/#inbox")
-<% if @facts['hostname'] == 'eagle' -%>
+<% if @facts['hostname'] == 'hawk' -%>
         , ("chat"   , spawn "firefox --new-window web.webex.com")
 <% end -%>
 <% libvirtd_connect_str = @facts['hostname'] == 'hawk' ? 'qemu:///system' : 'qemu+ssh://root@hawk/system' -%>
