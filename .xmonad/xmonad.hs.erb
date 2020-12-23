@@ -107,8 +107,8 @@ topicConfig = def
 <% if @facts['hostname'] == 'eagle' -%>
         , ("chat"   , spawn "firefox --new-window web.webex.com")
 <% end -%>
-<% libvirtd_connect_str = @facts['hostname'] == 'eagle' ? 'qemu:///system' : 'qemu+ssh://root@eagle/system' -%>
-        , ("windows", spawn "GDK_DPI_SCALE=<%= gui_scaling_factor %> GDK_SCALE=1 virt-viewer --full-screen --connect=<%= libvirtd_connect_str %> --wait --reconnect osprey")
+<% libvirtd_connect_str = @facts['hostname'] == 'hawk' ? 'qemu:///system' : 'qemu+ssh://root@hawk/system' -%>
+        , ("windows", spawn "GDK_DPI_SCALE=<%= gui_scaling_factor %> GDK_SCALE=1 virt-viewer --full-screen --connect=<%= libvirtd_connect_str %> --wait --reconnect buzzard")
         ]
     }
 
@@ -282,7 +282,7 @@ main = xmonad
     , ("M-`"           , spawn "~/.xmonad/scripts/toggle-dpms")
 <% if @facts['hostname'] == 'falcon' -%>
     , ("M-b"           , rofi >>= \cmd -> spawn $ "env ROFI='" ++ cmd ++ "' ~/bin/brightness")
-    , ("M-<Up>"        , spawn "~/bin/switch-input hawk")
+    , ("M-<Up>"        , spawn "~/bin/switch-input caracara")
     , ("M-<Down>"      , spawn "~/bin/switch-input falcon")
     , ("M-<Left>"      , spawn "~/bin/switch-input kite")
     , ("M-<Right>"     , spawn "~/bin/switch-input falcon")
