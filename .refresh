@@ -1,5 +1,3 @@
 #!/usr/bin/ruby
-
 Process::Sys.setuid('james') if RUBY_PLATFORM =~ /cygwin/
-basedir = File.dirname(__FILE__)
-exec "#{basedir}/bin/refresh-dotfiles", '--no-fetch'
+exec "#{File.dirname(__FILE__)}/bin/refresh-dotfiles", '--no-fetch'

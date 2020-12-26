@@ -2,8 +2,7 @@
 #
 # refresh-dotfiles
 #
-# Pull the latest configuration changes from GitHub and
-# process ERB templates with Puppet
+# Pull the latest configuration from Git and process ERB templates with Puppet
 #
 
 # Process files relative to this script.
@@ -128,8 +127,8 @@ if [[ -z $no_fetch ]]; then
     git reset --hard "origin/${branch}"
 fi
 
-# Process templates with Puppet unless we're on a branch or clone
-if [[ $branch == 'main' || $branch == 'windows' || $PWD != $HOME ]]; then
+# Process templates with Puppet if we're on the main branch or a clone
+if [[ $branch == 'main' || $PWD != $HOME ]]; then
     "$PUPPET" module install puppetlabs-stdlib
     [[ -d /tmp/cache ]] && rmdir --ignore-fail-on-non-empty /tmp/cache
 
