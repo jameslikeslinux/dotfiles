@@ -139,10 +139,6 @@ p() { cd "${HOME}/projects/${1}" && ls }
 compdef "_files -W ${HOME}/projects" p
 
 # Set standard umask
-if [[ $OS == 'Windows_NT' ]]; then
-    umask 002
-else
-    umask 022
-fi
+umask 022
 
 # vim:ft=zsh
