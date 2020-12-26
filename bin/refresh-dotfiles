@@ -7,11 +7,11 @@
 #
 
 # Process files relative to this script
-BASEDIR="$(readlink -f "$(dirname "$0")/..")"
+BASEDIR="$(dirname "$0")/.."
 
 # Just download and extract compiled repository in non-git-based directories
-if [[ ! -d "$BASEDIR/.git" ]]; then
-    curl -s https://codeload.github.com/iamjamestl/dotfiles/tar.gz/compiled | tar -C "$BASEDIR" -xvzf - --strip 1
+if [[ ! -d "${BASEDIR}/.git" ]]; then
+    curl -s https://gitlab.james.tl/james/dotfiles/-/archive/preprocessed/dotfiles-preprocessed.tar.gz | tar -C "$BASEDIR" -xvzf - --strip 1
     exit
 fi
 
@@ -19,19 +19,18 @@ fi
 TMPFILE="$(mktemp)"
 trap "rm -f '$TMPFILE'" EXIT INT TERM
 
-# A place to keep track of what this script manages
-DOT_TEMPLATES_ORIG="${BASEDIR}/.templates"
-
+# Puppet on Windows is not a Cygwin app--it needs Windows paths
 if [[ $OSTYPE == 'cygwin' ]]; then
     BASEDIR="$(cygpath -am "$BASEDIR")"
     TMPFILE="$(cygpath -am "$TMPFILE")"
     PUPPET='puppet.bat'
-
-    DOT_TEMPLATES="${BASEDIR}/.templates"
 else
     PUPPET='puppet'
-    DOT_TEMPLATES="$DOT_TEMPLATES_ORIG"
 fi
+
+# A place to keep track of what this script manages
+DOT_TEMPLATES="${BASEDIR}/.templates"
+
 
 #
 # Read and parse command line options
@@ -74,18 +73,10 @@ while true; do
     esac
 done
 
-mode() {
-    if [[ $OSTYPE == 'cygwin' ]]; then
-        stat -c '%a' "$(cygpath "$1")"
-    else
-        stat -c '%a' "$1"
-    fi
-}
-
 generate_manifest() {
     # Create/update dotfiles from templates in git
     git ls-files '*.erb' | while read template; do
-        mode="$(mode "$template")"
+        mode="$(stat -c '%a' "$template")"
         cat <<END
 file { '${BASEDIR}/${template%.erb}':
   mode    => '${mode}',
@@ -126,7 +117,7 @@ END
 # Main program
 #
 cd "$BASEDIR"
-touch "$DOT_TEMPLATES_ORIG"
+touch "$DOT_TEMPLATES"
 
 branch="$(git rev-parse --abbrev-ref HEAD)"
 
@@ -136,8 +127,8 @@ if [[ -z $no_fetch ]]; then
     git reset --hard "origin/${branch}"
 fi
 
-# Process templates with Puppet unless we're on a branch
-if [[ $branch == 'main' || $BASEDIR != $(readlink -f "$HOME") ]]; then
+# Process templates with Puppet unless we're on a branch or clone
+if [[ $branch == 'main' || $branch == 'windows' || $PWD != $HOME ]]; then
     "$PUPPET" module install puppetlabs-stdlib
     [[ -d /tmp/cache ]] && rmdir --ignore-fail-on-non-empty /tmp/cache
     generate_manifest > "$TMPFILE"

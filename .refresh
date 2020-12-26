@@ -1,10 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/ruby
 
-if [[ $1 ]]; then
-    export HOME="$(eval echo "~${1}")"
-else
-    export HOME=~
-fi
-
-BASEDIR="$(readlink -f "$(dirname "$0")")"
-exec "${BASEDIR}/bin/refresh-dotfiles" --no-fetch
+Process::Sys.setuid('james') if RUBY_PLATFORM =~ /cygwin/
+basedir = File.dirname(__FILE__)
+exec "#{basedir}/bin/refresh-dotfiles", '--no-fetch'
