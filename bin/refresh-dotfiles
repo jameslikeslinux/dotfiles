@@ -6,8 +6,9 @@
 # process ERB templates with Puppet
 #
 
-# Process files relative to this script
-BASEDIR="$(dirname "$0")/.."
+# Process files relative to this script.
+# This needs to be an absolute path for use in the generated Puppet manifest.
+BASEDIR="$(realpath "$(dirname "$0")/..")"
 
 # Just download and extract compiled repository in non-git-based directories
 if [[ ! -d "${BASEDIR}/.git" ]]; then
@@ -16,13 +17,13 @@ if [[ ! -d "${BASEDIR}/.git" ]]; then
 fi
 
 # Create place to store generated Puppet manifest
-TMPFILE="$(mktemp)"
-trap "rm -f '$TMPFILE'" EXIT INT TERM
+MANIFEST="$(mktemp)"
+trap "rm -f '$MANIFEST'" EXIT INT TERM
 
 # Puppet on Windows is not a Cygwin app--it needs Windows paths
 if [[ $OSTYPE == 'cygwin' ]]; then
     BASEDIR="$(cygpath -am "$BASEDIR")"
-    TMPFILE="$(cygpath -am "$TMPFILE")"
+    MANIFEST="$(cygpath -am "$MANIFEST")"
     PUPPET='puppet.bat'
 else
     PUPPET='puppet'
@@ -131,10 +132,13 @@ fi
 if [[ $branch == 'main' || $branch == 'windows' || $PWD != $HOME ]]; then
     "$PUPPET" module install puppetlabs-stdlib
     [[ -d /tmp/cache ]] && rmdir --ignore-fail-on-non-empty /tmp/cache
-    generate_manifest > "$TMPFILE"
-    RUBYLIB="${BASEDIR}/lib/ruby" "$PUPPET" apply "$TMPFILE"
 
-    if [[ $OSTYPE == 'cygwin' ]]; then
-        "$PUPPET" resource file "${BASEDIR}/.ssh/config" 'mode=600'
-    fi
+    generate_manifest > "$MANIFEST"
+    cat >> "$MANIFEST" <<END_SPECIAL
+File <| title == '${BASEDIR}/.ssh/config' |> {
+  mode => '0600',
+}
+END_SPECIAL
+
+    RUBYLIB="${BASEDIR}/lib/ruby" "$PUPPET" apply "$MANIFEST"
 fi
