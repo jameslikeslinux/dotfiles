@@ -106,9 +106,10 @@ topicConfig = def
         , ("mail"   , spawn "firefox --new-window https://mail.google.com/mail/u/0/#inbox --new-window https://mail.google.com/mail/u/1/#inbox")
 <% if @facts['hostname'] == 'hawk' -%>
         , ("chat"   , spawn "firefox --new-window web.webex.com")
+        , ("windows", spawn "GDK_DPI_SCALE=<%= gui_scaling_factor %> GDK_SCALE=1 virt-viewer --full-screen --connect=qemu:///system --wait --reconnect buzzard")
+<% else -%>
+        , ("windows", spawn "GDK_DPI_SCALE=<%= gui_scaling_factor %> GDK_SCALE=1 virt-viewer --full-screen --spice-preferred-compression=auto-glz --connect=qemu+ssh://root@hawk/system --wait --reconnect buzzard")
 <% end -%>
-<% libvirtd_connect_str = @facts['hostname'] == 'hawk' ? 'qemu:///system' : 'qemu+ssh://root@hawk/system' -%>
-        , ("windows", spawn "GDK_DPI_SCALE=<%= gui_scaling_factor %> GDK_SCALE=1 virt-viewer --full-screen --connect=<%= libvirtd_connect_str %> --wait --reconnect buzzard")
         ]
     }
 
