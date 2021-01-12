@@ -2,7 +2,7 @@
 Description=VPN connection launcher
 PartOf=graphical-session.target
 After=plasma-networkmanagement.service
-ConditionHost=eagle
+ConditionHost=hawk
 
 [Service]
 Type=oneshot
