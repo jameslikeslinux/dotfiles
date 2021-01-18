@@ -426,7 +426,9 @@ class SwayWorkspaces < StatusWidget
   end
 
   def segments
-    workspaces = JSON.parse(`swaymsg -t get_workspaces`).select { |ws| ws['num'] > 0 }
+    workspaces = JSON.parse(`swaymsg -t get_workspaces`)
+    workspaces.select! { |ws| ws['num'] > 0 }
+    workspaces.sort! { |a, b| a['num'] <=> b['num'] }
     (1..@count).each do |num|
       fifo = @fifos[num - 1]
       workspace = workspaces.find { |ws| ws['num'] == num }
