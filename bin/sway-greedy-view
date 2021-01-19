@@ -11,28 +11,37 @@ if [[ $# != 1 ]]; then
 fi
 
 target_ws="$1"
+target_ws_num="${target_ws%:*}"
 
 workspaces="$(swaymsg -t get_workspaces)"
-<<< "$workspaces" jq -r ".[] | select(.name == \"${target_ws}\") | .visible, .output, .focus == []" | IFS=$'\n' read -d '' target_ws_visible target_ws_output target_ws_empty
+<<< "$workspaces" jq -r ".[] | select(.num == ${target_ws_num}) | .visible, .output, .focus == []" | IFS=$'\n' read -d '' target_ws_visible target_ws_output target_ws_empty
 <<< "$workspaces" jq -r '.[] | select(.focused) | .name, .output, .focus == []' | IFS=$'\n' read -d '' focused_ws focused_ws_output focused_ws_empty
 
 if [[ $target_ws_visible != 'true' ]]; then
     if [[ $target_ws_output != '' && $target_ws_output != $focused_ws_output ]]; then
+        # Bring hidden workspace to this output
         swaymsg "[workspace=\"${target_ws}\"]" move workspace output "$focused_ws_output"
     else
-        swaymsg workspace "$target_ws"
+        # View hidden workspace already on this output
+        swaymsg workspace number "$target_ws"
     fi
-elif [[ $target_ws != $focused_ws ]]; then
-    # Empty workspaces cannot be moved so use a sequence of commands that
-    # causes the empty workspace to be hidden (removed), then restore it on the
-    # correct output.
-    if [[ $target_ws_empty == 'true' && $focused_ws_empty == 'true' ]]; then
+elif [[ $target_ws_num != ${focused_ws%:*} ]]; then
+    if [[ $target_ws == $target_ws_num ]]; then
+        # Avoid greedy view when given a bare number, such as from waybar
+        swaymsg workspace number "$target_ws_num"
+    elif [[ $target_ws_empty == 'true' && $focused_ws_empty == 'true' ]]; then
+        # Swap two empty workspaces.  Empty workspaces cannot be moved so use a
+        # sequence of commands that cause the workspace to be hidden (removed),
+        # then restore it on the correct output.
         swaymsg "workspace _; focus output '${target_ws_output}'; workspace '${focused_ws}'; focus output '${focused_ws_output}'; workspace '${target_ws}'"
     elif [[ $target_ws_empty == 'true' ]]; then
+        # Bring empty workspace to current output
         swaymsg "[workspace=\"${focused_ws}\"] move workspace output '${target_ws_output}'; focus output '${focused_ws_output}'; workspace '${target_ws}'"
     elif [[ $focused_ws_empty == 'true' ]]; then
+        # Send empty workspace to other output
         swaymsg "[workspace=\"${target_ws}\"] move workspace output '${focused_ws_output}'; focus output '${target_ws_output}'; workspace '${focused_ws}'; focus output '${focused_ws_output}'"
     else
+        # Swap two non-empty workspaces
         swaymsg "[workspace=\"${focused_ws}\"] move workspace output '${target_ws_output}'; [workspace=\"${target_ws}\"] move workspace output '${focused_ws_output}'"
     fi
 fi
