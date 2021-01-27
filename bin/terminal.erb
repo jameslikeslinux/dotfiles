@@ -1,9 +1,0 @@
-#!/usr/bin/env zsh
-<% case @facts['platform'] -%>
-<% when 'pinebookpro' -%>
-exec alacritty "$@"
-<% when 'raspberrypi' -%>
-exec xterm "$@"
-<% else -%>
-exec urxvt "$@"
-<% end -%>
