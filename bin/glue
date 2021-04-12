@@ -14,4 +14,4 @@ if (( ARGC == 0 )); then
     fi
 fi
 
-exec ssh -qt stowe.umd.edu "$@"
+exec ssh -qt -J avw-unix-jump-noafs.umd.edu stowe.umd.edu "$@"
