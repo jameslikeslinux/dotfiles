@@ -5,3 +5,11 @@ dark = ColorScheme.dark.colors_by_base -%>
     background-color: <%= dark[0x01].web %> !important;
   }
 }
+<% if @facts['os']['family'] == 'Gentoo' -%>
+
+/* Respect Gtk theme */
+* {
+  scrollbar-color: auto !important;
+  scrollbar-width: auto !important;
+}
+<% end -%>

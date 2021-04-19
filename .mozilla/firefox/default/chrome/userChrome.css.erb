@@ -7,8 +7,8 @@ offset = (3 * gui_scaling_factor).round -%>
 @supports -moz-bool-pref("nest.contextMenuOffsetTweak") {
     #contentAreaContextMenu { margin: <%= offset %>px 0 0 <%= offset %>px }
 }
-
 <% if @facts['os']['family'] == 'Gentoo' -%>
+
 /* Highlight selected tab with blue from color scheme */
 .tab-line[selected="true"] {
     background-color: <%= require 'colorscheme'; ColorScheme.dark.colors_by_base[0x0D].web %> !important;
