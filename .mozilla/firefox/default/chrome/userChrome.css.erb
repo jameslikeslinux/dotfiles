@@ -8,9 +8,17 @@ offset = (3 * gui_scaling_factor).round -%>
     #contentAreaContextMenu { margin: <%= offset %>px 0 0 <%= offset %>px }
 }
 <% if @facts['os']['family'] == 'Gentoo' -%>
+<% require 'colorscheme'; blue = ColorScheme.dark.colors_by_base[0x0D].web -%>
 
-/* Highlight selected tab with blue from color scheme */
-.tab-line[selected="true"] {
-    background-color: <%= require 'colorscheme'; ColorScheme.dark.colors_by_base[0x0D].web %> !important;
+/*
+ * -moz-accent-color changed around Firefox 87
+ * Restore blue accent color to tabs and the urlbar
+ */
+:root {
+    --toolbar-field-focus-border-color: <%= blue %> !important;
+}
+
+#tabbrowser-tabs {
+    --tab-line-color: <%= blue %> !important;
 }
 <% end -%>
