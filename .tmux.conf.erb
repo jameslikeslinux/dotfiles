@@ -51,8 +51,9 @@ bind-key -T root TripleClick1Pane if-shell -Ft{mouse} '#{alternate_on}' 'send-ke
 set -s set-clipboard on
 set -s terminal-overrides 'rxvt-unicode*:Ms=\E]52;%p1%s;%p2%s\007,tmux*:Ms=\E]52;%p1%s;%p2%s\007'
 
-# Alacritty uses system clipboard by default; force primary clipboard
-set -sa terminal-overrides ',alacritty*:Ms=\E]52;p;%p2%s\007'
+# Alacritty and Foot uses system clipboard by default
+# Force primary clipboard
+set -sa terminal-overrides ',alacritty*:Ms=\E]52;p;%p2%s\007,foot*:Ms=\E]52;p;%p2%s\007'
 
 # Enable real truecolor when the TERM indicates support
 set -sa terminal-overrides ',*truecolor*:Tc'
