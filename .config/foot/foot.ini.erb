@@ -1,0 +1,28 @@
+<% require 'colorscheme'
+dark = ColorScheme.dark
+-%>
+term=foot-powerline
+
+[colors]
+foreground=<%= dark.foreground.hex %>
+background=<%= dark.background.hex %>
+regular0=<%= dark.terminal[0].hex %>
+regular1=<%= dark.terminal[1].hex %>
+regular2=<%= dark.terminal[2].hex %>
+regular3=<%= dark.terminal[3].hex %>
+regular4=<%= dark.terminal[4].hex %>
+regular5=<%= dark.terminal[5].hex %>
+regular6=<%= dark.terminal[6].hex %>
+regular7=<%= dark.terminal[7].hex %>
+bright0=<%= dark.terminal[8].hex %>
+bright1=<%= dark.terminal[9].hex %>
+bright2=<%= dark.terminal[10].hex %>
+bright3=<%= dark.terminal[11].hex %>
+bright4=<%= dark.terminal[12].hex %>
+bright5=<%= dark.terminal[13].hex %>
+bright6=<%= dark.terminal[14].hex %>
+bright7=<%= dark.terminal[15].hex %>
+selection-foreground=<%= dark.background.hex %>
+selection-background=<%= dark.cursor.hex %>
+
+# vim=filetype=dosini
