@@ -36,7 +36,7 @@ bindsym $mod+t            floating toggle
 bindsym $mod+x            kill
 bindsym $mod+p            exec rofi -show drun -dpi <%= (96 * scaling_ratio).round %>
 bindsym $mod+q            reload
-bindsym $mod+Shift+q      exec swaynag -t warning -m '' -b 'Yes, exit sway' 'swaymsg exit'
+bindsym $mod+Shift+q      exec swaynag -t warning -m '' -b 'Yes, exit sway' 'systemctl --user stop sway-session.target; swaymsg exit'
 
 bindsym $mod+h         focus left
 bindsym $mod+l         focus right
@@ -133,6 +133,6 @@ for_window [title="Sway Idle Inhibitor"] move workspace idler, inhibit_idle open
 #
 # Session
 #
-exec '~/bin/reset-systemd-environment && systemctl --user start sway-session.target'
+exec '~/bin/reset-systemd-environment && systemctl --user restart sway-session.target'
 
 # vim: filetype=conf
