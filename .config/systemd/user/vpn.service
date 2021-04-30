@@ -6,6 +6,8 @@ ConditionHost=hawk
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/nmcli connection up umd-oitmr
+ExecStop=/usr/bin/nmcli connection down umd-oitmr
+RemainAfterExit=yes
 
 [Install]
 WantedBy=graphical-session.target
