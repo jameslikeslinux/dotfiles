@@ -1,0 +1,4 @@
+[Unit]
+Description=Wayland session
+RefuseManualStart=yes
+StopWhenUnneeded=yes

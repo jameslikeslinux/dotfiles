@@ -1,3 +1,4 @@
 [Unit]
 Description=Sway session
+BindsTo=wayland-session.target
 PartOf=graphical-session.target
