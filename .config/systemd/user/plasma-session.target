@@ -1,4 +1,3 @@
 [Unit]
 Description=Plasma session
 BindsTo=graphical-session.target
-PartOf=sway-session.target x-session.target

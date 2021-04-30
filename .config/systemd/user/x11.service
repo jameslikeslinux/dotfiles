@@ -1,8 +1,0 @@
-[Unit]
-Description=X11 watcher
-RefuseManualStart=yes
-
-[Service]
-ExecStart=/usr/bin/xprop -root -spy
-StandardOutput=null
-SuccessExitStatus=1
