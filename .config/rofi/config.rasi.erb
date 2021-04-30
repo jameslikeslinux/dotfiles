@@ -1,0 +1,7 @@
+<% text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1 -%>
+configuration {
+    dpi: <%= (96 * text_scaling_factor).round %>;
+    theme: "dark";
+}
+
+/* vim: filetype=css
