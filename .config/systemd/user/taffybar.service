@@ -1,10 +1,9 @@
 [Unit]
 Description=Taffybar
-PartOf=graphical-session.target
+PartOf=xmonad-session.target
 
 [Service]
-ExecCondition=/usr/bin/test ${KDEWM} = /usr/bin/xmonad
 ExecStart=/usr/bin/taffybar
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=xmonad-session.target

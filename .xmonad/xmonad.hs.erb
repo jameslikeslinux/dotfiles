@@ -164,8 +164,10 @@ reflectWith swapFn = do
 -- HOOKS
 --
 
--- ewmh should set this at startup but doesn't
-startupHook' = spawnOnce "xprop -root -f _NET_CURRENT_DESKTOP 32c -set _NET_CURRENT_DESKTOP 0"
+startupHook' = do
+    -- ewmh should set this at startup but doesn't
+    spawnOnce "xprop -root -f _NET_CURRENT_DESKTOP 32c -set _NET_CURRENT_DESKTOP 0"
+    spawn "systemctl --user start xmonad-session.target"
 
 logHook' = do
     switchTopicHook

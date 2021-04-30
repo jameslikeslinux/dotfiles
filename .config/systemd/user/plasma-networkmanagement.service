@@ -1,6 +1,6 @@
 [Unit]
 Description=Plasma networkmanagement module
-PartOf=graphical-session.target
+PartOf=plasma-session.target
 
 [Service]
 Type=oneshot
@@ -9,4 +9,4 @@ ExecStart=/usr/bin/qdbus org.kde.kded5 /modules/networkmanagement init
 RemainAfterExit=yes
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=plasma-session.target

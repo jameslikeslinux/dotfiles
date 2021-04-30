@@ -1,10 +1,9 @@
 [Unit]
 Description=Waybar
-PartOf=graphical-session.target
+PartOf=sway-session.target
 
 [Service]
-ExecCondition=/usr/bin/test -S ${SWAYSOCK}
 ExecStart=/usr/bin/waybar
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=sway-session.target

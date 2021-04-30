@@ -1,6 +1,6 @@
 [Unit]
-Description=X resources
-PartOf=graphical-session.target
+Description=restore X resources overwritten by Plasma
+PartOf=plasma-session.target
 
 [Service]
 Type=oneshot
@@ -9,4 +9,4 @@ ExecStart=/usr/bin/xrdb -merge /etc/sway/Xresources
 RemainAfterExit=yes
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=plasma-session.target
