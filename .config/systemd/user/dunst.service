@@ -1,9 +1,0 @@
-[Unit]
-Description=Dunst notification service
-PartOf=xmonad-session.target
-
-[Service]
-ExecStart=/usr/bin/dunst
-
-[Install]
-WantedBy=xmonad-session.target
