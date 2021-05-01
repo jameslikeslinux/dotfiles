@@ -1,0 +1,10 @@
+[Unit]
+Description=Barrier keyboard/mouse server
+PartOf=x-session.target
+ConditionHost=falcon
+
+[Service]
+ExecStart=/usr/bin/barriers --no-daemon --no-restart
+
+[Install]
+WantedBy=x-session.target
