@@ -1,9 +1,0 @@
-[Unit]
-Description=Dunst notification service
-PartOf=sway-session.target xmonad-session.target
-
-[Service]
-ExecStart=/usr/bin/dunst
-
-[Install]
-WantedBy=sway-session.target xmonad-session.target
