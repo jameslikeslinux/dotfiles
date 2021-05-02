@@ -1,0 +1,24 @@
+<% gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
+offset = (3 * gui_scaling_factor).round -%>
+/*
+ * Fix context menu position on xmonad
+ * See: https://www.reddit.com/r/firefox/comments/672ef7/rightclick_menu_open_under_mouse_cursor/?st=j8gt6u78&sh=c59dd405
+ */
+@supports -moz-bool-pref("nest.contextMenuOffsetTweak") {
+    #contentAreaContextMenu { margin: <%= offset %>px 0 0 <%= offset %>px }
+}
+<% if @facts['os']['family'] == 'Gentoo' -%>
+
+/*
+ * Accent color selection changed in Firefox 87
+ * Restore blue accent color to tabs and the urlbar
+ * See: https://bugzilla.mozilla.org/show_bug.cgi?id=1703679
+ */
+:root {
+    --toolbar-field-focus-border-color: highlight !important;
+}
+
+#tabbrowser-tabs {
+    --tab-line-color: highlight !important;
+}
+<% end -%>
