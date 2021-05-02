@@ -47,8 +47,8 @@ bindsym Mod1+Shift+Tab exec sway-layout-manager focus_prev
 bindsym $mod+semicolon [con_mark="_last_focused"] focus
 
 bindsym $mod+s                exec ~/.xmonad/scripts/screensaver toggle
-bindsym $mod+Space            exec ~/.xmonad/scripts/play-pause
-bindsym XF86AudioPlay         exec ~/.xmonad/scripts/play-pause
+bindsym $mod+Space            exec playerctl play-pause
+bindsym XF86AudioPlay         exec playerctl play-pause
 bindsym XF86AudioMicMute      exec ~/.xmonad/scripts/volume toggle-mute
 bindsym XF86AudioMute         exec ~/.xmonad/scripts/volume toggle-mute
 bindsym XF86AudioLowerVolume  exec ~/.xmonad/scripts/volume -0.5dB

@@ -95,14 +95,14 @@ topicConfig :: TopicConfig
 topicConfig = def
     { defaultTopicAction = \topic -> return ()
     , topicActions = fromList $
-<% if ['owl', 'caracara'].include? @facts['hostname'] -%>
+<% if ['harrier', 'owl'].include? @facts['hostname'] -%>
         [ ("web"    , spawn "firefox --browser")
 <% else -%>
         [ ("web"    , spawn "firefox --browser twitter.com washingtonpost.com")
 <% end -%>
         , ("ops"    , (ask >>= spawn . terminal . config))
         , ("dev"    , (ask >>= spawn . terminal . config))
-        , ("music"  , spawn "chromium --app=https://music.youtube.com/")
+        , ("music"  , spawn "firefox -P music --kiosk https://music.youtube.com/")
         , ("mail"   , spawn "firefox --new-window https://mail.google.com/mail/u/0/#inbox --new-window https://mail.google.com/mail/u/1/#inbox")
 <% if @facts['hostname'] == 'hawk' -%>
         , ("chat"   , spawn "firefox --new-window web.webex.com")
@@ -290,8 +290,8 @@ main = xmonad
     , ("M-<Left>"      , spawn "~/bin/switch-input kite")
     , ("M-<Right>"     , spawn "~/bin/switch-input falcon")
 <% end -%>
-    , ("M-<Space>"               , spawn "~/.xmonad/scripts/play-pause")
-    , ("<XF86AudioPlay>"         , spawn "~/.xmonad/scripts/play-pause")
+    , ("M-<Space>"               , spawn "playerctl play-pause")
+    , ("<XF86AudioPlay>"         , spawn "playerctl play-pause")
     , ("<XF86AudioMicMute>"      , spawn "~/.xmonad/scripts/mic toggle-mute")
     , ("<XF86AudioMute>"         , raisePanelTemporarily >> spawn "~/.xmonad/scripts/volume toggle-mute")
     , ("<XF86AudioLowerVolume>"  , raisePanelTemporarily >> spawn "~/.xmonad/scripts/volume -0.5dB")
