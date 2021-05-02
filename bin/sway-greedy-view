@@ -16,10 +16,12 @@ swaymsg -t get_workspaces | jq -r "
     sort_by(.focused | not) | .[] | (
         select(.focused) | .name, .num, .output, .focus == []
     ), (
-        select(.num == ${target_ws_num}) | .visible, .output, .focus == []
+        select(.num == ${target_ws_num}) | .name, .visible, .output, .focus == []
     )
 " | IFS=$'\n' read -d '' focused_ws focused_ws_num focused_ws_output focused_ws_empty \
-                         target_ws_visible target_ws_output target_ws_empty
+                         target_ws target_ws_visible target_ws_output target_ws_empty
+
+target_ws="${target_ws:-$1}"
 
 if [[ $target_ws_visible != 'true' ]]; then
     if [[ $target_ws_output != '' && $target_ws_output != $focused_ws_output ]]; then
