@@ -24,7 +24,7 @@ run-shell ~/.tmux/theme.tmux
 bind-key t command-prompt -I 't ' "run-shell '~/bin/%%'"
 
 # Shortcut to detach all other clients attached to this session
-bind-key M-d run-shell "t '#S' -D"
+bind-key M-d detach-client -a
 
 # Shortcut to kill all other windows than the current one
 bind-key M-& confirm-before -p 'kill other windows? (y/n)' 'kill-window -a'
