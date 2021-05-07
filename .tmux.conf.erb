@@ -45,7 +45,7 @@ bind-key X run-shell ~/.tmux/term-compat.tmux
 set -s set-clipboard on
 set -s terminal-overrides 'rxvt-unicode*:Ms=\E]52;%p1%s;%p2%s\007,tmux*:Ms=\E]52;%p1%s;%p2%s\007'
 
-# Alacritty and Foot uses system clipboard by default
+# Alacritty and Foot use system clipboard by default
 # Force primary clipboard
 set -sa terminal-overrides ',alacritty*:Ms=\E]52;p;%p2%s\007,foot*:Ms=\E]52;p;%p2%s\007'
 
