@@ -166,16 +166,30 @@ class SwayWorkspace
   end
 
   def flip
-    outer  = container(0)
-    first  = windows(container(0)).first
-    second = windows(container(1)).first
+    outer_container        = container(0)
+    first_stack_windows    = windows(outer_container).first
+    second_stack_container = container(1)
+    second_stack_windows   = windows(second_stack_container).first
 
-    swaymsg(['layout', 'toggle', 'split'], outer) if outer
-    swaymsg(['layout', 'toggle', 'split'], first) if first
-    swaymsg(['layout', 'toggle', 'split'], second) if second
+    if flipped?
+      second_to_first = 'up'
+      first_to_second = 'right'
+    else
+      second_to_first = 'left'
+      first_to_second = 'down'
+    end
+
+    swaymsg(['move', second_to_first], second_stack_container) if second_stack_container
+    swaymsg(['layout', 'toggle', 'split'], first_stack_windows) if first_stack_windows
+    swaymsg(['split', 'toggle'], outer_container) if outer_container
+    swaymsg(['move', first_to_second], second_stack_container) if second_stack_container
+    swaymsg(['layout', 'toggle', 'split'], second_stack_windows) if second_stack_windows
+
+    # Window moves change focus; set it back
+    keep_focus
 
     # Retain ratio of master to stack size
-    if first
+    if first_stack_windows
       if flipped?
         source_size_axis = 'height'
         target_size_axis = 'width'
@@ -183,8 +197,8 @@ class SwayWorkspace
         source_size_axis = 'width'
         target_size_axis = 'height'
       end
-      source_size_ratio = first['rect'][source_size_axis].to_f / @rect[source_size_axis]
-      swaymsg(['resize', 'set', target_size_axis, (@rect[target_size_axis] * source_size_ratio).round, 'px'], first)
+      source_size_ratio = first_stack_windows['rect'][source_size_axis].to_f / @rect[source_size_axis]
+      swaymsg(['resize', 'set', target_size_axis, (@rect[target_size_axis] * source_size_ratio).round, 'px'], first_stack_windows)
     end
 
     @flipped = !@flipped
@@ -198,7 +212,7 @@ class SwayWorkspace
     if flipped?
       windows(container(0)).each_with_index do |window, i|
         swaymsg(['move', 'up'], window)
-        swaymsg(['splith'], window) if i == 0
+        swaymsg(['layout', 'splith'], window) if i == 0
       end
 
       windows(container(1)).reverse.each_with_index do |window, i|
@@ -209,7 +223,7 @@ class SwayWorkspace
       windows(container(0)).reverse.each_with_index do |window, i|
         swaymsg(['move', 'left'], window)
         swaymsg(['move', 'right'], window)
-        swaymsg(['splitv'], window) if i == 0
+        swaymsg(['layout', 'splitv'], window) if i == 0
       end
 
       windows(container(1)).reverse.each_with_index do |window, i|
@@ -445,7 +459,7 @@ class SwayWorkspace
       swaymsg(['mark', '--add', '--toggle', '_moving'], window) if window['marks'].include?('_moving')
 
       if i == 0
-        swaymsg([split], window) if !master
+        swaymsg(['layout', split], window) if !master
       elsif i == master_cap
         if flipped?
           direction = reflected? ? 'up' : 'down'
