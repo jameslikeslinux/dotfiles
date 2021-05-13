@@ -10,15 +10,20 @@
 IMAGE='nest/tools/bitwarden-cli:<%= @facts['profile']['cpu'] %>'
 
 if podman image inspect "$IMAGE" >& /dev/null; then
-    # Let password prompt and color output work on real terminals
+    # Let the password prompt and color output work on real terminals
     [[ -t 0 ]] && tty_args='--tty'
 
     # Fetch the session token from systemd as written by tools like bw-type
-    eval "$(systemctl --user show-environment | grep '^BW_SESSION=')"
-    export BW_SESSION
+    if [[ ! $BW_SESSION ]]; then
+        eval "$(systemctl --user show-environment | grep '^BW_SESSION=')"
+        export BW_SESSION
+    fi
 
-    # Ensure the config directory exists so the container will start
-    mkdir -p "${HOME}/.config/Bitwarden CLI"
+    # Initialize the configuration with the correct server and file permissions
+    if [[ $(stat -c '%a' "${HOME}/.config/Bitwarden CLI" 2>/dev/null) != '700' ]]; then
+        rm -rf "${HOME}/.config/Bitwarden CLI"
+        podman run --rm -v "${HOME}/.config:/root/.config" "$IMAGE" bw config server vault.thesatelliteoflove.net && print
+    fi
 
     # Run the thing
     exec podman run --rm --interactive $tty_args -e BW_SESSION -v "${HOME}/.config/Bitwarden CLI:/root/.config/Bitwarden CLI" "$IMAGE" bw "$@"
