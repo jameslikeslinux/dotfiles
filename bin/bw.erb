@@ -1,0 +1,25 @@
+#!/usr/bin/env zsh
+#
+# Bitwarden CLI container wrapper
+#
+# Behave like the 'bw' Bitwarden CLI command, but invoke the container
+# built at https://gitlab.james.tl/nest/tools/bitwarden-cli instead.
+#
+
+<% if @facts['profile'] && @facts['profile']['cpu'] -%>
+IMAGE='nest/tools/bitwarden-cli:<%= @facts['profile']['cpu'] %>'
+
+if podman image inspect "$IMAGE" >& /dev/null; then
+    [[ -t 0 ]] && tty_args='--tty'
+    mkdir -p "${HOME}/.config/Bitwarden CLI"
+    exec podman run --rm --interactive $tty_args -e BW_SESSION -v "${HOME}/.config/Bitwarden CLI:/root/.config/Bitwarden CLI" "$IMAGE" bw "$@"
+else
+    print "Run 'podman pull ${IMAGE}'"
+    exit 1
+fi
+<% else -%>
+print "Bitwarden CLI is not supported on this host" >&2
+exit 1
+<% end -%>
+
+# vim: filetype=zsh

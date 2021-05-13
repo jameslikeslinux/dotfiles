@@ -21,9 +21,9 @@ notify() {
 
 unlock_vault() {
     if password="$(ksshaskpass -- Bitwarden)"; then
-        if bw_unlock_output="$(bw unlock --raw <<< "$password")"; then
+        if bw_unlock_output="${$(bw unlock --raw <<< "$password" 2>&1)##*$'\n'}"; then
             systemctl --user set-environment BW_SESSION="$bw_unlock_output"
-            bws sync
+            bws --nointeraction sync
         else
             notify "$bw_unlock_output"
             [[ $bw_unlock_output == 'You are not logged in.' ]] && exit 1
@@ -35,12 +35,12 @@ unlock_vault() {
 }
 
 while true; do
-    if bws_password_output="$(bws get password "$ID")"; then
+    if bws_password_output="${$(bws --nointeraction get password "$ID" 2>&1)##*$'\n'}"; then
         export bws_password_output
         xdotool - <<< 'type $bws_password_output'
         xdotool key Return
         exit 0
-    elif [[ $bws_password_output =~ 'Vault is locked.' ]]; then
+    elif [[ $bws_password_output == 'Vault is locked.' ]]; then
         unlock_vault
     else
         notify "$bws_password_output"
