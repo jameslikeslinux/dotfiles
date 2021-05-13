@@ -139,5 +139,5 @@ File <| title == '${BASEDIR}/.ssh/config' |> {
 }
 END_SPECIAL
 
-    RUBYLIB="${BASEDIR}/lib/ruby" "$PUPPET" apply "$MANIFEST"
+    FACTERLIB="${BASEDIR}/lib/facter" RUBYLIB="${BASEDIR}/lib/ruby" "$PUPPET" apply "$MANIFEST"
 fi
