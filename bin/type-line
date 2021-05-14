@@ -1,0 +1,31 @@
+#!/usr/bin/env zsh
+#
+# Type a line
+#
+# Type the input string as if by keyboard so that, for example,
+# passwords can be entered with a chord, bypassing the clipboard.
+# Detect the correct tool based on window type.
+#
+
+read -r input
+
+wl_type() {
+    exec wtype - <<< "$input"
+}
+
+x11_type() {
+    export input="${input}
+"
+    exec xdotool - <<< 'type $input'
+}
+
+if [[ $XDG_SESSION_TYPE == 'wayland' ]]; then
+    shell="$(swaymsg -t get_tree | jq -r '.. | select(.focused?).shell')"
+    if [[ $shell == 'xwayland' ]]; then
+        x11_type
+    else
+        wl_type
+    fi
+else
+    x11_type
+fi

@@ -36,9 +36,7 @@ unlock_vault() {
 
 while true; do
     if bw_password_output="${$(bw --nointeraction get password "$ID" 2>&1)##*$'\n'}"; then
-        export bw_password_output
-        xdotool - <<< 'type $bw_password_output'
-        xdotool key Return
+        type-line <<< "$bw_password_output"
         exit 0
     elif [[ $bw_password_output == 'Vault is locked.' ]]; then
         unlock_vault
