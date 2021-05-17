@@ -34,8 +34,6 @@ unlock_vault() {
     fi
 }
 
-notify 'Typing...'
-
 while true; do
     if bw_password_output="${$(bw --nointeraction get password "$ID" 2>&1)##*$'\n'}"; then
         type-line <<< "$bw_password_output"

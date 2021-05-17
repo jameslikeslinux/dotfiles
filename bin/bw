@@ -1,0 +1,15 @@
+#!/usr/bin/env zsh
+#
+# Bitwarden CLI wrapper
+#
+# Run a Bitwarden CLI command using the session key retrieved
+# from the systemd user environment
+#
+
+# Fetch the session token from systemd as written by tools like bw-type
+if [[ ! $BW_SESSION ]]; then
+    eval "$(systemctl --user show-environment | grep '^BW_SESSION=')"
+    export BW_SESSION
+fi
+
+exec /opt/bitwarden/bw "$@"
