@@ -197,6 +197,7 @@ manageHook' = composeOne
     [ className =? "ksmserver"      -?> doIgnore
     , className =? "XLogo"          -?> doFloat
     , className =? "systemsettings" -?> doCenterFloat
+    , appName   =? "gp-saml-gui"    -?> doCenterFloat
     , isDesktop                     -?> doWindowAction sendToBottom
     , isDock                        -?> doWindowAction sendToJustAboveDesktop
     , isOSD                         -?> doCenterFloat

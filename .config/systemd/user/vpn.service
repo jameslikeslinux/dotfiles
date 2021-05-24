@@ -1,13 +1,13 @@
 [Unit]
-Description=VPN connection launcher
-After=plasma-networkmanagement.service
+Description=UMD virtual private network
 ConditionHost=hawk
 
 [Service]
-Type=oneshot
-ExecStart=/usr/bin/nmcli connection up umd-oitmr
-ExecStop=/usr/bin/nmcli connection down umd-oitmr
-RemainAfterExit=yes
+Type=forking
+PIDFile=vpn.pid
+ExecStart=/usr/bin/gp-saml-gui --gateway --pkexec-openconnect access.umd.edu -- \
+            --background --pid-file=${XDG_RUNTIME_DIR}/vpn.pid --setuid=${USER} \
+            --csd-wrapper=/usr/libexec/openconnect/hipreport.sh
 
 [Install]
 WantedBy=graphical-session.target

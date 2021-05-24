@@ -378,7 +378,7 @@ class VpnStatus < StatusWidget
   private
 
   def start_monitor
-    @p = IO.popen('nmcli connection monitor')
+    @p = IO.popen('journalctl --user --follow --identifier=systemd')
     @p.each { trigger }
     @p.close
   end
@@ -389,7 +389,7 @@ class VpnStatus < StatusWidget
   end
 
   def segments
-    if `nmcli --colors no --terse --fields type,state connection show`.include?('vpn:activated')
+    if `systemctl --user is-active vpn`.chomp == 'active'
       segment fontawesome "\uf023"
     else
       ''
