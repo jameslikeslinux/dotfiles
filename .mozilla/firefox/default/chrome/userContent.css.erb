@@ -1,3 +1,4 @@
+<% if @facts['os']['family'] == 'Gentoo' -%>
 <% require 'colorscheme'
 dark = ColorScheme.dark.colors_by_base -%>
 @-moz-document url-prefix(about:blank) {
@@ -5,7 +6,6 @@ dark = ColorScheme.dark.colors_by_base -%>
     background-color: <%= dark[0x01].web %> !important;
   }
 }
-<% if @facts['os']['family'] == 'Gentoo' -%>
 
 /* Respect Gtk theme */
 * {
