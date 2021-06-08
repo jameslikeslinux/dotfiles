@@ -4,10 +4,11 @@ ConditionHost=hawk
 
 [Service]
 Type=forking
-PIDFile=vpn.pid
 ExecStart=/usr/bin/gp-saml-gui --gateway --pkexec-openconnect access.umd.edu -- \
             --background --pid-file=${XDG_RUNTIME_DIR}/vpn.pid --setuid=${USER} \
             --csd-wrapper=/usr/libexec/openconnect/hipreport.sh
+PIDFile=vpn.pid
+Restart=on-failure
 
 [Install]
 WantedBy=graphical-session.target
