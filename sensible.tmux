@@ -11,7 +11,7 @@ is_osx() {
 }
 
 iterm_terminal() {
-	[[ "$TERM_PROGRAM" =~ ^iTerm ]]
+	[[ "${TERM_PROGRAM}" =~ ^iTerm || "${LC_TERMINAL}" =~ ^iTerm ]]
 }
 
 command_exists() {
@@ -45,7 +45,7 @@ server_option_value_not_changed() {
 }
 
 key_binding_not_set() {
-	local key="$1"
+	local key="${1//\\/\\\\}"
 	if $(tmux list-keys | grep -q "${KEY_BINDING_REGEX}${key}[[:space:]]"); then
 		return 1
 	else
@@ -66,12 +66,6 @@ key_binding_not_changed() {
 
 main() {
 	# OPTIONS
-
-	# enable utf8 (option removed in tmux 2.2)
-	tmux set-option -g utf8 on 2>/dev/null
-
-	# enable utf8 in tmux status-left and status-right (option removed in tmux 2.2)
-	tmux set-option -g status-utf8 on 2>/dev/null
 
 	# address vim mode switching delay (http://superuser.com/a/252717/65504)
 	if server_option_value_not_changed "escape-time" "500"; then
