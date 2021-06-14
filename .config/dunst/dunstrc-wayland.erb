@@ -11,7 +11,6 @@ padding = <%= (4 * gui_scaling_factor).round %>
 horizontal_padding = <%= (8 * gui_scaling_factor).round %>
 separator_height = <%= (1 * gui_scaling_factor).round %>
 separator_color = foreground
-transparency = 10
 
 font = sans <%= 9 * text_scaling_factor %>
 markup = full
@@ -26,13 +25,13 @@ dmenu = /usr/bin/rofi -dmenu -p dunst
 sticky_history = false
 
 [urgency_low]
-background = "<%= dark[0x01].shade.web %>"
+background = "<%= dark[0x01].shade.web %>e6"
 foreground = "<%= dark[0x04].web %>"
 
 [urgency_normal]
-background = "<%= dark[0x01].shade.web %>"
+background = "<%= dark[0x01].shade.web %>e6"
 foreground = "<%= dark[0x06].web %>"
 
 [urgency_critical]
-background = "<%= dark[0x08].shade.web %>"
+background = "<%= dark[0x08].shade.web %>e6"
 foreground = "<%= dark[0x06].web %>"
