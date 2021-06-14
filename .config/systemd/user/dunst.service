@@ -1,0 +1,9 @@
+[Unit]
+Description=Dunst notification service
+PartOf=sway-session.target xmonad-session.target
+
+[Service]
+ExecStart=/usr/bin/dunst -conf %h/.config/dunst/dunstrc-${XDG_SESSION_TYPE}
+
+[Install]
+WantedBy=sway-session.target xmonad-session.target

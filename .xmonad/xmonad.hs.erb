@@ -272,6 +272,9 @@ main = xmonad
     , ("M-S-o"         , swapPrevScreen)
     , ("M-S-e"         , swapNextScreen)
     , ("M-S-q"         , spawn "qdbus org.kde.ksmserver /KSMServer logout 1 0 1")
+    , ("M-S-c"         , spawn "dunstctl close")
+    , ("M-S-p"         , spawn "dunstctl history-pop")
+    , ("M-S-<Space>"   , spawn "dunstctl context")
     , ("M-s"           , raisePanelTemporarily >> spawn "~/.xmonad/scripts/screensaver toggle")
     , ("M-<Escape>"    , unGrab >> spawn "~/.xmonad/scripts/screensaver reset; loginctl lock-session")
     , ("M-<Tab>"       , sendMessage NextLayout)
@@ -301,11 +304,8 @@ main = xmonad
     , ("<XF86MonBrightnessUp>"   , raisePanelTemporarily >> spawn "~/.xmonad/scripts/brightness increase")
     ]
     `removeKeysP`
-    [ "M-S-c"       -- close window
-    , "M-S-<Space>" -- reset workspace to default layout
-    , "M-S-<Tab>"   -- focus previous window
+    [ "M-S-<Tab>"   -- focus previous window
     , "M-S-/"       -- show help
-    , "M-S-p"       -- launch gmrun
     ]
 
 -- vim: filetype=haskell

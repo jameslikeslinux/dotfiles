@@ -46,6 +46,10 @@ bindsym Mod1+Tab       exec sway-layout-manager focus_next
 bindsym Mod1+Shift+Tab exec sway-layout-manager focus_prev
 bindsym $mod+semicolon [con_mark="_last_focused"] focus
 
+bindsym $mod+Shift+c     exec dunstctl close
+bindsym $mod+Shift+p     exec dunstctl history-pop
+bindsym $mod+Shift+Space exec dunstctl context
+
 bindsym $mod+s                exec ~/.xmonad/scripts/screensaver toggle
 bindsym $mod+Space            exec playerctl play-pause
 bindsym XF86AudioPlay         exec playerctl play-pause

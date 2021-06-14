@@ -4,7 +4,7 @@ gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
 text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1
 -%>
 [global]
-geometry = "<%= (400 * gui_scaling_factor).round %>x4-<%= (7 * text_scaling_factor).round %>+<%= (25 * text_scaling_factor).round %>"
+geometry = "<%= (400 * gui_scaling_factor).round %>x4-<%= (7 * text_scaling_factor).round %>+<%= (7 * text_scaling_factor).round %>"
 shrink = true
 corner_radius = <%= (4 * gui_scaling_factor).round %>
 padding = <%= (4 * gui_scaling_factor).round %>
@@ -13,7 +13,7 @@ separator_height = <%= (1 * gui_scaling_factor).round %>
 separator_color = foreground
 transparency = 10
 
-font = sans 9
+font = sans <%= 9 * text_scaling_factor %>
 markup = full
 format = "<b>%s</b>\n%b"
 word_wrap = true
@@ -24,11 +24,6 @@ icon_path = /usr/share/dunst/icons/actions:/usr/share/dunst/icons/devices:/usr/s
 
 dmenu = /usr/bin/rofi -dmenu -p dunst
 sticky_history = false
-
-[shortcuts]
-close = mod4+shift+c
-history = mod4+shift+p
-context = mod4+shift+space
 
 [urgency_low]
 background = "<%= dark[0x01].shade.web %>"
