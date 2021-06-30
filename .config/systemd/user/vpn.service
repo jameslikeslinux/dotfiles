@@ -1,6 +1,5 @@
 [Unit]
 Description=UMD virtual private network
-ConditionHost=hawk
 
 [Service]
 Type=forking
