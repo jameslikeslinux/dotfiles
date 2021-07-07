@@ -39,12 +39,10 @@ class StatusWidget
   end
 
   def segment(str, first = false)
+    content = colorize('#d8d8d8', '#282828', " #{str} ")
     if first
-      content = colorize('#d8d8d8', '#282828', " #{str}")
-<% tweak = (3333 * ((@facts['scaling'] ? @facts['scaling']['text'] : 1) - 1.1)).round -%>
-      "<span fgcolor='#282828' bgcolor='#000000' letter_spacing='<%= tweak %>'></span>#{content}<span bgcolor='#282828' letter_spacing='<%= -tweak %>'> </span>"
+      "#{colorize '#282828', '#000000', ''}#{content}"
     else
-      content = colorize('#d8d8d8', '#282828', " #{str} ")
       "#{colorize '#000000', '#282828', ''}#{content}"
     end
   end
