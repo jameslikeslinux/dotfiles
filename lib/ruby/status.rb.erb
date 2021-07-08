@@ -192,7 +192,7 @@ class NetworkStatus < StatusWidget
   private
 
   def start_monitor
-    @p = IO.popen('nmcli device monitor')
+    @p = IO.popen('journalctl --follow --unit=iwd --grep=station_enter_state')
     @p.each { trigger }
     @p.close
   end
@@ -203,12 +203,13 @@ class NetworkStatus < StatusWidget
   end
 
   def segments
-    (device, type, devstate, connection) = `nmcli --colors no --terse device status`.lines.first.chomp.split(':')
+    status_line = `iwctl station list`.lines.map(&:chomp).reject(&:empty?).last
+    (device, state) = status_line.split if status_line
 
-    if type == 'wifi'
+    if device and state
       icon = fontawesome "\uf1eb"
 
-      case devstate
+      case state
       when 'connected'
         if `iw dev #{device} link` =~ /signal:\s+(\S+)\s(\S+)/
           signal = "#{$1}#{$2}"
