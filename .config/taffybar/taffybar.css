@@ -1,4 +1,3 @@
-<% gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1 -%>
 * {
     all: unset;
 }
@@ -11,7 +10,6 @@
 
 .taffy-box {
     background-color: black;
-    margin-bottom: <%= (18 * gui_scaling_factor).round - 18 %>px;
 }
 
 .taffy-window menuitem:hover {

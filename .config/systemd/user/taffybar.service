@@ -3,7 +3,7 @@ Description=Taffybar
 PartOf=xmonad-session.target
 
 [Service]
-ExecStart=/usr/bin/taffybar
+ExecStart=/usr/local/bin/taffybar
 
 [Install]
 WantedBy=xmonad-session.target
