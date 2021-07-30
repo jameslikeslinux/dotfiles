@@ -129,15 +129,13 @@ fi
 
 # Process templates with Puppet if we're on the main branch or a clone
 if [[ $branch == 'main' || $PWD != $HOME ]]; then
-    "$PUPPET" module install puppetlabs-stdlib
-    [[ -d /tmp/cache ]] && rmdir --ignore-fail-on-non-empty /tmp/cache
-
     generate_manifest > "$MANIFEST"
+
     cat >> "$MANIFEST" <<END_SPECIAL
 File <| title == '${BASEDIR}/.ssh/config' |> {
   mode => '0600',
 }
 END_SPECIAL
 
-    FACTERLIB="${BASEDIR}/lib/facter" RUBYLIB="${BASEDIR}/lib/ruby" "$PUPPET" apply "$MANIFEST"
+    "$PUPPET" apply --modulepath="${BASEDIR}/lib/puppet" "$MANIFEST"
 fi
