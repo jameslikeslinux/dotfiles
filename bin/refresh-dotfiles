@@ -7,7 +7,7 @@
 
 # Process files relative to this script.
 # This needs to be an absolute path for use in the generated Puppet manifest.
-BASEDIR="$(realpath "$(dirname "$0")/..")"
+BASEDIR="$(cd "$(dirname "$0")/.." && echo "$PWD")"
 
 # Just download and extract compiled repository in non-git-based directories
 if [[ ! -d "${BASEDIR}/.git" ]]; then
