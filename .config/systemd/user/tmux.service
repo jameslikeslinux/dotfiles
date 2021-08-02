@@ -1,6 +1,6 @@
 [Unit]
 Description=tmux terminal multiplexer server
-ConditionUser=!root
+ConditionUser=james
 
 [Service]
 Type=forking
