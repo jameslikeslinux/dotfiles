@@ -62,6 +62,7 @@ exec_tmux() {
             fi
         fi
     elif systemctl --user > /dev/null 2>&1; then
+        loginctl enable-linger
         systemctl --user stop tmux.scope 2>/dev/null
         exec systemd-run --user --scope --unit tmux tmux "$@"
     fi
