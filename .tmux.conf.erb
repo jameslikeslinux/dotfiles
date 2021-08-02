@@ -33,7 +33,7 @@ bind-key M-& confirm-before -p 'kill other windows? (y/n)' 'kill-window -a'
 bind-key S set-window-option synchronize-panes
 
 # Send keys to initialize my home directory on non-AFS RHEL systems
-bind-key I confirm-before -p 'initialize home directory? (y/n)' "send-keys 'if grep -q 7\\. /etc/redhat-release; then branch=rhel7-noafs; else branch=compiled; fi && cd && rm -rf .git && git init && git remote add origin https://gitlab.umd.edu/jtl/dotfiles.git && git fetch --depth=1 && git reset --hard \"origin/\${branch}\" && git checkout \"\$branch\" && exec \$SHELL' Enter"
+bind-key I confirm-before -p 'initialize home directory? (y/n)' "send-keys 'if grep -q 8\\. /etc/redhat-release; then branch=rhel8-noafs; elif grep -q 7\\. /etc/redhat-release; then branch=rhel7-noafs; else branch=preprocessed; fi && cd && rm -rf .git && git init && git remote add origin https://gitlab.umd.edu/jtl/dotfiles.git && git fetch --depth=1 && git reset --hard \"origin/\${branch}\" && git checkout \"\$branch\" && exec \$SHELL' Enter"
 
 # Send keys to reload vim when TERM changes
 bind-key V confirm-before -p 'reload vim? (y/n)' 'run-shell ~/.tmux/reload-vim.tmux'
