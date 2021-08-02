@@ -138,4 +138,6 @@ File <| title == '${BASEDIR}/.ssh/config' |> {
 END_SPECIAL
 
     "$PUPPET" apply --modulepath="${BASEDIR}/lib/puppet" "$MANIFEST"
+else
+    "$PUPPET" resource file "${BASEDIR}/.ssh/config" mode=0600
 fi
