@@ -3,7 +3,7 @@ Description=picom compositor
 PartOf=xmonad-session.target
 
 [Service]
-ExecStart=/usr/bin/picom
+ExecStart=/usr/bin/picom --experimental-backends --vsync
 
 [Install]
 WantedBy=xmonad-session.target
