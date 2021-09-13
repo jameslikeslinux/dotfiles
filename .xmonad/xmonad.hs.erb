@@ -50,9 +50,10 @@ data PanelTimer = PanelTimer TimerId deriving Typeable
 instance ExtensionClass PanelTimer where
     initialValue = PanelTimer 0
 
-isDesktop = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DESKTOP"
-isDock    = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DOCK"
-isOSD     = isInProperty "_NET_WM_WINDOW_TYPE" "_KDE_NET_WM_WINDOW_TYPE_ON_SCREEN_DISPLAY"
+isDesktop  = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DESKTOP"
+isDock     = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DOCK"
+isFloating = isInProperty "_NET_WM_STATE" "_NET_WM_STATE_ABOVE"
+isOSD      = isInProperty "_NET_WM_WINDOW_TYPE" "_KDE_NET_WM_WINDOW_TYPE_ON_SCREEN_DISPLAY"
 
 isOverlayWindow :: Query Bool
 isOverlayWindow = do
@@ -200,6 +201,7 @@ manageHook' = composeOne
     , appName   =? "gp-saml-gui"    -?> doCenterFloat
     , isDesktop                     -?> doWindowAction sendToBottom
     , isDock                        -?> doWindowAction sendToJustAboveDesktop
+    , isFloating                    -?> doCenterFloat
     , isOSD                         -?> doCenterFloat
     , isDialog                      -?> doFloat
     , transience                    --- move to parent window
