@@ -41,6 +41,9 @@ bind-key V confirm-before -p 'reload vim? (y/n)' 'run-shell ~/.tmux/reload-vim.t
 # Send keys for compatibility with hosts that do not contain my terminfo files
 bind-key X run-shell ~/.tmux/term-compat.tmux
 
+# Acknowledge alerts
+bind-key @ kill-session -C
+
 # Enable primary selection clipboard using xterm OSC escape sequence
 set -s set-clipboard on
 set -s terminal-overrides 'rxvt-unicode*:Ms=\E]52;%p1%s;%p2%s\007,tmux*:Ms=\E]52;%p1%s;%p2%s\007'
