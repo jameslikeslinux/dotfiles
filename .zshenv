@@ -44,3 +44,6 @@ export RUBYLIB="${HOME}/lib/ruby"
 # XXX: Experimental settings
 export MOZ_DBUS_REMOTE=1
 export PAN_MESA_DEBUG=gl3
+
+# For macOS
+export CLICOLOR=1
