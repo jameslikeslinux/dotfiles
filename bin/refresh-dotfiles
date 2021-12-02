@@ -73,10 +73,20 @@ while true; do
     esac
 done
 
+file_mode() {
+    local file="$1"
+
+    if [[ $OSTYPE == darwin* ]]; then
+        stat -f '%A' "$file"
+    else
+        stat -c '%a' "$file"
+    fi
+}
+
 generate_manifest() {
     # Create/update dotfiles from templates in git
     git ls-files '*.erb' | while read template; do
-        mode="$(stat -c '%a' "$template")"
+        mode="$(file_mode "$template")"
         cat <<END
 file { '${BASEDIR}/${template%.erb}':
   mode    => '${mode}',
