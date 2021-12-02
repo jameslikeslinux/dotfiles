@@ -15,21 +15,7 @@ if [[ $OS == 'Windows_NT' ]]; then
     else
         exec cygstart --action=runas mintty -e "$SHELL -c ${(qq)command}"
     fi
-elif [[ -e /etc/glue/restrict ]]; then
-    # legacy glue
-    if [[ $# -eq 0 ]]; then
-        exec su -m -c "${SHELL}; kdestroy"
-    else
-        exec su -m -c "${SHELL} -c ${(qq)command}; kdestroy"
-    fi
-elif [[ -e /etc/glue ]]; then
-    # new glue
-    if [[ $# -eq 0 ]]; then
-        exec su
-    else
-        exec su -c "$command"
-    fi
-elif [[ $HOST == 'router.mgmt.home' ]]; then
+elif [[ $OSTYPE == darwin* ]]; then
     exec sudo -E "${@:--s}"
 else
     exec sudo "${@:--s}"
