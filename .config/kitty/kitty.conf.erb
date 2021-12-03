@@ -1,0 +1,22 @@
+<% require 'colorscheme'; dark = ColorScheme.dark -%>
+# Fonts
+adjust_line_height 2
+symbol_map U+E0A0-U+E0A3,U+E0C0-U+E0C7 PowerlineSymbols
+term xterm-kitty-powerline
+
+# Cursor customization
+cursor <%= dark.cursor.web %>
+cursor_blink_interval 0
+
+# Terminal bell
+enable_audio_bell no
+
+# Window layout
+remember_window_size no
+window_padding_width 2
+placement_strategy top-left
+
+# Color scheme
+<% dark.terminal.each do |c| -%>
+color<%= c.ansi %> <%= c.web %>
+<% end -%>
