@@ -1,6 +1,6 @@
 <% require 'colorscheme'; dark = ColorScheme.dark -%>
 # Fonts
-adjust_line_height 2
+adjust_line_height 3
 symbol_map U+E0A0-U+E0A3,U+E0C0-U+E0C7 PowerlineSymbols
 term xterm-kitty-powerline
 
@@ -20,3 +20,6 @@ placement_strategy top-left
 <% dark.terminal.each do |c| -%>
 color<%= c.ansi %> <%= c.web %>
 <% end -%>
+
+# OS specific tweaks
+macos_thicken_font 0.5
