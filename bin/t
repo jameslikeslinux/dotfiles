@@ -142,9 +142,9 @@ default_session_name() {
     print "$name"
 }
 
-# When TMUX=0 is used to signal to zsh not to launch tmux automatically, let
-# this script work as expected.
-if [[ $TMUX == '0' ]]; then
+# When TMUX is invalid, such as when TMUX=0 is used to signal to zsh not to
+# start tmux automatically, let this script work as expected
+if [[ ! -S ${TMUX%%,*} ]]; then
     unset TMUX
 fi
 
