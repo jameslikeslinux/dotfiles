@@ -142,6 +142,12 @@ default_session_name() {
     print "$name"
 }
 
+# When TMUX=0 is used to signal to zsh not to launch tmux automatically, let
+# this script work as expected.
+if [[ $TMUX == '0' ]]; then
+    unset TMUX
+fi
+
 if (( ARGC == 0 )); then
     tmux_new_session "$(default_session_name)"
 elif (( tmux_commands[(I)${1}*] )) || [[ $1 == -* ]]; then
