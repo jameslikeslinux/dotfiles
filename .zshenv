@@ -41,6 +41,12 @@ export QT_QPA_PLATFORMTHEME=kde
 # To find my custom ruby libraries
 export RUBYLIB="${HOME}/lib/ruby"
 
+# Don't mess with system gems
+if command -v ruby > /dev/null; then
+    export GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
+    path=("${GEM_HOME}/bin" $path)
+fi
+
 # XXX: Experimental settings
 export MOZ_DBUS_REMOTE=1
 export PAN_MESA_DEBUG=gl3
