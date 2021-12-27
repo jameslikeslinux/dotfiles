@@ -3,7 +3,7 @@ export LANG=en_US.UTF-8
 
 # Set path
 typeset -U path
-for dir in /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin /usr/glue/bin /usr/glue/sbin $HOME/bin $HOME/local/bin $HOME/.gem/ruby/2.6.0/bin; do
+for dir in /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin /usr/glue/bin /usr/glue/sbin $HOME/bin $HOME/local/bin; do
     [[ -e $dir ]] && path=($dir $path)
 done
 
