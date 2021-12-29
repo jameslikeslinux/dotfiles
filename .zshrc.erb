@@ -84,7 +84,7 @@ elif [[ $OS == 'Windows_NT' ]] && id -Gnz | tr '\0' '\n' | grep -q '^Administrat
 fi
 
 # Figure out if I'm running with Glue admin rights
-if [[ -x $(whence klist) ]] && klist 2>&1 | grep jtl/admin > /dev/null; then
+if klist 2>&1 | grep jtl/admin > /dev/null; then
     zstyle ':prompt:mine' admin true
 fi
 
@@ -101,7 +101,7 @@ prompt mine
 autoload -U compinit && compinit -u
 
 # Color list autocompletion
-if [[ -x $(whence dircolors) ]]; then
+if whence dircolors > /dev/null; then
     eval $(dircolors)
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 fi

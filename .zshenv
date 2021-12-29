@@ -12,15 +12,15 @@ typeset -U fpath
 fpath=("$HOME/.zsh/functions" $fpath)
 
 # Editor is vim if it exists
-if [[ -x $(whence vim) ]]; then
-    export EDITOR="vim"
+if whence vim > /dev/null; then
+    export EDITOR='vim'
 else
-    export EDITOR="vi"
+    export EDITOR='vi'
 fi
 
 # Set some standard programs
 export VISUAL=$EDITOR
-export PAGER="less"
+export PAGER='less'
 
 # For my custom terminal types
 export TERMINFO="${HOME}/.terminfo"
@@ -42,7 +42,7 @@ export QT_QPA_PLATFORMTHEME=kde
 export RUBYLIB="${HOME}/lib/ruby"
 
 # Don't mess with system gems
-if command -v ruby > /dev/null; then
+if whence ruby > /dev/null; then
     export GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
     path=("${GEM_HOME}/bin" $path)
 fi
