@@ -1,5 +1,6 @@
 [Unit]
 Description=picom compositor
+ConditionVirtualization=false
 PartOf=xmonad-session.target
 
 [Service]
