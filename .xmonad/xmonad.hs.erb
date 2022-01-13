@@ -96,21 +96,10 @@ topicConfig :: TopicConfig
 topicConfig = def
     { defaultTopicAction = \topic -> return ()
     , topicActions = fromList $
-<% if ['harrier', 'owl'].include? @facts['hostname'] -%>
-        [ ("web"    , spawn "firefox --browser")
-<% else -%>
-        [ ("web"    , spawn "firefox --browser twitter.com washingtonpost.com")
-<% end -%>
-        , ("ops"    , (ask >>= spawn . terminal . config))
+        [ ("ops"    , (ask >>= spawn . terminal . config))
         , ("dev"    , (ask >>= spawn . terminal . config))
         , ("music"  , spawn "firefox -P music --kiosk https://music.youtube.com/")
-        , ("mail"   , spawn "firefox --new-window https://mail.google.com/mail/u/0/#inbox --new-window https://mail.google.com/mail/u/1/#inbox")
-<% if @facts['hostname'] == 'hawk' -%>
-        , ("chat"   , spawn "firefox --new-window web.webex.com")
-        , ("windows", spawn "GDK_DPI_SCALE=<%= gui_scaling_factor %> GDK_SCALE=1 virt-viewer --full-screen --connect=qemu:///system --wait --reconnect buzzard")
-<% else -%>
-        , ("windows", spawn "GDK_DPI_SCALE=<%= gui_scaling_factor %> GDK_SCALE=1 virt-viewer --full-screen --spice-preferred-compression=auto-glz --connect=qemu+ssh://root@hawk/system --wait --reconnect buzzard")
-<% end -%>
+        , ("mail"   , spawn "firefox --new-window https://mail.google.com/mail/u/0/#inbox")
         ]
     }
 
