@@ -18,6 +18,7 @@ import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.WorkspaceHistory
+import XMonad.Layout.Gaps
 import XMonad.Layout.LayoutModifier
 import XMonad.Layout.Maximize
 import XMonad.Layout.MultiToggle
@@ -168,6 +169,7 @@ logHook' = do
 layoutHook' = id
     . onWorkspace "windows" (noBorders Full)
     . mkToggle (single NBFULL)
+    . gaps' [((U, 108), False)]
     . avoidStruts
     . mkToggle (single FULL)
     . mkToggle (single REFLECTX)
@@ -240,6 +242,7 @@ main = xmonad
     , ("M-S-'"         , sendToScreen def 0)
     , ("M-S-,"         , sendToScreen def 1)
     , ("M-S-."         , sendToScreen def 1)
+    , ("M-g"           , sendMessage $ ToggleGaps)
     , ("M-f"           , sendMessage $ Toggle NBFULL)
     , ("M-S-f"         , sendMessage $ Toggle FULL)
     , ("M-r"           , sendMessage $ Toggle REFLECTX)
