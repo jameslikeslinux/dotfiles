@@ -1,0 +1,9 @@
+[Unit]
+Description=Prevent screen from blanking and locking
+
+[Service]
+Type=oneshot
+ExecStart=%h/.xmonad/scripts/screensaver inhibit
+
+[Install]
+WantedBy=graphical-session.target

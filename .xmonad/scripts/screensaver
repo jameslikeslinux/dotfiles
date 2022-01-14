@@ -2,17 +2,33 @@
 
 INHIBITOR_FILE="${XDG_RUNTIME_DIR}/screensaver.inhibit"
 
+inhibit() {
+    touch "$INHIBITOR_FILE"
+}
+
+reset() {
+    rm -f "$INHIBITOR_FILE"
+}
+
+toggle() {
+    if [[ -f "$INHIBITOR_FILE" ]]; then
+        reset
+    else
+        inhibit
+    fi
+}
+
 case "$1" in
+    'inhibit')
+        inhibit
+        ;;
+
     'toggle')
-        if [[ -f "$INHIBITOR_FILE" ]]; then
-            rm -f "$INHIBITOR_FILE"
-        else
-            touch "$INHIBITOR_FILE"
-        fi
+        toggle
         ;;
 
     'reset')
-        rm -f "$INHIBITOR_FILE"
+        reset
         ;;
 
     *)
