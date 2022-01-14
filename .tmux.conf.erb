@@ -45,6 +45,9 @@ bind-key v run-shell ~/.tmux/term-compat.tmux
 # Acknowledge alerts
 bind-key @ kill-session -C
 
+# Let middle click paste from primary selection
+bind-key -T root MouseDown2Pane select-pane -t = \; if-shell -F "#{||:#{pane_in_mode},#{mouse_any_flag}}" "send -M" "run-shell ~/.tmux/paste-primary.tmux"
+
 # Enable primary selection clipboard using xterm OSC escape sequence
 set -s set-clipboard on
 set -s terminal-overrides 'rxvt-unicode*:Ms=\E]52;%p1%s;%p2%s\007,tmux*:Ms=\E]52;%p1%s;%p2%s\007'
