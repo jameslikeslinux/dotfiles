@@ -99,8 +99,10 @@ topicConfig = def
     , topicActions = fromList $
         [ ("ops"    , (ask >>= spawn . terminal . config))
         , ("dev"    , (ask >>= spawn . terminal . config))
+<% if @facts['hostname'] != 'hawk' -%>
         , ("music"  , spawn "firefox -P music --kiosk https://music.youtube.com/")
         , ("mail"   , spawn "firefox --new-window https://mail.google.com/mail/u/0/#inbox")
+<% end -%>
         ]
     }
 
