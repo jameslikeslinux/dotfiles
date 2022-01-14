@@ -1,0 +1,11 @@
+[Unit]
+Description=Wallpaper setting daemon
+PartOf=xmonad-session.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/xwallpaper --daemon --stretch %h/.wallpaper.png
+Restart=always
+
+[Install]
+WantedBy=xmonad-session.target
