@@ -404,10 +404,10 @@ class ScreensaverStatus < StatusWidget
       else
         system 'qdbus org.freedesktop.ScreenSaver /org/freedesktop/ScreenSaver org.freedesktop.ScreenSaver.SimulateUserActivity'
       end
-      segment fontawesome "\uf108"
+      ''
     else
       system 'swaymsg \'[title="Sway Idle Inhibitor"] kill\'' if ENV['SWAYSOCK']
-      ''
+      segment fontawesome "\uf4fd"
     end
   end
 end
