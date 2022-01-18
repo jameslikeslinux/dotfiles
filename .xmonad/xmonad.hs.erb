@@ -179,7 +179,7 @@ layoutHook' = id
     -- Window padding is roughly based on the *text* height of taffybar
     . renamed [CutWordsLeft 1] . spacingWithEdge <%= (6.5 * text_scaling_factor).round %>
     . renamed [CutWordsLeft 1] . maximizeWithPadding <%= (6.5 * text_scaling_factor).round * 2 %>
-    . onWorkspace "mail" layoutHalfTall
+    -- . onWorkspace "mail" layoutHalfTall
     $ layoutGoldenTall ||| layoutHalfTall
   where
     layoutGoldenTall =
