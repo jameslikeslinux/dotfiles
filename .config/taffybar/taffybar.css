@@ -15,3 +15,11 @@
 .taffy-window menuitem:hover {
     background-color: #282828;
 }
+
+button.windows {
+    font-family: sans;
+}
+
+menu {
+    padding: 0.2em;
+}

@@ -58,7 +58,7 @@ workspaceDecorator fg bg bold s =
       | otherwise = id
     endSep
       | '\x00a0' `notElem` s = ""
-      | otherwise            = colorize bg "#000000" "\xe0b0"
+      | otherwise            = colorize bg "#000000" "\xe0b0 "
 
 workspaceLabel :: Workspace -> [(WorkspaceId, Workspace)] -> String
 workspaceLabel workspace occupiedWorkspaces
