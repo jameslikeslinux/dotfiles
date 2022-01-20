@@ -1,4 +1,7 @@
-<% text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1 -%>
+<% require 'colorscheme'
+dark = ColorScheme.dark.colors_by_base
+text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1
+-%>
 import Control.Concurrent.MVar
 import Control.Monad
 import Control.Monad.IO.Class
@@ -58,17 +61,17 @@ workspaceDecorator fg bg bold s =
       | otherwise = id
     endSep
       | '\x00a0' `notElem` s = ""
-      | otherwise            = colorize bg "#000000" "\xe0b0 "
+      | otherwise            = colorize bg "<%= dark[0x00].web %>" "\xe0b0 "
 
 workspaceLabel :: Workspace -> [(WorkspaceId, Workspace)] -> String
 workspaceLabel workspace occupiedWorkspaces
   | occupiedWorkspaces == [] = ""
   | otherwise =
         case workspaceState workspace of
-            Active    -> workspaceDecorator "#282828" "#7cafc2" True name
-            Visible   -> workspaceDecorator "#d8d8d8" "#383838" False name
-            Hidden    -> workspaceDecorator "#d8d8d8" "#282828" False name
-            Urgent    -> workspaceDecorator "#282828" "#f7ca88" False name
+            Active    -> workspaceDecorator "<%= dark[0x01].web %>" "<%= dark[0x0D].web %>" True name
+            Visible   -> workspaceDecorator "<%= dark[0x05].web %>" "<%= dark[0x02].web %>" False name
+            Hidden    -> workspaceDecorator "<%= dark[0x05].web %>" "<%= dark[0x01].web %>" False name
+            Urgent    -> workspaceDecorator "<%= dark[0x01].web %>" "<%= dark[0x0A].web %>" False name
             otherwise -> ""
       where
         (lastWsIdx, _)            = last occupiedWorkspaces
@@ -97,7 +100,7 @@ windowsConfig = defaultWindowsConfig
   where
     activeWindowLabeler = do
       label <- truncatedGetActiveLabel 100
-      return . T.pack . colorize "#d8d8d8" "#000000" . wrap " " " " . T.unpack $ label
+      return . T.pack . colorize "<%= dark[0x05].web %>" "<%= dark[0x00].web %>" . wrap " " " " . T.unpack $ label
 
 statusWidget :: String -> TaffyIO Gtk.Widget
 statusWidget cmd = do
@@ -115,7 +118,7 @@ taffybarConfig = defaultSimpleTaffyConfig
   where
     workspaces    = workspacesNew Main.workspacesConfig
     windows       = windowsNew windowsConfig
-    clock         = textClockNew Nothing ((colorize "#383838" "#282828" "\xe0b2") ++ (colorize "#d8d8d8" "#383838" " %a %b %_d %r ")) 1
+    clock         = textClockNew Nothing ((colorize "<%= dark[0x02].web %>" "<%= dark[0x01].web %>" "\xe0b2") ++ (colorize "<%= dark[0x05].web %>" "<%= dark[0x02].web %>" " %a %b %_d %r ")) 1
     statusWidgets = map statusWidget ["vpn", "screensaver", "backlight", "audio", "network", "power", "load"]
 
 main :: IO ()
