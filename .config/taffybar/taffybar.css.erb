@@ -1,0 +1,34 @@
+<% require 'colorscheme'
+dark = ColorScheme.dark.colors_by_base
+-%>
+* {
+    all: unset;
+}
+
+.taffy-window {
+    color: <%= dark[0x01].web %>;
+    font-family: monospace;
+    font-size: 9pt;
+}
+
+.taffy-box {
+    background-color: black;
+}
+
+.taffy-window menuitem:hover {
+    background-color: <%= dark[0x01].web %>;
+}
+
+.windows {
+    color: <%= dark[0x05].web %>;
+    font-family: sans-serif;
+    font-weight: 500;
+}
+
+.windows menu {
+    font-weight: normal;
+    padding: 0.3em;
+}
+
+/* vim:ft=css
+ */

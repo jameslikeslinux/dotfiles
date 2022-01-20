@@ -197,8 +197,8 @@ layoutHook' = id
         . subLayout [] Simplest
         . boringWindows
     tabTheme = def
-        { fontName   = "xft:sans:size=<%= (8 * text_scaling_factor).round %>"
-        , decoHeight = <%= (16 * text_scaling_factor).round %>
+        { fontName            = "xft:sans-serif:size=<%= (8 * text_scaling_factor).round %>"
+        , decoHeight          = <%= (16 * text_scaling_factor).round %>
         , activeBorderWidth   = 0
         , inactiveBorderWidth = 0
         , urgentBorderWidth   = 0

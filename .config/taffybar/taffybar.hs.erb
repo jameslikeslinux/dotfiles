@@ -100,7 +100,7 @@ windowsConfig = defaultWindowsConfig
   where
     activeWindowLabeler = do
       label <- truncatedGetActiveLabel 100
-      return . T.pack . colorize "<%= dark[0x05].web %>" "<%= dark[0x00].web %>" . wrap " " " " . T.unpack $ label
+      return . T.pack . wrap " " " " . T.unpack $ label
 
 statusWidget :: String -> TaffyIO Gtk.Widget
 statusWidget cmd = do
