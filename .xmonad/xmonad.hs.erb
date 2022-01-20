@@ -18,6 +18,7 @@ import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.WorkspaceHistory
+import XMonad.Layout.BoringWindows hiding (Replace)
 import XMonad.Layout.Gaps
 import XMonad.Layout.LayoutModifier
 import XMonad.Layout.Maximize
@@ -28,8 +29,11 @@ import XMonad.Layout.PerWorkspace
 import XMonad.Layout.Reflect
 import XMonad.Layout.Renamed
 import XMonad.Layout.ResizableTile
+import XMonad.Layout.Simplest
 import XMonad.Layout.Spacing
-import XMonad.Layout.ThreeColumns
+import XMonad.Layout.SubLayouts
+import XMonad.Layout.Tabbed
+import XMonad.Layout.WindowNavigation
 import qualified XMonad.Util.ExtensibleState as XS
 import XMonad.Util.EZConfig
 import XMonad.Util.Run
@@ -173,6 +177,7 @@ layoutHook' = id
     . mkToggle (single NBFULL)
     . gaps' [((U, 108), False)]
     . avoidStruts
+    . tabs
     . mkToggle (single FULL)
     . mkToggle (single REFLECTX)
     . mkToggle (single MIRROR)
@@ -186,6 +191,24 @@ layoutHook' = id
         renamed [Replace "GoldenTall"] $ ResizableTall 1 (3/100) (0.605) []
     layoutHalfTall =
         renamed [Replace "HalfTall"] $ ResizableTall 1 (3/100) (1/2) []
+    tabs = id
+        . configurableNavigation noNavigateBorders
+        . addTabsBottom shrinkText tabTheme
+        . subLayout [] Simplest
+        . boringWindows
+    tabTheme = def
+        { fontName   = "xft:sans:size=<%= (8 * text_scaling_factor).round %>"
+        , decoHeight = <%= (16 * text_scaling_factor).round %>
+        , activeBorderWidth   = 0
+        , inactiveBorderWidth = 0
+        , urgentBorderWidth   = 0
+        , activeColor         = "<%= dark[0x08].web %>"
+        , inactiveColor       = "<%= dark[0x03].web %>"
+        , urgentColor         = "<%= dark[0x0A].web %>"
+        , activeTextColor     = "<%= dark[0x01].web %>"
+        , inactiveTextColor   = "<%= dark[0x01].web %>"
+        , urgentTextColor     = "<%= dark[0x01].web %>"
+        }
 
 manageHook' = composeOne
     [ className =? "ksmserver"      -?> doIgnore
@@ -258,6 +281,16 @@ main = xmonad
     , ("M-S-l"         , sendMessage Expand)
     , ("M-S-j"         , sendMessage MirrorShrink)
     , ("M-S-k"         , sendMessage MirrorExpand)
+    -- Begin tab keybindings
+    , ("M-C-h"         , sendMessage $ pullGroup L)
+    , ("M-C-l"         , sendMessage $ pullGroup R)
+    , ("M-C-j"         , sendMessage $ pullGroup D)
+    , ("M-C-k"         , sendMessage $ pullGroup U)
+    , ("M-C-m"         , withFocused $ sendMessage . MergeAll)
+    , ("M-C-S-m"       , withFocused $ sendMessage . UnMerge)
+    -- End tab keybindings
+    , ("M-C-<Tab>"     , onGroup W.focusDown')
+    , ("M-C-S-<Tab>"   , onGroup W.focusUp')
     , ("M-u"           , windows W.swapUp)
     , ("M-d"           , windows W.swapDown)
     , ("M-x"           , kill)
@@ -275,8 +308,8 @@ main = xmonad
     , ("M-<Escape>"    , unGrab >> spawn "~/.xmonad/scripts/screensaver reset; loginctl lock-session")
     , ("M-<Tab>"       , sendMessage NextLayout)
     , ("M-<Backspace>" , setLayout $ Layout layoutHook')
-    , ("M1-<Tab>"      , windows W.focusDown)
-    , ("M1-S-<Tab>"    , windows W.focusUp)
+    , ("M1-<Tab>"      , focusDown)
+    , ("M1-S-<Tab>"    , focusUp)
     , ("M-p"           , spawnRofi "-show drun")
     , ("M-w"           , spawnRofi "-show window")
     , ("M1-S-a"        , unGrab >> spawn "xdotool keyup alt+shift && ~/.xmonad/scripts/bw-type jtl/admin 4b70ddc9-0b8a-4479-9691-d330a6b61264")
