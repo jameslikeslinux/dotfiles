@@ -293,9 +293,9 @@ main = xmonad
     , ("M-C-k"         , sendMessage $ pullGroup U)
     , ("M-C-m"         , withFocused $ sendMessage . MergeAll)
     , ("M-C-S-m"       , withFocused $ sendMessage . UnMerge)
-    -- End tab keybindings
     , ("M-C-<Tab>"     , onGroup W.focusDown')
     , ("M-C-S-<Tab>"   , onGroup W.focusUp')
+    -- End tab keybindings
     , ("M-u"           , windows W.swapUp)
     , ("M-d"           , windows W.swapDown)
     , ("M-x"           , kill)
