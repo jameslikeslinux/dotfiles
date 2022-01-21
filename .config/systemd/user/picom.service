@@ -1,10 +1,11 @@
 [Unit]
 Description=picom compositor
-ConditionVirtualization=false
 PartOf=xmonad-session.target
 
 [Service]
-ExecStart=/usr/bin/picom --experimental-backends --vsync
+ExecStart=/usr/bin/picom --backend=glx --experimental-backends --vsync
+Restart=always
+RestartSec=1
 
 [Install]
 WantedBy=xmonad-session.target
