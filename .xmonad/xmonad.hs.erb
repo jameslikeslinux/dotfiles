@@ -17,6 +17,7 @@ import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.RefocusLast
 import XMonad.Hooks.WorkspaceHistory
 import XMonad.Layout.BoringWindows hiding (Replace)
 import XMonad.Layout.Gaps
@@ -167,10 +168,11 @@ startupHook' = do
     spawnOnce "systemctl --user restart xmonad-session.target"
 
 logHook' = do
-    switchTopicHook
     historyHook
     workspaceHistoryHook
+    refocusLastLogHook
     raiseOverlays
+    switchTopicHook
 
 layoutHook' = id
     . onWorkspace "windows" (noBorders Full)
@@ -224,13 +226,16 @@ manageHook' = composeOne
     , pure True                     -?> insertPosition Below Newer
     ]
 
--- Based on https://stackoverflow.com/questions/11045239/can-xmonads-loghook-be-run-at-set-intervals-rather-than-in-merely-response-to/14297833
-handleEventHook' event = do
-    (PanelTimer timerId) <- XS.get
-    handleTimer timerId event $ do
-        allWindowsByType isDock >>= mapM_ sendToJustAboveDesktop
-        return Nothing
-    return (All True)
+handleEventHook' =
+    refocusLastWhen (return True) <+> lowerPanelOnTimer
+  where
+    -- Based on https://stackoverflow.com/questions/11045239/can-xmonads-loghook-be-run-at-set-intervals-rather-than-in-merely-response-to/14297833
+    lowerPanelOnTimer event = do
+        (PanelTimer timerId) <- XS.get
+        handleTimer timerId event $ do
+            allWindowsByType isDock >>= mapM_ sendToJustAboveDesktop
+            return Nothing
+        return (All True)
 
 workspaces' = ["web", "ops", "dev", "music", "mail", "chat", "seven", "eight", "nine", "windows"]
 
