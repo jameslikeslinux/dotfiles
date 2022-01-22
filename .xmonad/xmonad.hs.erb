@@ -168,11 +168,11 @@ startupHook' = do
     spawnOnce "systemctl --user restart xmonad-session.target"
 
 logHook' = do
+    switchTopicHook -- must be first
     historyHook
     workspaceHistoryHook
     refocusLastLogHook
     raiseOverlays
-    switchTopicHook
 
 layoutHook' = id
     . onWorkspace "windows" (noBorders Full)
