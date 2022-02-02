@@ -34,6 +34,9 @@ set nowrap list sidescroll=1
 " Use more bash-like file completion (don't cycle through options)
 set wildmode=longest,list
 
+" Avoid descending into Bolt module directory and Bundler installs
+set wildignore+=*/.modules/*,*/vendor/*
+
 " Show command as it's being typed
 set showcmd
 
