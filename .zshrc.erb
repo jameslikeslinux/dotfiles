@@ -141,4 +141,13 @@ compdef "_files -W ${HOME}/projects" p
 # Set standard umask
 umask 022
 
+# Start or load an ssh-agent on Cygwin
+if [[ $OSTYPE == 'cygwin' && ! -S $SSH_AUTH_SOCK ]]; then
+    eval $(tmux show-environment -gs SSH_AUTH_SOCK 2>/dev/null)
+    if [[ ! -S $SSH_AUTH_SOCK ]]; then
+        eval $(ssh-agent) >/dev/null
+        tmux set-environment -g SSH_AUTH_SOCK $SSH_AUTH_SOCK 2>/dev/null
+    fi
+fi
+
 # vim:ft=zsh
