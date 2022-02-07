@@ -1,15 +1,16 @@
+<% require 'colorscheme'
+cs = ColorScheme.dark
+colors = cs.terminal
+text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1 -%>
 BoldAsFont=yes
 Font=Hack
-FontHeight=10
+FontHeight=<%= (9 * text_scaling_factor).round %>
 Term=mintty-powerline
 CursorType=block
 Scrollbar=none
 CursorBlinks=no
 ConfirmExit=no
 BellType=0
-<% require 'colorscheme'
-cs = ColorScheme.dark
-colors = cs.terminal -%>
 ForegroundColour=<%= cs.foreground.rgb.join(',') %>
 BackgroundColour=<%= cs.background.rgb.join(',') %>
 CursorColour=<%= cs.cursor.rgb.join(',') %>
