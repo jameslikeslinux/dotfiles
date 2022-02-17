@@ -39,14 +39,19 @@ if [[ ! $TMUX ]]; then
 fi
 
 # History settings
-HISTFILE=~/.history.$HOST
+HISTFILE=~/.history
 HISTSIZE=10000
 SAVEHIST=10000
 setopt inc_append_history
 
 if [[ ! -e $HISTFILE ]]; then
-    touch $HISTFILE
-    chmod 600 $HISTFILE
+    if [[ -f ~/.history.$HOST ]]; then
+        # Migrate from per-host history file
+        mv -f ~/.history.$HOST $HISTFILE
+    else
+        touch $HISTFILE
+        chmod 600 $HISTFILE
+    fi
 fi
 
 if [[ ! -w $HISTFILE ]]; then
