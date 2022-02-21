@@ -1,13 +1,24 @@
-<% if @facts['hostname'] == 'falcon' -%>
+<% case @facts['hostname'] -%>
+<% when 'falcon' -%>
 section: screens
-	falcon:
-	caracara:
+    falcon:
+    caracara:
 end
 
 section: options
-	keystroke(super+alt+up) = switchToScreen(caracara)
-	keystroke(super+alt+down) = switchToScreen(falcon)
-	mousebutton(6) = keystroke(WWWBack)
-	mousebutton(7) = keystroke(WWWForward)
+    keystroke(super+alt+up) = switchToScreen(caracara)
+    keystroke(super+alt+down) = switchToScreen(falcon)
+    mousebutton(6) = keystroke(WWWBack)
+    mousebutton(7) = keystroke(WWWForward)
+end
+<% when 'hawk' -%>
+section: screens
+    hawk:
+    falcon:
+end
+
+section: options
+    keystroke(super+alt+right) = switchToScreen(falcon)
+    keystroke(super+alt+left) = switchToScreen(hawk)
 end
 <% end -%>

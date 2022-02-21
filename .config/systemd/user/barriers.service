@@ -1,7 +1,7 @@
 [Unit]
 Description=Barrier keyboard/mouse server
 PartOf=x-session.target
-ConditionHost=falcon
+ConditionFileNotEmpty=%h/.local/share/barrier/.barrier.conf
 
 [Service]
 ExecStart=/usr/bin/barriers --no-daemon --no-restart --disable-crypto
