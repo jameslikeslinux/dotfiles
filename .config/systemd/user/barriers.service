@@ -4,7 +4,8 @@ PartOf=x-session.target
 ConditionFileNotEmpty=%h/.local/share/barrier/.barrier.conf
 
 [Service]
-ExecStart=/usr/bin/barriers --no-daemon --no-restart --disable-crypto
+Type=forking
+ExecStart=/usr/bin/barriers --disable-crypto
 
 [Install]
 WantedBy=x-session.target

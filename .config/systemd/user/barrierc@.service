@@ -3,8 +3,8 @@ Description=Barrier keyboard/mouse client
 PartOf=x-session.target
 
 [Service]
-ExecStart=/usr/bin/barrierc --no-daemon --no-restart --disable-crypto %i.nest
-Restart=always
+Type=forking
+ExecStart=/usr/bin/barrierc --disable-crypto %i.nest
 
 [Install]
 WantedBy=x-session.target
