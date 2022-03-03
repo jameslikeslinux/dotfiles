@@ -5,7 +5,7 @@ PartOf=xmonad-session.target
 [Service]
 ExecStart=/usr/bin/picom --backend=glx --experimental-backends --vsync
 Restart=always
-RestartSec=5
+RestartSec=10
 
 [Install]
 WantedBy=xmonad-session.target
