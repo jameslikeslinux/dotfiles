@@ -77,9 +77,9 @@ file_mode() {
     local file="$1"
 
     if [[ $OSTYPE == darwin* ]]; then
-        stat -f '%A' "$file"
+        stat -L -f '%A' "$file"
     else
-        stat -c '%a' "$file"
+        stat -L -c '%a' "$file"
     fi
 }
 
