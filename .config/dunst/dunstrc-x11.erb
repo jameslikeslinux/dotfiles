@@ -4,12 +4,14 @@ gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
 text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1
 -%>
 [global]
-geometry = "<%= (400 * gui_scaling_factor).round %>x4-<%= (7 * text_scaling_factor).round %>+<%= (25 * text_scaling_factor).round %>"
+offset = <%= (7 * text_scaling_factor).round %>x<%= (25 * text_scaling_factor).round %>
+scale = <%= gui_scaling_factor %>
 shrink = true
-corner_radius = <%= (4 * gui_scaling_factor).round %>
-padding = <%= (4 * gui_scaling_factor).round %>
-horizontal_padding = <%= (8 * gui_scaling_factor).round %>
-separator_height = <%= (1 * gui_scaling_factor).round %>
+corner_radius = 4
+frame_width = 0
+padding = 4
+horizontal_padding = 8
+separator_height = 1
 separator_color = foreground
 
 font = sans 9
@@ -17,9 +19,11 @@ markup = full
 format = "<b>%s</b>\n%b"
 word_wrap = true
 
+enable_recursive_icon_lookup = true
 icon_position = left
-max_icon_size = <%= (48 * gui_scaling_factor).round %>
-icon_path = /usr/share/dunst/icons/actions/scaled:/usr/share/dunst/icons/devices/scaled:/usr/share/dunst/icons/status/scaled
+icon_theme = breeze-dark
+icon_size = 24
+min_icon_size = 32
 
 dmenu = /usr/bin/rofi -dmenu -p dunst
 sticky_history = false
