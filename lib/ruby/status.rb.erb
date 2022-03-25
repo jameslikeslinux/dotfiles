@@ -445,6 +445,38 @@ class VpnStatus < StatusWidget
   end
 end
 
+class WindowStatus < StatusWidget
+  MAX_LENGTH = 100.freeze
+
+  def initialize
+    super('window', nil)
+  end
+
+  private
+
+  def start_monitor
+    @p = IO.popen('swaymsg --monitor --type subscribe \'["window"]\'')
+    @p.each do |line|
+      event = JSON.parse(line) || next
+      next unless ['focus', 'title'].include? event['change']
+      @title = event['container']['name']
+      trigger
+    end
+    @p.close
+  end
+
+  def cleanup
+    Process.kill('TERM', @p.pid) if @p and !@p.closed?
+    super
+  end
+
+  def segments
+    return unless @title
+    title = @title.length > MAX_LENGTH ? "#{@title[0..MAX_LENGTH - 2]}…" : @title
+    " #{title}"
+  end
+end
+
 class SwayWorkspaces < StatusWidget
   def initialize(count)
     super('sway-workspaces')
@@ -498,7 +530,7 @@ class SwayWorkspaces < StatusWidget
           bgcolor = '#282828'
           bold = false
         end
-        endsep = workspace == workspaces.last ? colorize(bgcolor, nil, '') : ''
+        endsep = workspace == workspaces.last ? colorize(bgcolor, nil, ' ') : ''
         fifo.puts colorize(fgcolor, bgcolor, " #{workspace['name']} ", bold) + endsep
       else
         fifo.puts ''

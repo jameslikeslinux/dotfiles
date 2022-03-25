@@ -13,7 +13,7 @@
         "custom/sway-workspace-8",
         "custom/sway-workspace-9",
         "custom/sway-workspace-10",
-        "sway/window"
+        "custom/window"
     ],
     "modules-right": [
         "custom/load",
@@ -75,9 +75,8 @@
         "on-click": "sway-greedy-view 10",
         "tooltip": false
     },
-    "sway/window": {
-        "format": " {}",
-        "max-length": 100,
+    "custom/window": {
+        "exec": "$HOME/.config/waybar/status/widget window",
         "tooltip": false
     },
     "custom/load": {
