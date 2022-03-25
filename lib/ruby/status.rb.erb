@@ -531,13 +531,30 @@ class SwayWorkspaces < StatusWidget
           bold = false
         end
         endsep = workspace == workspaces.last ? colorize(bgcolor, nil, ' ') : ''
-        fifo.puts colorize(fgcolor, bgcolor, " #{workspace['name']} ", bold) + endsep
+        fifo.puts colorize(fgcolor, bgcolor, " #{pretty_name(workspace['name'])} ", bold) + endsep
       else
         fifo.puts ''
       end
       fifo.flush
     end
     nil # don't output any segments
+  end
+
+  def pretty_name(name)
+    subs = {
+      'web'     => "\uf0ac", # fa-globe
+      'dev'     => "\uf121", # fa-code
+      'ops'     => "\uf120", # fa-terminal
+      'music'   => "\uf001", # fa-music
+      'mail'    => "\uf0e0", # fa-envelope
+      'chat'    => "\uf075", # fa-comment
+      'windows' => "\uf17a", # fa-windows
+    }
+
+    return name unless name =~ /^(\d+).*?: (.*)/
+    num = Regexp.last_match(1)
+    icon = fontawesome(subs[Regexp.last_match(2)] || "\uf069")
+    "#{num}: #{icon}"
   end
 end
 
