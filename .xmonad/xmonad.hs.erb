@@ -216,6 +216,7 @@ manageHook' = composeOne
     [ className =? "ksmserver"                -?> doIgnore
     , className =? "ksmserver-logout-greeter" -?> doIgnore
     , className =? "XLogo"                    -?> doFloat
+    , className =? "Firewall-config"          -?> doCenterFloat
     , className =? "systemsettings"           -?> doCenterFloat
     , appName   =? "gp-saml-gui"              -?> doCenterFloat
     , isDesktop                               -?> doWindowAction sendToBottom
