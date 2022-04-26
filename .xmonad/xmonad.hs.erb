@@ -253,7 +253,7 @@ main = xmonad
     . withNavigation2DConfig def { defaultTiledNavigation = centerNavigation }
     $ def
     { modMask            = mod4Mask
-    , terminal           = "urxvtc"
+    , terminal           = "<%= ['pinebookpro'].include?(@facts['profile']['platform']) ? 'alacritty' : 'urxvtc' %>"
     , startupHook        = startupHook'
     , logHook            = logHook'
     , layoutHook         = layoutHook'

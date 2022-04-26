@@ -145,9 +145,11 @@ if [[ $branch == 'main' || $PWD != $HOME ]]; then
 File <| title == '${BASEDIR}/.ssh/config' |> {
   mode => '0600',
 }
+
+include dotfiles
 END_SPECIAL
 
-    "$PUPPET" apply --modulepath="${BASEDIR}/lib/puppet" "$MANIFEST"
+    FACTER_basedir="$BASEDIR" "$PUPPET" apply --modulepath="${BASEDIR}/lib/puppet" "$MANIFEST"
 else
     "$PUPPET" resource file "${BASEDIR}/.ssh/config" mode=0600
 fi
