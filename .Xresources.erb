@@ -1,6 +1,7 @@
 <% require 'colorscheme'
 dark = ColorScheme.dark
 gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
+text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1
 dark.terminal.each do |c| -%>
 *color<%= c.ansi %>: <%= c.x11 %>
 <% end -%>
@@ -32,7 +33,7 @@ URxvt.secondaryScroll: false
 URxvt.secondaryWheel: true
 URxvt.termName: rxvt-unicode-256color-powerline
 URxvt.urgentOnBell: true
-URxvt.letterSpace: -1
+URxvt.letterSpace: <%= (-1 * text_scaling_factor).round %>
 
 <% dark.terminal.each do |c| -%>
 xterm*color<%= c.ansi %>: <%= c.x11 %>
