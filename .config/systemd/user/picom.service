@@ -3,7 +3,7 @@ Description=picom compositor
 PartOf=xmonad-session.target
 
 [Service]
-ExecStart=/usr/bin/picom --backend=glx --experimental-backends --vsync
+ExecStart=/usr/bin/picom --experimental-backends --vsync
 Restart=always
 RestartSec=10
 
