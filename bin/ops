@@ -1,0 +1,8 @@
+#!/bin/sh
+#
+# tmux layout for operations
+#
+
+tmux split-window -h htop
+tmux split-window
+tmux select-pane -L
