@@ -113,7 +113,7 @@ prompt_mine_ro() {
 }
 
 prompt_mine_bg() {
-    if [[ $(jobs | wc -l) -gt 0 ]]; then
+    if [[ ${#jobstates} > 0 ]]; then
         prompt_mine_segment ' %j ' green base01
     fi
 }
