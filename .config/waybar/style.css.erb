@@ -1,3 +1,4 @@
+<% text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1 -%>
 * {
     all: unset;
 }
@@ -6,7 +7,7 @@
     background-color: black;
     color: #d8d8d8;
     font-family: monospace;
-    font-size: 9pt;
+    font-size: <%= 9 * text_scaling_factor %>pt;
 }
 
 #custom-window {
