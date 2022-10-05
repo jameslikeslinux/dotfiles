@@ -1,13 +1,15 @@
-<% text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1 -%>
+<% require 'colorscheme'
+dark = ColorScheme.dark.colors_by_base
+-%>
 * {
     all: unset;
 }
 
 #waybar {
     background-color: black;
-    color: #d8d8d8;
+    color: <%= dark[0x05].web %>;
     font-family: monospace;
-    font-size: <%= 9 * text_scaling_factor %>pt;
+    font-size: 9pt;
 }
 
 #custom-window {
@@ -21,6 +23,6 @@
 }
 
 #clock {
-    background-color: #383838;
+    background-color: <%= dark[0x02].web %>;
     margin: 2px 0 2px 0;
 }
