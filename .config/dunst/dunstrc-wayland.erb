@@ -5,7 +5,6 @@ text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1
 -%>
 [global]
 offset = 7x7
-scale = <%= gui_scaling_factor %>
 shrink = true
 corner_radius = 4
 frame_width = 0
@@ -14,7 +13,7 @@ horizontal_padding = 8
 separator_height = 1
 separator_color = foreground
 
-font = sans 9
+font = sans <%= 9 * text_scaling_factor %>
 markup = full
 format = "<b>%s</b>\n%b"
 word_wrap = true
@@ -22,8 +21,7 @@ word_wrap = true
 enable_recursive_icon_lookup = true
 icon_position = left
 icon_theme = breeze-dark
-icon_size = 24
-min_icon_size = 32
+min_icon_size = 24
 
 dmenu = /usr/bin/rofi -dmenu -p dunst
 sticky_history = false
