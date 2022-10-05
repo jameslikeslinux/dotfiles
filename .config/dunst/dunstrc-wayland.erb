@@ -4,6 +4,9 @@ gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
 text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1
 -%>
 [global]
+<% if @facts['primary_output'] -%>
+monitor = <%= @facts['monitor_layout'].reverse.index @facts['primary_output'] %>
+<% end -%>
 offset = 7x7
 shrink = true
 corner_radius = 4
