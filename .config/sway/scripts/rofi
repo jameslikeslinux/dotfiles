@@ -1,0 +1,2 @@
+#!/usr/bin/env zsh
+exec rofi -m "XWAYLAND$(swaymsg -t get_outputs | jq -r 'to_entries[] | select(.value.focused).key')" "$@"

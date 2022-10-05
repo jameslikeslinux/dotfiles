@@ -34,7 +34,7 @@ bindsym $mod+Shift+Return exec footclient
 bindsym $mod+f            fullscreen
 bindsym $mod+t            floating toggle
 bindsym $mod+x            kill
-bindsym $mod+p            exec rofi -show drun -dpi <%= (96 * scaling_ratio).round %>
+bindsym $mod+p            exec ~/.config/sway/scripts/rofi -show drun -dpi <%= (96 * scaling_ratio).round %>
 bindsym $mod+q            reload
 bindsym $mod+Shift+q      exec swaynag -t warning -m '' -b 'Yes, exit sway' 'systemctl --user stop graphical-session.target; swaymsg exit'
 
