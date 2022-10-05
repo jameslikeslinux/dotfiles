@@ -455,11 +455,19 @@ class WindowStatus < StatusWidget
   private
 
   def start_monitor
-    @p = IO.popen('swaymsg --monitor --type subscribe \'["window"]\'')
+    @p = IO.popen('swaymsg --monitor --type subscribe \'["window", "workspace"]\'')
     @p.each do |line|
       event = JSON.parse(line) || next
-      next unless ['focus', 'title'].include? event['change']
-      @title = event['container']['name']
+      case event['change']
+      when 'init'
+        @title = ''
+      when 'close', 'move'
+        @title = '' if event['container']
+      when 'focus', 'title'
+        @title = event['container']['name'] if event['container']
+      else
+        next
+      end
       trigger
     end
     @p.close
