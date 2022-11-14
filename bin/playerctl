@@ -1,0 +1,9 @@
+#!/usr/bin/env zsh
+#
+# playerctl wrapper
+#
+# Define playerctl preferences like what players to ignore in this script
+# rather than hardcoding in window manager configs.
+#
+
+exec /usr/bin/playerctl -i Gwenview "$@"

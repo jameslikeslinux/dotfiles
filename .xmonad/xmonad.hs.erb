@@ -330,8 +330,8 @@ main = xmonad
     , ("M-<Left>"      , spawn "~/bin/switch-input kite")
     , ("M-<Right>"     , spawn "~/bin/switch-input falcon")
 <% end -%>
-    , ("M-<Space>"               , spawn "playerctl play-pause")
-    , ("<XF86AudioPlay>"         , spawn "playerctl play-pause")
+    , ("M-<Space>"               , spawn "~/bin/playerctl play-pause")
+    , ("<XF86AudioPlay>"         , spawn "~/bin/playerctl play-pause")
     , ("<XF86AudioMicMute>"      , spawn "~/.xmonad/scripts/mic toggle-mute")
     , ("<XF86AudioMute>"         , raisePanelTemporarily >> spawn "~/.xmonad/scripts/volume toggle-mute")
     , ("<XF86AudioLowerVolume>"  , raisePanelTemporarily >> spawn "~/.xmonad/scripts/volume -0.5dB")
