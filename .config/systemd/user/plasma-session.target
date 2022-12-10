@@ -1,3 +1,0 @@
-[Unit]
-Description=Plasma session
-BindsTo=graphical-session.target

@@ -1,6 +1,0 @@
-[Desktop Entry]
-Exec=/bin/systemctl --user restart plasma-session.target
-Icon=plasma
-Name=Plasma Session
-Type=Application
-X-KDE-AutostartScript=true
