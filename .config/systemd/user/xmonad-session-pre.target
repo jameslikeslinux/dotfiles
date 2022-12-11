@@ -1,4 +1,4 @@
 [Unit]
-Description=X session
+Description=xmonad session startup
 RefuseManualStart=yes
 StopWhenUnneeded=yes

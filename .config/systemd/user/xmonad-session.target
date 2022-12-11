@@ -1,3 +1,5 @@
 [Unit]
 Description=xmonad session
-PartOf=graphical-session.target
+Wants=xmonad-session-pre.target
+After=xmonad-session-pre.target
+BindsTo=graphical-session.target x-session.target

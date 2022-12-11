@@ -1,0 +1,12 @@
+[Unit]
+Description=load X resources
+PartOf=xmonad-session.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/xrdb /etc/X11/Xresources
+ExecStart=/usr/bin/xrdb -merge %h/.Xresources
+RemainAfterExit=yes
+
+[Install]
+WantedBy=xmonad-session.target

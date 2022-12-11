@@ -1,3 +1,5 @@
 [Unit]
 Description=Sway session
+Wants=sway-session-pre.target
+After=sway-session-pre.target
 BindsTo=graphical-session.target wayland-session.target

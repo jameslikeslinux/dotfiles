@@ -1,4 +1,4 @@
 [Unit]
-Description=X session
+Description=Wayland session startup
 RefuseManualStart=yes
 StopWhenUnneeded=yes

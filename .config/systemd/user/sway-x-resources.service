@@ -1,0 +1,12 @@
+[Unit]
+Description=load X resources
+PartOf=sway-session.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/xrdb /etc/sway/Xresources
+ExecStart=/usr/bin/xrdb -merge %h/.Xresources
+RemainAfterExit=yes
+
+[Install]
+WantedBy=sway-session.target

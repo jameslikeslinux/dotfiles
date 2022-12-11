@@ -110,7 +110,7 @@ default_session_name() {
 
     if [[ $TSESSION ]]; then
         name="$TSESSION"
-    elif [[ $DESKTOP_SESSION ]]; then
+    elif [[ $XDG_SESSION_DESKTOP ]]; then
         local current_desktop
 
         if [[ -S $SWAYSOCK ]]; then
