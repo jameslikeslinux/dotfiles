@@ -5,7 +5,7 @@ text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1
 scaling_ratio = text_scaling_factor / gui_scaling_factor
 -%>
 # Load system configs like input and output configuration
-include /etc/sway/config.d/*
+include /etc/sway/config
 
 #
 # Preferences
@@ -36,7 +36,7 @@ bindsym $mod+t            floating toggle
 bindsym $mod+x            kill
 bindsym $mod+p            exec ~/.config/sway/scripts/rofi -show drun -dpi <%= (96 * scaling_ratio).round %>
 bindsym $mod+q            reload
-bindsym $mod+Shift+q      exec swaynag -t warning -m '' -b 'Yes, exit sway' 'systemctl --user stop graphical-session.target; swaymsg exit'
+bindsym $mod+Shift+q      exec swaynag -t warning -m '' -b 'Exit sway' 'systemctl --user stop graphical-session.target; swaymsg exit'
 
 bindsym $mod+h         focus left
 bindsym $mod+l         focus right
