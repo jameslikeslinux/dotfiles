@@ -1,7 +1,7 @@
 class dotfiles {
   $urxvtd_ensure = $facts['profile']['platform'] ? {
     'pinebookpro' => absent,
-    default       => link,
+    default       => absent,
   }
 
   file { "${facts['basedir']}/.config/systemd/user/x-session.target.wants/urxvtd.service":
