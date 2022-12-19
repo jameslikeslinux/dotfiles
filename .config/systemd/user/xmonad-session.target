@@ -1,5 +1,5 @@
 [Unit]
 Description=xmonad session
-Wants=xmonad-session-pre.target
+Wants=xmonad-session-pre.target plasma-ksmserver.service
 After=xmonad-session-pre.target
 BindsTo=graphical-session.target x-session.target
