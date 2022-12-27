@@ -4,6 +4,7 @@ PartOf=graphical-session.target
 
 [Service]
 Type=oneshot
+ExecStartPre=/bin/sh -c '[ "$XDG_SESSION_DESKTOP" == "sway" ] && xrdb /etc/sway/Xresources || xrdb /etc/X11/Xresources'
 ExecStart=/usr/bin/xrdb -merge %h/.Xresources
 RemainAfterExit=yes
 
