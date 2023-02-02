@@ -1,0 +1,21 @@
+---
+stages:
+  - 'preprocess'
+
+'Preprocess templates':
+  stage: 'preprocess'
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  before_script:
+    - 'git config --global user.name "Dotfiles CI"'
+    - 'git config --global user.email james@james.tl'
+    - 'eval $(ssh-agent -s)'
+    - 'chmod 600 "$SSH_PRIVATE_KEY" && ssh-add "$SSH_PRIVATE_KEY"'
+    - 'mkdir -p ~/.ssh && chmod 700 ~/.ssh'
+    - 'cat "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts'
+    - 'git remote set-url origin git@gitlab.james.tl:james/dotfiles.git'
+  script:
+    - './.refresh'
+    - 'git add -f .'
+    - 'git commit -m "Preprocess templates"'
+    - 'git push --force origin HEAD:preprocessed'
