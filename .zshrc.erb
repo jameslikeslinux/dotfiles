@@ -140,6 +140,12 @@ alias jcu='journalctl --user'
 alias jcue='journalctl --user -e'
 alias jcuf='journalctl --user -f'
 
+# streamux aliases
+alias sm='streamux'
+alias sf='streamux fast'
+alias sb='streamux balanced'
+alias ss='streamux stable'
+
 # Easy way to switch to project
 p() { cd "${HOME}/projects/${1}" && ls }
 compdef "_files -W ${HOME}/projects" p
