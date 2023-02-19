@@ -1,0 +1,14 @@
+[Unit]
+Description=streaming server in tmux
+Requires=tmux.service
+After=tmux.service
+ConditionPathExists=%h/streamux/bin/streamux
+
+[Service]
+Type=oneshot
+ExecStart=%h/streamux/bin/streamux
+ExecStop=/usr/bin/tmux kill-session -t streamux
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target
