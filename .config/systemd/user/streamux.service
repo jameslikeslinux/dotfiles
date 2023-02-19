@@ -5,10 +5,9 @@ After=tmux.service
 ConditionPathExists=%h/streamux/bin/streamux
 
 [Service]
-Type=oneshot
-ExecStart=%h/streamux/bin/streamux
-ExecStop=/usr/bin/tmux kill-session -t streamux
-RemainAfterExit=yes
+Type=forking
+ExecStart=%h/streamux/bin/streamux start
+ExecStop=%h/streamux/bin/streamux stop
 
 [Install]
 WantedBy=default.target
