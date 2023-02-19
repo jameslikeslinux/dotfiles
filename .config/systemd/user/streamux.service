@@ -8,6 +8,7 @@ ConditionPathExists=%h/streamux/bin/streamux
 Type=forking
 ExecStart=%h/streamux/bin/streamux start
 ExecStop=%h/streamux/bin/streamux stop
+Restart=always
 
 [Install]
 WantedBy=default.target
