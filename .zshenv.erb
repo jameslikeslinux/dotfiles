@@ -7,6 +7,11 @@ for dir in /bin /sbin /usr/bin /usr/sbin /usr/local/bin /usr/local/sbin /usr/glu
     [[ -e $dir ]] && path=($dir $path)
 done
 
+# Add streamux commands inside streamux shell
+if [[ $STREAMUX && -e $HOME/streamux/libexec ]]; then
+    path=($HOME/streamux/libexec $path)
+fi
+
 # Load extra functions
 typeset -U fpath
 fpath=("$HOME/.zsh/functions" $fpath)
