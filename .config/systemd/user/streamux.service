@@ -7,6 +7,10 @@ ConditionPathExists=%h/streamux/bin/streamux
 [Service]
 Type=oneshot
 ExecStart=%h/streamux/bin/streamux start
+ExecStop=%h/streamux/bin/streamux stop
+ExecStartPost=/usr/bin/sudo sh -c 'echo heartbeat > /sys/class/leds/blue:status/trigger'
+ExecStopPost=/usr/bin/sudo sh -c 'echo default-on > /sys/class/leds/blue:status/trigger'
+RemainAfterExit=yes
 
 [Install]
 WantedBy=default.target
