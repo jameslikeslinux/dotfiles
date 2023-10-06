@@ -112,7 +112,7 @@ taffybarConfig = defaultSimpleTaffyConfig
     { monitorsAction = return [0]
     , startWidgets   = [workspaces, windows]
     , endWidgets     = clock : statusWidgets
-    , barHeight      = <%= (18 * text_scaling_factor).round %>
+    , barHeight      = ExactSize <%= (18 * text_scaling_factor).round %>
     , widgetSpacing  = 0
     }
   where
