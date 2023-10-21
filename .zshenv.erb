@@ -34,11 +34,17 @@ export TERMINFO="${HOME}/.terminfo"
 export XAUTHORITY="${XAUTHORITY-$HOME/.Xauthority}"
 
 # Enable access to ssh-agent that may be running under systemd or Cygwin
-if [[ $OSTYPE == 'cygwin' ]]; then
-    export SSH_AUTH_SOCK="${SSH_AUTH_SOCK:-/tmp/ssh-agent-${UID}.socket}"
-else
-    export SSH_AUTH_SOCK="${SSH_AUTH_SOCK:-${XDG_RUNTIME_DIR}/ssh-agent.socket}"
-fi
+case $OSTYPE in
+    'cygwin')
+        export SSH_AUTH_SOCK="${SSH_AUTH_SOCK:-/tmp/ssh-agent-${UID}.socket}"
+        ;;
+    'linux-android')
+        export SSH_AUTH_SOCK="${SSH_AUTH_SOCK:-/data/data/com.termux/files/usr/tmp/ssh-agent.socket}"
+        ;;
+    *)
+        export SSH_AUTH_SOCK="${SSH_AUTH_SOCK:-${XDG_RUNTIME_DIR}/ssh-agent.socket}"
+        ;;
+esac
 
 # Use Plasma theme outside of Plasma
 export QT_QPA_PLATFORMTHEME=kde

@@ -150,9 +150,8 @@ compdef "_files -W ${HOME}/projects" p
 # Set standard umask
 umask 022
 
-# Start ssh-agent on Cygwin if necessary
-if [[ $OSTYPE == 'cygwin' ]] && ! pgrep -U $UID -x ssh-agent > /dev/null; then
-    rm -f "$SSH_AUTH_SOCK"
+# Start ssh-agent on platforms where/if necessary
+if [[ ($OSTYPE == 'cygwin' || $OSTYPE == 'linux-android') && ! -S $SSH_AUTH_SOCK ]]; then
     eval $(ssh-agent -a "$SSH_AUTH_SOCK") > /dev/null
 fi
 
