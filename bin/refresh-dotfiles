@@ -151,5 +151,9 @@ END_SPECIAL
 
     FACTER_basedir="$BASEDIR" "$PUPPET" apply --modulepath="${BASEDIR}/lib/puppet" "$MANIFEST"
 else
-    "$PUPPET" resource file "${BASEDIR}/.ssh/config" mode=0600
+    if command -v "$PUPPET" > /dev/null; then
+        "$PUPPET" resource file "${BASEDIR}/.ssh/config" mode=0600
+    else
+        chmod 0600 "${BASEDIR}/.ssh/config"
+    fi
 fi
