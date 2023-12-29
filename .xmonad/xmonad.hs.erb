@@ -173,6 +173,7 @@ logHook' = do
     raiseOverlays
 
 layoutHook' = id
+    . smartBorders
     . onWorkspace "windows" (noBorders Full)
     . mkToggle (single NBFULL)
     . gaps' [((U, 108), False)]
@@ -213,6 +214,7 @@ layoutHook' = id
 manageHook' = composeOne
     [ className =? "ksmserver"                -?> doIgnore
     , className =? "ksmserver-logout-greeter" -?> doIgnore
+    , className =? "Taffybar-linux-x86_64"    -?> hasBorder False -- for calendar widget
     , className =? "XLogo"                    -?> doFloat
     , className =? "Firewall-config"          -?> doCenterFloat
     , className =? "systemsettings"           -?> doCenterFloat
