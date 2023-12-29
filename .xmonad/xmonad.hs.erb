@@ -174,7 +174,6 @@ logHook' = do
     raiseOverlays
 
 layoutHook' = id
-    . smartBorders
     . onWorkspace "windows" (noBorders Full)
     . mkToggle (single NBFULL)
     . gaps' [((U, 108), False)]
@@ -221,10 +220,10 @@ manageHook' = composeOne
     , appName   =? "gp-saml-gui"              -?> doCenterFloat
     , isDesktop                               -?> doWindowAction sendToBottom
     , isDock                                  -?> doWindowAction sendToJustAboveDesktop
+    , isTooltip                               -?> doIgnore
     , isFloating                              -?> doCenterFloat
     , isOSD                                   -?> doCenterFloat
     , isDialog                                -?> doFloat
-    , isTooltip                               -?> hasBorder False
     , transience                              --- move to parent window
     , pure True                               -?> insertPosition Below Newer
     ]
