@@ -60,6 +60,7 @@ isDesktop  = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DESKTOP"
 isDock     = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_DOCK"
 isFloating = isInProperty "_NET_WM_STATE" "_NET_WM_STATE_ABOVE"
 isOSD      = isInProperty "_NET_WM_WINDOW_TYPE" "_KDE_NET_WM_WINDOW_TYPE_ON_SCREEN_DISPLAY"
+isTooltip  = isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_TOOLTIP"
 
 isOverlayWindow :: Query Bool
 isOverlayWindow = do
@@ -214,7 +215,6 @@ layoutHook' = id
 manageHook' = composeOne
     [ className =? "ksmserver"                -?> doIgnore
     , className =? "ksmserver-logout-greeter" -?> doIgnore
-    , className =? "Taffybar-linux-x86_64"    -?> hasBorder False -- for calendar widget
     , className =? "XLogo"                    -?> doFloat
     , className =? "Firewall-config"          -?> doCenterFloat
     , className =? "systemsettings"           -?> doCenterFloat
@@ -224,6 +224,7 @@ manageHook' = composeOne
     , isFloating                              -?> doCenterFloat
     , isOSD                                   -?> doCenterFloat
     , isDialog                                -?> doFloat
+    , isTooltip                               -?> hasBorder False
     , transience                              --- move to parent window
     , pure True                               -?> insertPosition Below Newer
     ]
