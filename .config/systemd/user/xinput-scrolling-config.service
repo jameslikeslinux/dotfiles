@@ -1,0 +1,12 @@
+[Unit]
+Description=set libinput scrolling pixel distance
+PartOf=xmonad-session.target
+ConditionHost=hawk
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/xinput set-prop 8 'libinput Scrolling Pixel Distance' 10
+RemainAfterExit=yes
+
+[Install]
+WantedBy=xmonad-session.target
