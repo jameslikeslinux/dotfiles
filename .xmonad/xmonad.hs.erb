@@ -176,7 +176,7 @@ logHook' = do
 layoutHook' = id
     . onWorkspace "windows" (noBorders Full)
     . mkToggle (single NBFULL)
-    . gaps' [((U, 108), False)]
+    . gaps' [(<%= @facts['networking']['hostname'] == 'owl' ? '(D, 730)' : '(U, 108)' %>, False)]
     . avoidStruts
     . tabs
     . mkToggle (single FULL)
