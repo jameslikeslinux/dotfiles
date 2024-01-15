@@ -119,6 +119,7 @@ alias mv='mv -f'
 alias rm='rm -f'
 alias r='[[ -S ${TMUX%%,*} ]] && eval "$(t show-environment -s)" && TERM="${${(s/ /)$(t show-options -s default-terminal)}[2]//\"/}"; exec $SHELL'
 alias bigsnaps='zfs list -t snapshot -s used'
+alias calicoctl='kubectl exec -i -n kube-system calicoctl -- /calicoctl'
 alias caracara='xfreerdp /d: /dynamic-resolution /scale:180 /v:caracara.nest -grab-keyboard'
 unalias suafs 2>/dev/null
 unalias a 2>/dev/null
