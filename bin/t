@@ -61,7 +61,7 @@ exec_tmux() {
                 tmux "${socket_name[@]}" set-environment -r KRB5CCNAME
             fi
         fi
-    elif systemctl --user > /dev/null 2>&1; then
+    elif ! systemd-detect-virt -cq 2>/dev/null && systemctl --user > /dev/null 2>&1; then
         loginctl enable-linger
         systemctl --user stop tmux.scope 2>/dev/null
         exec systemd-run --user --scope --unit tmux tmux "$@"
