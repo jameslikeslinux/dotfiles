@@ -138,7 +138,7 @@ branch="$(git rev-parse --abbrev-ref HEAD)"
 # Grab latest updates from git and reexec this script
 if [[ -z $no_fetch ]]; then
     git fetch
-    git reset --hard "origin/${branch}" && exec "$0" --no-fetch
+    git reset --hard "origin/${branch}" && exec "$0" "$@" --no-fetch
 fi
 
 # Process templates with Puppet if we're on the main branch or a clone
