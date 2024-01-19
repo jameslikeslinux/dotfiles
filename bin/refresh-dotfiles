@@ -105,8 +105,8 @@ END
     # (processed through 'tr' because file_line generates Windows line
     # endings on Windows which 'read' doesn't strip off)
     < "$DOT_TEMPLATES" tr -d '\r' | while read dotfile; do
-        if [[ ! -f "${BASEDIR}/${dotfile}.erb" ]]; then
-            if ! git ls-files --error-unmatch "${BASEDIR}/${dotfile}" > /dev/null 2>&1; then
+        if [[ ! -f "${dotfile}.erb" ]]; then
+            if ! git ls-files --error-unmatch "$dotfile" > /dev/null 2>&1; then
                 cat <<END
 file { '${BASEDIR}/${dotfile}':
   ensure => absent,
@@ -135,10 +135,10 @@ touch "$DOT_TEMPLATES"
 
 branch="$(git rev-parse --abbrev-ref HEAD)"
 
-# Grab latest updates from git
+# Grab latest updates from git and reexec this script
 if [[ -z $no_fetch ]]; then
     git fetch
-    git reset --hard "origin/${branch}"
+    git reset --hard "origin/${branch}" && exec "$0" --no-fetch
 fi
 
 # Process templates with Puppet if we're on the main branch or a clone
