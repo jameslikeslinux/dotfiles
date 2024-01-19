@@ -314,7 +314,8 @@ main = xmonad
     , ("M-s"           , raisePanelTemporarily >> spawn "~/.xmonad/scripts/screensaver toggle")
     , ("M-<Escape>"    , unGrab >> spawn "~/.xmonad/scripts/screensaver reset; loginctl lock-session")
     , ("M-<Tab>"       , sendMessage NextLayout)
-    , ("C-<Tab>"       , sendMessage NextLayout)        -- for inside VMware Fusion
+    , ("C-<Tab>"       , sendMessage NextLayout) -- for inside VMware Fusion
+    , ("M-C-<Tab>"     , sendMessage NextLayout) -- for inside VMware Fusion
     , ("M-<Backspace>" , setLayout $ Layout layoutHook')
     , ("M1-<Tab>"      , focusDown)
     , ("M1-S-<Tab>"    , focusUp)
