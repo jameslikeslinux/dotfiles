@@ -106,16 +106,20 @@ END
     # endings on Windows which 'read' doesn't strip off)
     < "$DOT_TEMPLATES" tr -d '\r' | while read dotfile; do
         if [[ ! -f "${BASEDIR}/${dotfile}.erb" ]]; then
-            cat <<END
+            if ! git ls-files --error-unmatch "${BASEDIR}/${dotfile}" > /dev/null 2>&1; then
+                cat <<END
 file { '${BASEDIR}/${dotfile}':
   ensure => absent,
+  before => File_line['${dotfile}'],
 }
+END
+            fi
 
+            cat <<END
 file_line { '${dotfile}':
   ensure  => absent,
   path    => '${DOT_TEMPLATES}',
   line    => '${dotfile}',
-  require => File['${BASEDIR}/${dotfile}'],
 }
 END
         fi
