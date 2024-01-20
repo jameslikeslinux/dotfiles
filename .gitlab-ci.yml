@@ -1,9 +1,10 @@
 ---
 stages:
-  - 'preprocess'
+  - 'Build'
+  - 'Trigger'
 
 'Preprocess templates':
-  stage: 'preprocess'
+  stage: 'Build'
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
   before_script:
@@ -19,3 +20,11 @@ stages:
     - 'git add -f .'
     - 'git commit -m "Preprocess templates"'
     - 'git push --force origin HEAD:preprocessed'
+
+'Refresh stage1':
+  stage: 'Trigger'
+  variables:
+    BUILD: 'server'
+    REFRESH: 'true'
+  trigger:
+    project: 'nest/stage1'
