@@ -33,6 +33,13 @@ export TERMINFO="${HOME}/.terminfo"
 # Enable X apps through sudo (along with env_keep)
 export XAUTHORITY="${XAUTHORITY-$HOME/.Xauthority}"
 
+# Fix DISPLAY mismatch between SSH (uses hostname) and xauth (uses fqdn)
+if [[ $DISPLAY ]]; then
+    if xauth=($(xauth list $DISPLAY 2>/dev/null)); then
+        xauth add $DISPLAY ${xauth[2,-1]} 2>/dev/null && chown ${SUDO_USER:-$USER} $XAUTHORITY
+    fi
+fi
+
 # Enable access to ssh-agent that may be running under systemd or Cygwin
 case $OSTYPE in
     'cygwin')
