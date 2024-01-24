@@ -119,7 +119,6 @@ alias mv='mv -f'
 alias rm='rm -f'
 alias r='[[ -S ${TMUX%%,*} ]] && eval "$(t show-environment -s)" && TERM="${${(s/ /)$(t show-options -s default-terminal)}[2]//\"/}"; exec $SHELL'
 alias bigsnaps='zfs list -t snapshot -s used'
-alias calicoctl='kubectl exec -i -n kube-system calicoctl -- /calicoctl'
 alias caracara='xfreerdp /d: /dynamic-resolution /scale:180 /v:caracara.nest -grab-keyboard'
 unalias suafs 2>/dev/null
 unalias a 2>/dev/null
@@ -130,6 +129,19 @@ compdef glue=ssh
 
 alias j='ssh -J avw-unix-jump-noafs.umd.edu'
 compdef j=ssh
+
+# Kubernetes aliases
+alias calicoctl='kubectl exec -i -n kube-system calicoctl -- /calicoctl'
+alias k='kubectl'
+alias kg='kubectl get'
+alias kga='kubectl get all'
+alias kd='kubectl describe'
+alias kl='kubectl logs'
+alias klf='kubectl logs -f'
+
+kdf() { watch -n 3 --no-wrap "kubectl describe $@ | tail -$((LINES - 3))" }
+_kdf() { words=(kubectl describe $words[2,-1] ''); CURRENT=$((CURRENT + 1)); _kubectl }
+compdef _kdf kdf
 
 # systemd aliases
 alias sc='systemctl'
