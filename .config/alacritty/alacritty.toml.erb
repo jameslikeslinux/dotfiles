@@ -5,7 +5,7 @@ text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1
 scaling_ratio = text_scaling_factor / gui_scaling_factor
 -%>
 <% if @facts['os']['family'] == 'windows' -%>
-shell = "C:/tools/cygwin/bin/script.exe -q -c zsh /dev/null"
+shell = "C:/tools/cygwin/bin/zsh.exe"
 
 <% end -%>
 [env]
