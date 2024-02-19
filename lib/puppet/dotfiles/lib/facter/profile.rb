@@ -11,9 +11,3 @@ Facter.add('profile') do
     end
   end
 end
-
-Facter.add('profile') do
-  setcode do
-    { architecture: Facter.value('architecture'), role: 'workstation' }
-  end
-end
