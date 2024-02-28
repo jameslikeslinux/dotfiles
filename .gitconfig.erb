@@ -1,6 +1,13 @@
 [user]
 	name = James Lee
 	email = james@james.tl
+	signingKey = ~/.ssh/id_ed25519
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	allowedSignersFile = ~/.ssh/allowed_signers
+[commit]
+	gpgSign = true
 [color]
 	ui = auto
 [pull]
