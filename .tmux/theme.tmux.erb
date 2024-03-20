@@ -67,6 +67,14 @@ else
     separator='>'
 fi
 
+if [[ $TERM == vt* ]]; then
+    separator=''
+    tmux set -g set-titles off
+else
+    tmux set -g set-titles on
+    tmux set -g set-titles-string '#S:#I:#W > #T'
+fi
+
 # Detect if we're running in another tmux session and set prefix and
 # appearance accordingly
 if [[ $TERM == tmux* ]]; then
