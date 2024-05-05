@@ -1,5 +1,5 @@
 <% case @facts['networking']['hostname'] -%>
-<% when 'owl' -%>
+<% when 'falcon', 'owl' -%>
 # See: https://gavv.net/articles/roc-tutorial-0.2/#configure-pipewire-source-roc-receiver
 context.modules = [
   {   name = libpipewire-module-roc-source
@@ -7,7 +7,12 @@ context.modules = [
           local.ip = 0.0.0.0
           resampler.profile = medium
           fec.code = rs8m
+<% case @facts['networking']['hostname'] -%>
+<% when 'falcon' -%>
+          sess.latency.msec = 50
+<% when 'owl' -%>
           sess.latency.msec = 150
+<% end -%>
           local.source.port = 10001
           local.repair.port = 10002
           source.name = "Roc Source"
@@ -17,13 +22,18 @@ context.modules = [
       }
   }
 ]
-<% when 'hawk' -%>
+<% when 'hawk', 'kestrel' -%>
 # See: https://gavv.net/articles/roc-tutorial-0.2/#configure-pipewire-sink-roc-sender
 context.modules = [
   {   name = libpipewire-module-roc-sink
       args = {
           fec.code = rs8m
+<% case @facts['networking']['hostname'] -%>
+<% when 'hawk' -%>
           remote.ip = 172.22.1.16
+<% when 'kestrel' -%>
+          remote.ip = 172.22.4.2
+<% end -%>
           remote.source.port = 10001
           remote.repair.port = 10002
           sink.name = "Roc Sink"
