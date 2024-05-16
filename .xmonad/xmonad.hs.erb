@@ -327,7 +327,7 @@ main = xmonad
 <% if @facts['networking']['hostname'] == 'falcon' -%>
     , ("M-b"           , rofi >>= \cmd -> spawn $ "env ROFI='" ++ cmd ++ "' ~/bin/brightness")
     , ("M-<Up>"        , spawn "~/bin/switch-input caracara")
-    , ("M-<Down>"      , spawn "~/bin/switch-input falcon")
+    , ("M-<Down>"      , spawn "~/bin/switch-input kestrel")
     , ("M-<Left>"      , spawn "~/bin/switch-input kite")
     , ("M-<Right>"     , spawn "~/bin/switch-input falcon")
 <% end -%>
