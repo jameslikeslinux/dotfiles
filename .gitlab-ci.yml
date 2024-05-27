@@ -18,7 +18,7 @@ stages:
   script:
     - './.refresh'
     - 'git add -f .'
-    - 'git commit -m "Preprocess templates"'
+    - 'git commit -m "Preprocess templates" --no-gpg-sign'
     - 'git push --force origin HEAD:preprocessed'
 
 'Refresh stage1':
