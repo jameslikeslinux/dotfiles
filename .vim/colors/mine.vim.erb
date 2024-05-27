@@ -12,7 +12,7 @@ let s:gui = <%= cs.colors_by_base.map { |c| c.hex } %>
 if &t_Co >= 256
   let s:cterm = <%= cs.colors_by_base.map { |c| c.ansi } %>
   let s:bold = <%= cs.bold_colors.map { |c| c.base } %>
-  let s:visualfg = ""
+  let s:visualfg = "05"
   let s:visualbg = "02"
 elseif &t_Co >= 16
   let s:cterm = <%= cs.colors_by_base(16).map { |c| c.ansi } %>
