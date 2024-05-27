@@ -50,7 +50,7 @@ set -s terminal-overrides 'rxvt-unicode*:Ms=\E]52;%p1%s;%p2%s\007,tmux*:Ms=\E]52
 
 # Alacritty and Foot use system clipboard by default
 # Force primary clipboard
-set -sa terminal-overrides ',alacritty*:Ms=\E]52;p;%p2%s\007,foot*:Ms=\E]52;p;%p2%s\007'
+set -sa terminal-overrides ',alacritty*:Ms=\E]52;p%p1%s;%p2%s\007,foot*:Ms=\E]52;p%p1%s;%p2%s\007'
 
 # Enable real truecolor when the TERM indicates support
 set -sa terminal-overrides ',*truecolor*:Tc'
