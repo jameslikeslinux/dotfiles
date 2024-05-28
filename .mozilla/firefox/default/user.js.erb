@@ -3,6 +3,9 @@ user_pref("browser.compactmode.show", true);
 user_pref("browser.sessionstore.resume_from_crash", false);
 user_pref("browser.sessionstore.resume_session_once", false);
 user_pref("browser.tabs.insertRelatedAfterCurrent", true);
+<% if @facts['os']['name'] == 'Nest' -%>
+user_pref("browser.tabs.inTitlebar", 0);
+<% end -%>
 user_pref("browser.tabs.unloadOnLowMemory", false);
 user_pref("browser.tabs.warnOnClose", false);
 user_pref("browser.urlbar.autoFill", false);
