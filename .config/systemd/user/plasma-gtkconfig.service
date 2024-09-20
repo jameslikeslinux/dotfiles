@@ -3,6 +3,7 @@ Description=Plasma gtkconfig module
 PartOf=sway-session.target xmonad-session.target
 Wants=plasma-kded.service
 After=plasma-kded.service
+ConditionPathExists=/usr/lib64/qt5/plugins/kf5/kded/gtkconfig.so
 
 [Service]
 Type=oneshot
