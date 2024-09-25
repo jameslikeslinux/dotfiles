@@ -3,6 +3,11 @@ dark = ColorScheme.dark.colors_by_base
 gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
 text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1
 scaling_ratio = text_scaling_factor / gui_scaling_factor
+term = if @facts['profile'] && ['pinebookpro'].include?(@facts['profile']['platform'])
+         'footclient'
+       else
+         'alacritty'
+       end
 -%>
 # Load system configs like input and output configuration
 include /etc/sway/config
@@ -30,7 +35,7 @@ client.urgent           '<%= dark[0x0A].web %>' '<%= dark[0x0A].web %>' '<%= dar
 # Keybindings
 #
 set $mod Mod4
-bindsym $mod+Shift+Return exec <%= ['pinebookpro'].include?(@facts['profile']['platform']) ? 'footclient' : 'alacritty' %>
+bindsym $mod+Shift+Return exec <%= term %>
 bindsym $mod+f            fullscreen
 bindsym $mod+t            floating toggle
 bindsym $mod+x            kill
