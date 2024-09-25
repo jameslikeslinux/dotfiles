@@ -11,9 +11,9 @@ command=(${(q)argv})
 
 if [[ $OS == 'Windows_NT' ]]; then
     if [[ $# -eq 0 ]]; then
-        exec cygstart --action=runas alacritty
+        exec cygstart --action=runas mintty -
     else
-        exec cygstart --action=runas alacritty -e "$SHELL -c ${(qq)command}"
+        exec cygstart --action=runas mintty -e "$SHELL -c ${(qq)command}"
     fi
 elif [[ $OSTYPE == darwin* ]]; then
     exec sudo -E "${@:--s}"
