@@ -7,6 +7,9 @@ set hidden
 " Set terminal title
 set title
 
+" Disable annoying bell
+set belloff=all
+
 " Highlight current line
 set cursorline
 

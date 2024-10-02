@@ -2,7 +2,10 @@
 dark = ColorScheme.dark
 gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
 text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1
-dark.terminal.each do |c| -%>
+-%>
+Xft.dpi: <%= (96 * text_scaling_factor).round %>
+
+<% dark.terminal.each do |c| -%>
 *color<%= c.ansi %>: <%= c.x11 %>
 <% end -%>
 *foreground: <%= dark.colors_by_base[0x06].x11 %>
@@ -48,6 +51,8 @@ xterm*faceSize: 9
 xterm*forceBoxChars: true
 xterm*internalBorder: <%= (2 * gui_scaling_factor).round %>
 xterm*saveLines: 10000
+xterm*scrollBar: false
+xterm*toolBar: false
 ! Enable OSC 52 for tmux selection to primary buffer
 xterm*allowWindowOps: true
 ! Selections should only go to primary buffer

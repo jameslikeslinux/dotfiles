@@ -1,0 +1,8 @@
+# Load Xresources, etc.
+. /etc/X11/xinit/xinitrc-common
+
+# Disable annoying bell
+xset -b
+
+# Run system tray menu
+exec /usr/bin/xwin-xdg-menu
