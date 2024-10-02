@@ -3,8 +3,6 @@ dark = ColorScheme.dark
 gui_scaling_factor = @facts['scaling'] ? @facts['scaling']['gui'] : 1
 text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1
 -%>
-Xft.dpi: <%= (96 * text_scaling_factor).round %>
-
 <% dark.terminal.each do |c| -%>
 *color<%= c.ansi %>: <%= c.x11 %>
 <% end -%>
