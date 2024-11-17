@@ -1,9 +1,9 @@
 #!/usr/bin/env zsh
 
 change_brightness() {
-    local current="$(qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl brightness)"
-    local max="$(qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl brightnessMax)"
-    local steps="$(qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl brightnessSteps)"
+    local current="$(qdbus6 org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl brightness)"
+    local max="$(qdbus6 org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl brightnessMax)"
+    local steps="$(qdbus6 org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl brightnessSteps)"
     local increment=$((max * 1.0 / steps))
 
     # Snap the current value to the nearest increment
@@ -21,7 +21,7 @@ change_brightness() {
         new=0
     fi
 
-    qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl setBrightness "$(printf '%.0f' "$new")"
+    qdbus6 org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl setBrightness "$(printf '%.0f' "$new")"
 }
 
 case "$1" in

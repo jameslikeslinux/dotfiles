@@ -1,14 +1,14 @@
 [Unit]
 Description=Plasma gtkconfig module
 PartOf=sway-session.target xmonad-session.target
-Wants=plasma-kded.service
-After=plasma-kded.service
-ConditionPathExists=/usr/lib64/qt5/plugins/kf5/kded/gtkconfig.so
+Wants=plasma-kded6.service
+After=plasma-kded6.service
+ConditionPathExists=/usr/lib64/qt6/plugins/kf6/kded/gtkconfig.so
 
 [Service]
 Type=oneshot
-ExecStartPre=/usr/bin/kwriteconfig5 --file %h/.config/kcminputrc --group Mouse --key cursorSize $XCURSOR_SIZE
-ExecStart=/usr/bin/qdbus org.kde.kded5 /kded loadModule gtkconfig
+ExecStartPre=/usr/bin/kwriteconfig6 --file %h/.config/kcminputrc --group Mouse --key cursorSize $XCURSOR_SIZE
+ExecStart=/usr/bin/qdbus6 org.kde.kded6 /kded loadModule gtkconfig
 RemainAfterExit=yes
 
 [Install]

@@ -368,8 +368,8 @@ class BacklightStatus < StatusWidget
   end
 
   def segments
-    brightness = `qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl brightness`.to_i
-    max_brightness = `qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl brightnessMax`.to_i
+    brightness = `qdbus6 org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl brightness`.to_i
+    max_brightness = `qdbus6 org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl brightnessMax`.to_i
     if max_brightness > 0
       percentage = brightness * 100.0 / max_brightness
       @clear_thread.exit if @clear_thread
@@ -402,7 +402,7 @@ class ScreensaverStatus < StatusWidget
       if ENV['SWAYSOCK']
         system 'swaymsg \'[title="Sway Idle Inhibitor"] kill; exec kdialog --title "Sway Idle Inhibitor" --msgbox "This hidden box keeps Sway active"\''
       else
-        system 'qdbus org.freedesktop.ScreenSaver /org/freedesktop/ScreenSaver org.freedesktop.ScreenSaver.SimulateUserActivity'
+        system 'qdbus6 org.freedesktop.ScreenSaver /org/freedesktop/ScreenSaver org.freedesktop.ScreenSaver.SimulateUserActivity'
       end
       ''
     else
