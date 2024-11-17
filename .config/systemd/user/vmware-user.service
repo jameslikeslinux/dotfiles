@@ -1,0 +1,11 @@
+[Unit]
+Description=VMware User Agent
+PartOf=x-session.target
+ConditionVirtualization=vmware
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/vmware-user-suid-wrapper
+
+[Install]
+WantedBy=x-session.target
