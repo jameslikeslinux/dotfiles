@@ -46,32 +46,38 @@ Options:
 END
 }
 
-ARGS=$(getopt -o 'h' -l 'no-fetch,help' -n 'refresh-dotfiles' -- "$@")
+no_fetch=""
 
-if [ $? -ne 0 ]; then
-    usage
-    exit 1
-fi
-
-eval set -- "$ARGS"
-
-while true; do
-    case "$1" in
-        '--no-fetch')
-            shift
-            no_fetch="yes"
+while getopts ":h-:" opt; do
+    case $opt in
+        -)
+            case "${OPTARG}" in
+                no-fetch)
+                    no_fetch="yes"
+                    ;;
+                help)
+                    usage
+                    exit 0
+                    ;;
+                *)
+                    echo "Invalid option: --${OPTARG}" >&2
+                    usage
+                    exit 1
+                    ;;
+            esac
             ;;
-        '-h'|'--help')
-            shift
+        h)
             usage
             exit 0
             ;;
-        '--')
-            shift
-            break
+        \?)
+            echo "Invalid option: -$OPTARG" >&2
+            usage
+            exit 1
             ;;
     esac
 done
+shift $((OPTIND -1))
 
 file_mode() {
     local file="$1"
