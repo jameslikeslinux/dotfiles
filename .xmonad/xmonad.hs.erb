@@ -109,7 +109,7 @@ topicConfig = def
     { defaultTopicAction = \topic -> return ()
     , topicActions = fromList $
         [ ("ops"    , (ask >>= spawn . terminal . config))
-        , ("dev"    , (ask >>= spawn . terminal . config))
+        , ("dev"    , spawn "vscode")
 <% if @facts['networking']['hostname'] != 'hawk' -%>
         , ("music"  , spawn "firefox -P music --kiosk https://music.youtube.com/")
         , ("mail"   , spawn "firefox --new-window https://mail.google.com/mail/u/0/#inbox")
@@ -317,7 +317,7 @@ main = xmonad
     , ("M-S-p"         , spawn "dunstctl history-pop")
     , ("M-S-<Space>"   , spawn "dunstctl context")
     , ("M-s"           , raisePanelTemporarily >> spawn "~/.xmonad/scripts/screensaver toggle")
-    , ("M-<Escape>"    , unGrab >> spawn "~/.xmonad/scripts/screensaver reset; loginctl lock-session")
+    -- , ("M-<Escape>"    , unGrab >> spawn "~/.xmonad/scripts/screensaver reset; loginctl lock-session")
     , ("M-<Tab>"       , sendMessage NextLayout)
     , ("C-<Tab>"       , sendMessage NextLayout) -- for inside VMware Fusion
     , ("M-<Backspace>" , setLayout $ Layout layoutHook')
