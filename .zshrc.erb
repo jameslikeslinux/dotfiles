@@ -178,4 +178,11 @@ if ([[ $OSTYPE == 'cygwin' ]] && ! pgrep -U $UID -x ssh-agent > /dev/null) ||
     eval $(ssh-agent -a "$SSH_AUTH_SOCK") > /dev/null
 fi
 
+# VS Code terminal settings
+if [[ $TERM_PROGRAM == 'vscode' ]]; then
+    # (Re)load shell integration
+    # see: https://code.visualstudio.com/docs/terminal/shell-integration
+    source "$(code --locate-shell-integration-path zsh)"
+fi
+
 # vim:ft=zsh
