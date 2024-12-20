@@ -109,7 +109,7 @@ topicConfig = def
     { defaultTopicAction = \topic -> return ()
     , topicActions = fromList $
         [ ("ops"    , (ask >>= spawn . terminal . config))
-        , ("dev"    , spawn "vscode")
+        , ("dev"    , spawn "code")
 <% if @facts['networking']['hostname'] != 'hawk' -%>
         , ("music"  , spawn "firefox -P music --kiosk https://music.youtube.com/")
         , ("mail"   , spawn "firefox --new-window https://mail.google.com/mail/u/0/#inbox")
