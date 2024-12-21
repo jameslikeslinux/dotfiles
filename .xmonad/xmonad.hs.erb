@@ -217,7 +217,8 @@ layoutHook' = id
         }
 
 manageHook' = composeOne
-    [ className =? "ksmserver"                -?> doIgnore
+    [ className =? "code"                     -?> doF W.focusDown -- prevent focus stealing
+    , className =? "ksmserver"                -?> doIgnore
     , className =? "ksmserver-logout-greeter" -?> doIgnore
     , className =? "XLogo"                    -?> doFloat
     , className =? "Firewall-config"          -?> doCenterFloat
