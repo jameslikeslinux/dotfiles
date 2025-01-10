@@ -5,7 +5,7 @@ text_scaling_factor = @facts['scaling'] ? @facts['scaling']['text'] : 1
 term = if @facts['profile'] && ['pinebookpro'].include?(@facts['profile']['platform'])
          'xterm'
        else
-         'alacritty'
+         'urxvtc'
        end
 -%>
 import XMonad
