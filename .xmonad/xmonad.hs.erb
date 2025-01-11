@@ -217,8 +217,7 @@ layoutHook' = id
         }
 
 manageHook' = composeOne
-    [ className =? "code"                     -?> doF W.focusDown -- prevent focus stealing
-    , className =? "ksmserver"                -?> doIgnore
+    [ className =? "ksmserver"                -?> doIgnore
     , className =? "ksmserver-logout-greeter" -?> doIgnore
     , className =? "XLogo"                    -?> doFloat
     , className =? "Firewall-config"          -?> doCenterFloat
@@ -232,6 +231,11 @@ manageHook' = composeOne
     , isDialog                                -?> doFloat
     , transience                              --- move to parent window
     , pure True                               -?> insertPosition Below Newer
+    ]
+
+activateHook' = composeOne
+    [ className =? "code" -?> doIgnore  -- prevent focus stealing
+    , pure True           -?> doFocus
     ]
 
 handleEventHook' =
@@ -254,6 +258,7 @@ workspaces' = ["web", "ops", "dev", "music", "mail", "chat", "seven", "eight", "
 
 main = xmonad
     . docks
+    . setEwmhActivateHook activateHook'
     . ewmh
     . pagerHints
     . withNavigation2DConfig def { defaultTiledNavigation = centerNavigation }
