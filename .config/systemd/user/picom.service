@@ -1,6 +1,7 @@
 [Unit]
 Description=picom compositor
 PartOf=xmonad-session.target
+ConditionVirtualization=!vmware
 
 [Service]
 ExecStart=/usr/bin/picom --backend=glx --vsync
