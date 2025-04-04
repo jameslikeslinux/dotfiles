@@ -182,7 +182,7 @@ fi
 if [[ $TERM_PROGRAM == 'vscode' ]]; then
     # (Re)load shell integration
     # see: https://code.visualstudio.com/docs/terminal/shell-integration
-    source "$(code --locate-shell-integration-path zsh)"
+    source "$(code --locate-shell-integration-path zsh 2>/dev/null)"
 fi
 
 # vim:ft=zsh
